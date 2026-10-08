@@ -6,7 +6,7 @@ The full-platform edition uses **Scan → Model → Serve**, with private **S3 +
 
 [CloudFront demo entry point](https://d1pbdc1b2fpdk2.cloudfront.net) · Cognito credentials are distributed privately.
 
-**Deployment status:** the full-platform build/deployment workflow and official-source integration are being developed; live service, ingestion and browser validation are pending. The earlier compact deployment has its own [validation record](docs/validation.md), which does not establish full-platform readiness.
+**Deployment status:** all 16 full-platform stacks are deployed in `us-east-1`; the deployment job succeeded on **8 October 2026 at 08:06:25 UTC**. The [accelerator console](https://d1nupu5vkgc6el.cloudfront.net) and administrator Cognito login are provisioned. All three official-source tables are scanned and approved; the reference ontology is imported and a real induction has produced a proposal. The initial Neptune instance hit memory limits during concurrent document graph ingestion and is being resized to `db.r8g.large`. Document retries, accepted mappings, live query checks and full-platform browser validation remain pending. The branded CloudFront entry point currently serves the earlier compact edition until validated full-platform publication. See the [full-platform validation record](docs/full-platform-validation.md) for completed checks and remaining work; [compact validation](docs/validation.md) covers the separate earlier edition.
 
 ## Four starting points
 
@@ -114,6 +114,7 @@ Compact AWS deployment remains available through `scripts/deploy.py`, `scripts/c
 - [Full-platform presenter walkthrough](docs/full-platform-presenter.md)
 - [Official Singapore source inventory and refresh](docs/singapore-sources.md)
 - [Full-platform operations, pricing and teardown](docs/full-platform-operations.md)
+- [Full-platform deployment and validation record](docs/full-platform-validation.md)
 - [Exact accelerator API/integration contracts](docs/accelerator-integration.md)
 - [Compact synthetic presenter walkthrough](docs/presenter.md)
 - [Compact architecture and rule semantics](docs/architecture.md)

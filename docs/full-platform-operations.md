@@ -56,7 +56,9 @@ env -u AWS_PROFILE python platform/deploy-full.py start --phase deploy \
 
 Before deploying a new VPC, verify regional VPC headroom and that the selected Availability Zones offer the accelerator's endpoint services. The initial account check found five VPCs against a quota of five and requested an increase to ten. Check the current quota/request state; it is a prerequisite check, not a permanent deployment status. Do not remove unrelated VPCs to make room. Reusing a VPC requires explicitly prepared private subnets and endpoints because the upstream imported-VPC path does not create them.
 
-The demo settings use Neptune `db.t4g.medium`, ontology ECS **2 vCPU / 8 GiB / one task**, and an OpenSearch NEXTGEN collection group with standby replicas enabled. Search and indexing each have a **2-OCU minimum and 4-OCU maximum**. The small ontology task is sized for this bounded catalogue; larger inductions require revisiting memory and CPU. Keep embedding producers and retrieval consumers on the same model and **1,024 dimensions**. Current configuration uses Sonnet 5, Haiku 4.5 and Cohere Embed v4, and the hand-rolled Tier 3 strategy consults the formal ontology.
+The demo build settings use Neptune `db.r8g.large` (**2 vCPU / 16 GiB**), ontology ECS **2 vCPU / 8 GiB / one task**, and an OpenSearch NEXTGEN collection group with standby replicas enabled. Search and indexing each have a **2-OCU minimum and 4-OCU maximum**. The small ontology task is sized for this bounded catalogue; larger inductions require revisiting memory and CPU. Keep embedding producers and retrieval consumers on the same model and **1,024 dimensions**. Current configuration uses Sonnet 5, Haiku 4.5 and Cohere Embed v4, and the hand-rolled Tier 3 strategy consults the formal ontology.
+
+The initial Neptune `db.t4g.medium` trial provided 4 GiB and completed infrastructure deployment, but all four document knowledge-graph tasks subsequently failed with `MemoryLimitExceededException` during VersionManager source-node lookup or writes. The primary instance resize to `db.r8g.large` changes its compute capacity while preserving the cluster, endpoints and exports. Pause ingestion during the modification, confirm the instance is available and the storage stack update completes, then retry the failed graph tasks and validate their results. Infrastructure creation alone did not establish adequate ingestion capacity.
 
 ## Administrator and branded frontend
 
@@ -113,7 +115,7 @@ The first command checks source, schema, graph, Athena, structured query and doc
 
 ## Standing cost
 
-**Planning estimate: approximately US$1,180–1,900 per 730-hour month before usage and storage**, or roughly **US$39–62 per day**. These are a subtotal for the settings below, not a total-bill guarantee or a budget cap. The platform incurs substantial charges while idle.
+**Planning estimate: approximately US$1,320–2,020 per 730-hour month before usage and storage**, or roughly **US$44–67 per day**. These are a subtotal for the settings below, not a total-bill guarantee or a budget cap. The platform incurs substantial charges while idle.
 
 Rates were checked through the AWS Price List API on **8 October 2026** for `us-east-1`, on-demand USD pricing, excluding tax, discounts and credits:
 
@@ -122,18 +124,18 @@ Rates were checked through the AWS Price List API on **8 October 2026** for `us-
 | OpenSearch indexing and search | US$0.24/OCU-hour; 2 indexing + 2 search minimum, up to 4 + 4 | US$700.80–1,401.60 |
 | Interface VPC endpoints | US$0.01/endpoint/AZ-hour; 20 services in two AZs | US$292.00 |
 | Ontology ECS task | 2 × US$0.04048/vCPU-hour + 8 × US$0.004445/GiB-hour, Linux x86 | US$85.06 |
-| Neptune primary | `db.t4g.medium`, US$0.093/hour | US$67.89 |
+| Neptune primary | `db.r8g.large`, Standard storage configuration, US$0.276/hour | US$201.48 |
 | NAT gateway | One at US$0.045/hour | US$32.85 |
 | Public IPv4 | One NAT address at US$0.005/hour | US$3.65 |
-| **Subtotal** | Excludes the items below | **US$1,182.25–1,883.05** |
+| **Subtotal** | Excludes the items below | **US$1,315.84–2,016.64** |
 
 Active per-namespace VKG services add ARM Fargate usage: **US$0.03238/vCPU-hour + US$0.00356/GiB-hour**. One continuously active 1-vCPU/2-GiB task adds approximately US$28.84/month. Scan/extraction tasks are additional usage. CodeBuild `BUILD_GENERAL1_LARGE` Linux compute costs **US$0.02/build minute**; a 90-minute build is US$1.80 before associated storage and logs.
 
-Also budget for Bedrock tokens and embeddings, AgentCore runtime/memory usage, Neptune storage/I/O/burst credits where applicable, OpenSearch storage, NAT and endpoint data processing, Glue, Athena, DataZone, Lambda, API Gateway, Step Functions, Cognito, S3/ECR, CloudWatch, KMS, WAF and CloudFront. Exact Sonnet 5/Haiku 4.5/Embed v4 inference rates were not established by this price lookup and are excluded; use the current model pricing and measured token counts. AgentCore pricing has multiple consumption variants, so use the actual billed usage type rather than assuming a per-request flat rate. Existing compact-demo resources are additional.
+Also budget for Bedrock tokens and embeddings, AgentCore runtime/memory usage, Neptune storage/I/O, OpenSearch storage, NAT and endpoint data processing, Glue, Athena, DataZone, Lambda, API Gateway, Step Functions, Cognito, S3/ECR, CloudWatch, KMS, WAF and CloudFront. Exact Sonnet 5/Haiku 4.5/Embed v4 inference rates were not established by this price lookup and are excluded; use the current model pricing and measured token counts. AgentCore pricing has multiple consumption variants, so use the actual billed usage type rather than assuming a per-request flat rate. Existing compact-demo resources are additional.
 
 The OCU maximum is a compute capacity limit for this collection group; it does not cap the AWS bill. Reconcile actual endpoint counts, active tasks and OCU metrics against this estimate after deployment. Use project tags and Cost Explorer to track actual spending.
 
-Pricing references: [OpenSearch](https://aws.amazon.com/opensearch-service/pricing/), [PrivateLink](https://aws.amazon.com/privatelink/pricing/), [Fargate](https://aws.amazon.com/fargate/pricing/), [Neptune](https://aws.amazon.com/neptune/pricing/), [VPC/NAT/IPv4](https://aws.amazon.com/vpc/pricing/), [CodeBuild](https://aws.amazon.com/codebuild/pricing/), [Bedrock](https://aws.amazon.com/bedrock/pricing/) and [AgentCore](https://aws.amazon.com/bedrock/agentcore/pricing/). Price List product identifiers for the core rates are `4GTYCPXPAQWXNTQ4`/`TV5CBXF5VXP698KT` (OpenSearch indexing/search), `EN2N5TATXE673A3B` (endpoints), `8CESGAFWKAJ98PME`/`PBZNQUSEXZUC34C9` (x86 Fargate), `CH3E3XZENXTF7AHY` (Neptune), `M2YSHUBETB3JX4M4` (NAT), `4GQUNXTFWVSGPUZK` (IPv4) and `8MTWRQ8M475YQT7D` (CodeBuild).
+Pricing references: [OpenSearch](https://aws.amazon.com/opensearch-service/pricing/), [PrivateLink](https://aws.amazon.com/privatelink/pricing/), [Fargate](https://aws.amazon.com/fargate/pricing/), [Neptune](https://aws.amazon.com/neptune/pricing/), [VPC/NAT/IPv4](https://aws.amazon.com/vpc/pricing/), [CodeBuild](https://aws.amazon.com/codebuild/pricing/), [Bedrock](https://aws.amazon.com/bedrock/pricing/) and [AgentCore](https://aws.amazon.com/bedrock/agentcore/pricing/). Price List product identifiers for the core rates are `4GTYCPXPAQWXNTQ4`/`TV5CBXF5VXP698KT` (OpenSearch indexing/search), `EN2N5TATXE673A3B` (endpoints), `8CESGAFWKAJ98PME`/`PBZNQUSEXZUC34C9` (x86 Fargate), `49J73N4RC3HB3B8P` (Neptune `db.r8g.large`, Standard, effective 1 August 2026), `M2YSHUBETB3JX4M4` (NAT), `4GQUNXTFWVSGPUZK` (IPv4) and `8MTWRQ8M475YQT7D` (CodeBuild). The initial `db.t4g.medium` trial rate was US$0.093/hour (US$67.89/month); the instance resize adds US$133.59/month before storage and I/O. The alternative I/O Optimized `db.r8g.large` rate is US$0.3726/hour and is not used in this Standard-storage estimate.
 
 ## Teardown
 
