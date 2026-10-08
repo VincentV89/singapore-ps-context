@@ -25,6 +25,10 @@ test('all four audiences open their own context, schemes, graph and evidence', a
     const root = scenario.nodes.find(node => ['resident', 'organisation', 'organization', 'researcher', 'institution'].includes(node.type));
     expect(root).toBeTruthy();
     await expect(page.getByRole('button', { name: `${root!.type}: ${root!.label}`, exact: true })).toBeVisible();
+    const goal = scenario.nodes.find(node => ['goal', 'need', 'event'].includes(node.type));
+    expect(goal).toBeTruthy();
+    await expect(page.getByRole('button', { name: `${goal!.type}: ${goal!.label}`, exact: true })).toBeVisible();
+    expect(await page.locator('.graph-edge').count()).toBeGreaterThan(0);
     const firstCard = page.locator('.scheme-card').filter({ hasText: expected.schemes[0].name });
     await firstCard.getByRole('button', { name: 'View reasoning' }).click();
     await expect(page.getByRole('dialog').last().locator('.rule-row')).toHaveCount(expected.schemes[0].ruleResults.length);

@@ -3,9 +3,9 @@ import { Expand, Focus, Minus, Plus } from 'lucide-react';
 import type { GraphEdge, GraphNode } from './types';
 
 const columns = ['resident', 'household', 'event', 'scheme', 'rule', 'document', 'agency'];
-const colors: Record<string, string> = { resident: '#e4f5b6', household: '#e4f5b6', event: '#94ccff', scheme: '#6de0bc', rule: '#b8a5eb', document: '#e4ba81', agency: '#a7b9d2' };
+const colors: Record<string, string> = { resident: '#e4f5b6', organization: '#e4f5b6', institution: '#e4f5b6', context: '#e4f5b6', household: '#e4f5b6', need: '#94ccff', event: '#94ccff', scheme: '#6de0bc', rule: '#b8a5eb', document: '#e4ba81', agency: '#a7b9d2' };
 const columnLabels = ['RESIDENT', 'HOUSEHOLD', 'LIFE EVENT', 'SUPPORT SCHEME', 'ELIGIBILITY', 'EVIDENCE', 'AGENCY'];
-const nodeColumn = (node: GraphNode) => ['organization', 'institution'].includes(node.type) ? 'resident' : node.type === 'context' ? 'household' : node.type === 'lifeEvent' ? 'event' : node.type;
+const nodeColumn = (node: GraphNode) => ['organization', 'institution'].includes(node.type) ? 'resident' : node.type === 'context' ? 'household' : ['lifeEvent', 'goal', 'need'].includes(node.type) ? 'event' : node.type;
 function labelLines(node: GraphNode) {
   const label = node.type === 'agency' ? node.label.replace(/^Demo /, '') : node.label;
   if (label.length <= 23) return [label];
@@ -48,7 +48,7 @@ export function Graph({ nodes, edges, highlighted, selectedScheme, selectedNode,
     <div className="graph-caption">{caption}</div>
     <div className={`graph-canvas ${allPaths ? 'full-ontology' : ''}`}>
       <svg style={allPaths ? { minHeight: contentHeight * .8, maxHeight: 'none', aspectRatio: `1080/${contentHeight}` } : undefined} viewBox={`0 0 ${1080 / zoom} ${contentHeight / zoom}`} role="img" aria-label={`Knowledge graph with ${nodes.length} entities and ${edges.length} relationships. Select a node to explore its context.`}>
-        <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".6" fill="#29374a"/></pattern><filter id="glow"><feGaussianBlur stdDeviation="3"/></filter><linearGradient id="edge-gradient"><stop stopColor="#aee5af"/><stop offset="1" stopColor="#70cccd"/></linearGradient></defs>
+        <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".6" fill="#29374a"/></pattern><filter id="glow"><feGaussianBlur stdDeviation="3"/></filter><linearGradient id="edge-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="1080"><stop stopColor="#aee5af"/><stop offset="1" stopColor="#70cccd"/></linearGradient></defs>
         <rect width="1080" height={contentHeight} fill="url(#grid)"/>
         {visibleColumns.map((column, i) => <g key={column}><text x={70 + i * (940 / (visibleColumns.length - 1))} y="29" textAnchor="middle" className="graph-column-label">{labels[columns.indexOf(column)]}</text><line x1={70 + i * (940 / (visibleColumns.length - 1))} x2={70 + i * (940 / (visibleColumns.length - 1))} y1="48" y2={contentHeight - 26} stroke="#233043" strokeWidth=".7" strokeDasharray="2 7"/></g>)}
         {edges.map(edge => {
