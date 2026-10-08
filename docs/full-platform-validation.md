@@ -1,6 +1,6 @@
 # Full-platform deployment and validation
 
-Validated on **8 October 2026** in AWS account `879594333699`, region **`us-east-1`**. The deployed platform has completed actual **Scan → Model → Serve** checks over the Singapore official-source corpus. The branded frontend was published at **08:35:16 UTC**, and real Cognito hosted-login/PKCE passed. Full browser verification of all four audience journeys and mobile layout is still in progress.
+Validated on **8 October 2026** in AWS account `879594333699`, region **`us-east-1`**. The deployed platform completed actual **Scan → Model → Serve** checks over the Singapore official-source corpus. The branded frontend was published at **09:14:55 UTC**. Strict live browser verification completed at **09:52 UTC**, passing real Cognito hosted-login/PKCE, all four audience journeys, mobile layout and an explicit deep-reasoning follow-up. All six browser runtime calls returned substantive answers with `guardrailBlocked: false` and `partial: false`.
 
 | Endpoint | Purpose and current state |
 | --- | --- |
@@ -12,13 +12,13 @@ Validated on **8 October 2026** in AWS account `879594333699`, region **`us-east
 
 ## Infrastructure and capacity
 
-CodeBuild deployment **`sgsupport-full-platform:66a1d0ef-4569-47de-b2cb-65f6fb6c43c5`** returned **`SUCCEEDED`**, ending at **`2026-10-08T08:06:25.287Z`**. Install, build, post-build and artifact-upload phases succeeded. CloudFormation inspection confirmed all 16 expected stacks complete; the storage stack subsequently completed the Neptune resize:
+CodeBuild deployment **`sgsupport-full-platform:66a1d0ef-4569-47de-b2cb-65f6fb6c43c5`** returned **`SUCCEEDED`**, ending at **`2026-10-08T08:06:25.287Z`**. Install, build, post-build and artifact-upload phases succeeded. CloudFormation inspection confirmed all 16 expected stacks complete; the storage and guardrail stacks subsequently completed their documented updates:
 
 | Stack | Confirmed complete state |
 | --- | --- |
 | `sgsupport-demo-network` | `CREATE_COMPLETE` |
 | `sgsupport-demo-auth` | `CREATE_COMPLETE` |
-| `sgsupport-demo-guardrail` | `CREATE_COMPLETE` |
+| `sgsupport-demo-guardrail` | `UPDATE_COMPLETE` |
 | `sgsupport-demo-storage` | `UPDATE_COMPLETE` |
 | `sgsupport-demo-authnz` | `CREATE_COMPLETE` |
 | `sgsupport-demo-vkg` | `CREATE_COMPLETE` |
@@ -43,7 +43,7 @@ The full deployment uses Cognito pool **`us-east-1_vnrazEagY`**, client **`g840b
 
 Administrator **`vincenoh@amazon.com`** is enabled, `CONFIRMED`, email-verified and belongs to **`Admin`**. Invitation emails were suppressed; the password remains in an ignored local file with mode **`0600`**. Real Cognito SRP authentication returned an ID token for this client and administrator group. No password or token appears in this record.
 
-Client configuration permits SRP, refresh tokens and OAuth authorization-code flow, with callbacks for the accelerator console and branded navigator. The live browser has completed the actual Cognito hosted sign-in and frontend PKCE callback. The published navigator configuration selects **`platform.mode: "full"`**, the real namespace, accepted ontology identifier and full Cognito client, with **`localPreview: false`**. The recorded publication time is **`2026-10-08T08:35:16.837Z`**. The entry screenshot above comes from that authenticated deployed page and contains no credentials.
+Client configuration permits SRP, refresh tokens and OAuth authorization-code flow, with callbacks for the accelerator console and branded navigator. The live browser completed the actual Cognito hosted sign-in and frontend PKCE callback. The published navigator configuration selects **`platform.mode: "full"`**, the real namespace, accepted ontology identifier and full Cognito client, with **`localPreview: false`**. The recorded publication time is **`2026-10-08T09:14:55.317425+00:00`**. The entry screenshot above comes from the authenticated deployed page and contains no credentials.
 
 ## Scan: approved tables and all documents processed
 
@@ -95,8 +95,25 @@ The separate `full-platform-deep-checks-attempt01.local.json` report also **pass
 
 This request used Sonnet 5 in deep-reasoning mode. Only the tools and steps actually returned by the platform are represented in its trace. These observed results do not guarantee that every subsequent question invokes every retrieval/query path.
 
-## Browser verification still in progress
+## Strict live browser verification
 
-Cognito hosted-login/PKCE, the authenticated entry page and published full configuration have passed. The four live audience workspaces, their returned graph/evidence interactions and the mobile layout are still being verified. No completed four-persona browser suite or mobile result is claimed yet. Earlier [compact screenshots and tests](validation.md) remain evidence for the separate synthetic edition.
+The redacted `full-platform-browser.local.json` report records **`passed: true`**. Its `checkedAt` field, **09:45:31 UTC**, marks the run's start; the completed report was verified at **09:52 UTC**. Six actual AgentCore SSE calls passed: four initial standard audience questions, a household standard reload and an explicit deep follow-up. Requests used the full Cognito ID token and correct namespace. No platform responses were mocked; validating TLS remained enabled and the trust store was unchanged. The test driver buffered actual remote SSE through its relay.
+
+| Audience | Programme cards | Initial answer duration | Returned graph entities / relationships | Supporting passages |
+| --- | ---: | ---: | ---: | ---: |
+| Individuals & Families | 7 | 40.7 s | 55 / 72 | 5 |
+| Businesses & Entrepreneurs | 4 | 37.8 s | 53 / 67 | 5 |
+| Nonprofits & Community Organisations | 5 | 27.6 s | 58 / 78 | 5 |
+| Researchers & Educational Institutions | 4 | 29.2 s | 57 / 77 | 5 |
+
+Each initial answer was substantive, unblocked and complete, with six returned trace steps. Graph URIs were checked against actual responses. Evidence interactions opened attributed passages and official MSF, Enterprise Singapore, NCSS and NRF URLs. All programme cards required **agency assessment**. The 390-pixel mobile entry and audience workspaces had no horizontal overflow; JavaScript page errors and relay errors were both zero. [The Individuals workspace screenshot](demo-full-individuals.png) captures the real answer and graph from this run.
+
+Standard audience entry streams directly from AgentCore with `mode: standard`, Tier 3 and a 120-second server deadline. **Deep context reasoning** is off by default. Its explicit browser follow-up completed in **131.2 seconds**, returning a **7,442-character answer**, **20 supporting passages** and **18 actual trace steps**, with no partial or blocked result. That deep query returned 19 graph entities and no relationships; the UI therefore explicitly displayed the separately retrieved live ontology schema, **33 entities / 36 relationships**. This schema fallback is labelled and is distinct from a returned query graph. The separate native deep test above remains independent proof of its own 104-entity result and 45-step trace.
+
+Resolved browser failures included the proxy dropping an empty graph-search parameter, the REST API response window and primary prompt-attack false positives. Nonempty graph lookup, direct AgentCore SSE and narrow input-policy calibration were then verified by this strict run. Earlier failed or insufficient browser reports remain preserved; an earlier assertion suite could pass graph/provenance checks while displaying a blocked answer, so it is not evidence of successful audience navigation.
+
+At **09:44 UTC**, the guardrail stack completed the reviewed `PROMPT_ATTACK.InputStrength` change from `HIGH` to `MEDIUM`, preserving other primary/retrieval policies and identity/version references. Actual input-policy probes allowed three reconstructed default programme questions while blocking system-prompt disclosure and forged-grant/invoice-fraud instructions. Original failed browser request bodies were not retained; these input probes use reconstructed questions and do not test generated answers. The browser results above provide the separate answer proof. See [calibration operations](full-platform-operations.md#guardrail-calibration).
+
+Eight focused AWS-free full-frontend fixture tests and the production frontend build also passed. These fixture checks are separate from the live browser and native reports. Earlier [compact screenshots and tests](validation.md) cover the synthetic edition.
 
 Operator reports are kept privately with credentials and signed URLs redacted. To reproduce source/model/query checks and the separate deep stream, use `scripts/full_platform_checks.py` as documented in [operations](full-platform-operations.md). Each programme card requires **agency assessment**; this demonstration does not submit applications or issue eligibility decisions.

@@ -6,9 +6,11 @@ The full-platform edition uses **Scan → Model → Serve**, with private **S3 +
 
 [CloudFront demo entry point](https://d1pbdc1b2fpdk2.cloudfront.net) · Cognito credentials are distributed privately.
 
-**Deployment status:** the full platform is deployed, all 20 official policy documents are processed, and reviewed ontology/mappings are accepted. Live source, graph, Athena, Ontop, document retrieval and AgentCore deep-reasoning checks passed. The branded navigator was published on **8 October 2026 at 08:35:16 UTC**, with full-platform Cognito hosted-login/PKCE verified. All four audience journeys and mobile browser checks are still being verified. See the [full-platform validation record](docs/full-platform-validation.md); [compact validation](docs/validation.md) covers the separate earlier edition.
+**Deployment status:** the full platform is deployed, all 20 official policy documents are processed, and reviewed ontology/mappings are accepted. Live source, graph, Athena, Ontop, document retrieval and AgentCore deep-reasoning checks passed. The branded navigator was published on **8 October 2026 at 09:14:55 UTC**. Actual Cognito hosted-login/PKCE, all four audience journeys, mobile layout and an explicit deep-reasoning follow-up passed browser verification. Every verified answer was substantive, unblocked and complete. See the [full-platform validation record](docs/full-platform-validation.md); [compact validation](docs/validation.md) covers the separate earlier edition.
 
 ![Published SG Support Navigator showing four Singapore support audiences](docs/demo-full-entry.png)
+
+[View the live Individuals & Families workspace](docs/demo-full-individuals.png), including its returned graph, official programme evidence and context answer.
 
 ## Four starting points
 
@@ -30,8 +32,8 @@ flowchart TB
     Browser[Singapore branded React navigator] --> CF[Amazon CloudFront]
     CF --> Web[Private S3 frontend]
     Browser <-->|Authorization code + PKCE| Cognito[Amazon Cognito]
-    Browser -->|Authenticated query| API[API Gateway]
-    Browser -->|Authenticated streaming query| Serve
+    Browser -->|Authenticated metadata and graph APIs| API[API Gateway]
+    Browser -->|Standard or deep streaming query| Serve
     Official[Official Singapore agency pages] --> Snapshot[Dated documents and programme tables in private S3]
     subgraph Scan[Scan: discover and review sources]
         Snapshot --> Scanner[Source pipelines]
@@ -60,9 +62,11 @@ Programme cards come from the attributed public catalogue. Answers and execution
 
 Change a household, organisation or research-project input and ask what requirements need checking. Open source evidence and inspect **Trace the reasoning** to see which retrieval and query steps actually ran. Support-type chips narrow browsing. Official programme cards remain **Agency assessment required**; source prose is not converted into the compact demo's automatic eligibility rules. Partial answers and platform errors are displayed explicitly.
 
+Audience entry uses standard AgentCore streaming by default; the four verified initial answers took **28–41 seconds**. Select **Deep context reasoning** for a separate, longer investigation and allow roughly **2–3 minutes**. The live browser deep follow-up returned 20 supporting passages and 18 actual trace steps in 131 seconds. These are observed runs, not latency guarantees.
+
 ## Full-platform deployment
 
-The accelerator is pinned to **v0.3.4**, commit `c84a3043a989c30fe33658c763f5f279c6981aba`. The [project patch](platform/patches/0001-singapore-demo.patch) adds demo sizing, origin configuration and suppressed Cognito invitations. The core deployment comprises 16 stacks named `sgsupport-demo-*`; configuration uses `/sgsupport/config`.
+The accelerator is pinned to **v0.3.4**, commit `c84a3043a989c30fe33658c763f5f279c6981aba`. The [project patch](platform/patches/0001-singapore-demo.patch) adds demo sizing, origin configuration, reviewed prompt-attack calibration and suppressed Cognito invitations. The core deployment comprises 16 stacks named `sgsupport-demo-*`; configuration uses `/sgsupport/config`.
 
 Install the [operator dependencies](platform/requirements.txt), then follow [full-platform operations](docs/full-platform-operations.md):
 
