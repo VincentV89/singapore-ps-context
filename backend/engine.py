@@ -109,7 +109,7 @@ def json_value(value):
         return None
     python_value = value.toPython() if hasattr(value, "toPython") else value
     if isinstance(python_value, Decimal):
-        return round(float(python_value), 2)
+        return float(python_value)
     return python_value
 
 
@@ -191,12 +191,12 @@ def select_question_scope(question, schemes):
         words = scheme["name"].lower().split()
         if scheme["name"].lower() in text or any(word in text for word in words if word in {"bridge", "skills", "caregiver", "accessible"}):
             return "scheme", [scheme]
-    if any(term in text for term in ["income", "household", "per person", "per capita", "threshold"]):
-        return "income", [s for s in schemes if any(r["field"] == "perCapitaIncome" for r in s["ruleResults"])]
     if any(term in text for term in ["document", "evidence", "checklist", "apply", "application", "next step"]):
         return "documents", [s for s in schemes if s["status"] != "not-eligible"]
     if any(term in text for term in ["agency", "agencies", "coordinate", "office"]):
         return "agencies", [s for s in schemes if s["status"] != "not-eligible"]
+    if any(term in text for term in ["income", "per person", "per capita", "threshold"]):
+        return "income", [s for s in schemes if any(r["field"] == "perCapitaIncome" for r in s["ruleResults"])]
     if any(term in text for term in ["support", "eligible", "eligibility", "qualify", "benefit", "job loss", "jobloss", "unemployed", "why", "context", "life event", "missing", "review"]):
         return "overview", schemes
     return "unsupported", []
@@ -251,7 +251,9 @@ def analyze(payload):
     graph, pci = context_graph(profile)
     schemes = evaluate(graph)
     scope, selected = select_question_scope(question, schemes)
-    relevant_schemes = selected if question else [s for s in schemes if s["status"] != "not-eligible"]
+    # Explicit scheme questions inspect even an excluded path. Broad discovery
+    # highlights matching/review pathways so a changed profile changes the graph.
+    relevant_schemes = selected if scope == "scheme" else [s for s in selected if s["status"] != "not-eligible"]
     seed_ids = [s["id"] for s in relevant_schemes] or (["resident-demo", "household-demo"] if scope != "unsupported" else [])
     # Invoke the actual upstream context enrichment pipeline against named RDF
     # graphs, exercising direct relationships and the TBox neighbourhood.

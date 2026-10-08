@@ -35,8 +35,9 @@ class EligibilityTests(unittest.TestCase):
     def test_income_and_household_size_change_decision(self):
         above = analyze({"profile": {**PROFILE, "householdIncome": 4000.01}})
         self.assertEqual(scheme_map(above)["scheme-bridge"]["status"], "not-eligible")
-        # Decision uses full precision, not the display rounded to two digits.
-        self.assertEqual(above["metrics"]["perCapitaIncome"], 1000)
+        # Preserve the exact quotient in evidence; presentation may round it.
+        self.assertAlmostEqual(above["metrics"]["perCapitaIncome"], 1000.0025)
+        self.assertAlmostEqual(scheme_map(above)["scheme-bridge"]["ruleResults"][-1]["actual"], 1000.0025)
         boundary = analyze({"profile": {**PROFILE, "householdIncome": 4000}})
         self.assertEqual(scheme_map(boundary)["scheme-bridge"]["status"], "likely-eligible")
         larger_household = analyze({"profile": {**PROFILE, "householdIncome": 5000, "householdSize": 5}})
@@ -105,9 +106,20 @@ class EligibilityTests(unittest.TestCase):
         self.assertEqual(result["citations"], [])
 
     def test_documents_question_returns_only_relevant_evidence(self):
-        result = analyze({"profile": PROFILE, "question": "What documents are needed?"})
+        result = analyze({"profile": PROFILE, "question": "What income documents should this household prepare?"})
         self.assertIn("Employment transition record", result["answer"])
         self.assertNotIn("Caregiving declaration", result["answer"])
+
+    def test_household_support_question_includes_non_income_scheme(self):
+        result = analyze({"profile": PROFILE, "question": "What support could this household receive?"})
+        self.assertIn("Skills Restart Support", result["answer"])
+        self.assertIn("ev-skills", {item["id"] for item in result["citations"]})
+        self.assertIn("scheme-skills", result["affectedNodeIds"])
+        self.assertNotIn("scheme-caregiver", result["affectedNodeIds"])
+        changed = analyze({"profile": {**PROFILE, "caregiver": True, "householdIncome": 5400}, "question": "What support could this household receive?"})
+        self.assertIn("scheme-caregiver", changed["affectedNodeIds"])
+        self.assertNotIn("scheme-bridge", changed["affectedNodeIds"])
+        self.assertNotEqual(result["highlightedEdgeIds"], changed["highlightedEdgeIds"])
 
     def test_bedrock_failure_sanitized_and_explicit(self):
         with patch("engine.bedrock_synthesis", side_effect=RuntimeError("secret-token-should-not-leak")):
