@@ -285,7 +285,14 @@ class IngestRun:
         found = [n for n in namespaces if n.get("name") == "sg-support"]
         if len(found) > 1:
             raise RuntimeError("More than one sg-support namespace exists; resolve this before ingestion.")
-        result = found[0] if found else self.client.request("POST", "/namespaces", {"name": "sg-support", "displayName": "Singapore Support Navigator", "description": "Published Singapore agency support information for individuals, enterprises, community organisations, and researchers. Attributed public snapshots; no applicant personal data or authoritative eligibility decisions.", "owner": self.client.username})["namespace"]
+        if found:
+            existing_id = field(found[0], "namespaceId")
+            if not existing_id:
+                raise RuntimeError("Existing namespace summary omitted its identifier; inspect it before proceeding.")
+            detail = self.client.request("GET", "/namespaces/" + existing_id)
+            result = detail.get("namespace", detail)
+        else:
+            result = self.client.request("POST", "/namespaces", {"name": "sg-support", "displayName": "Singapore Support Navigator", "description": "Published Singapore agency support information for individuals, enterprises, community organisations, and researchers. Attributed public snapshots; no applicant personal data or authoritative eligibility decisions.", "owner": self.client.username})["namespace"]
         self.state["namespaceId"] = field(result, "namespaceId")
         if not self.state["namespaceId"]:
             raise RuntimeError("Namespace response omitted its identifier.")
