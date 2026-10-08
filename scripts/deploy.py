@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import mimetypes
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -50,8 +51,10 @@ def main():
     account = aws.client("sts").get_caller_identity()["Account"]
     print(f"Deploying {args.project} to AWS account {account}, {args.region}.", flush=True)
     if not args.skip_build:
-        subprocess.run(["bash", "backend/package_lambda.sh"], cwd=ROOT, check=True)
-        subprocess.run(["npm", "ci"], cwd=ROOT / "frontend", check=True)
+        build_env = os.environ.copy()
+        build_env["PYTHON"] = sys.executable
+        subprocess.run(["bash", "backend/package_lambda.sh"], cwd=ROOT, env=build_env, check=True)
+        subprocess.run(["npm", "ci", "--cache", str(ROOT / ".npm-cache")], cwd=ROOT / "frontend", check=True)
         subprocess.run(["npm", "run", "build"], cwd=ROOT / "frontend", check=True)
     code = ROOT / "backend/package.zip"
     if not code.is_file():

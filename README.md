@@ -4,6 +4,10 @@ A public sector demonstration of knowledge graphs and context intelligence: see 
 
 **All resident profiles, programmes, policy thresholds, benefits, and agency workflows are synthetic. This is an illustrative demo, not Singapore government eligibility advice or an approval system.** No personal data is required.
 
+[Open the deployed demo](https://d1pbdc1b2fpdk2.cloudfront.net). Cognito sign-in is required; credentials are distributed separately.
+
+![Deployed Life Events Navigator showing household context, connected graph, support pathways and evidence](docs/demo-preview.png)
+
 ## Deployment target
 
 - Region: `us-east-1`, as selected for this demo.
@@ -41,7 +45,7 @@ The **Job loss · household of four** preset starts at S$3,600 household income 
 Use credentials for the intended account, then:
 
 ```bash
-python -m pip install boto3
+source .venv/bin/activate
 python scripts/deploy.py --enable-bedrock
 python scripts/create_user.py demo.architect --credentials-file artifacts/demo-login.local.json
 python scripts/check_deployment.py
@@ -69,7 +73,10 @@ Useful guides:
 - [Architecture and graph reasoning](docs/architecture.md)
 - [Integration into the full Context Ontology Accelerator](docs/accelerator-integration.md)
 - [AWS operations and cleanup](infra/OPERATIONS.md)
+- [Deployed validation results](docs/validation.md)
 - [Importable OWL/Turtle ontology](backend/data/ontology.ttl)
 - [Separate synthetic instance data](backend/data/instances.ttl)
 
 AWS charges accrue while deployed. The compact implementation uses request-based services and optional model inference; it does not provision a Neptune cluster, OpenSearch capacity, or a NAT gateway.
+
+Licensed under Apache-2.0; see [LICENSE](LICENSE). Upstream source notices are retained in the vendored components.

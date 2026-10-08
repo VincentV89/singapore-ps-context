@@ -3,7 +3,7 @@
 install:
 	python -m venv .venv
 	.venv/bin/pip install -r backend/requirements.txt boto3
-	cd frontend && npm ci
+	cd frontend && npm ci --cache ../.npm-cache
 
 test:
 	.venv/bin/python -m unittest discover -s backend/tests -v

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 task_backend_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-task_python="${PYTHON:-$task_backend_root/.venv/bin/python}"
+task_python="${PYTHON:-$task_backend_root/../.venv/bin/python}"
+if [[ ! -x "$task_python" ]]; then
+  task_python="$task_backend_root/.venv/bin/python"
+fi
 if [[ ! -x "$task_python" ]]; then
   task_python="$(command -v python3)"
 fi
