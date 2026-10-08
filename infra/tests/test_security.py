@@ -80,8 +80,14 @@ class InfrastructureTests(unittest.TestCase):
         self.assertEqual(authorizer["Audience"], [{"Ref": "UserPoolClient"}])
         for resource in RESOURCES.values():
             if resource["Type"] == "AWS::ApiGatewayV2::Route":
-                self.assertEqual(resource["Properties"]["AuthorizationType"], "JWT")
-                self.assertEqual(resource["Properties"]["AuthorizationScopes"], ["life-events/access"])
+                route = resource["Properties"]
+                if route["RouteKey"].startswith("OPTIONS "):
+                    self.assertEqual(route["AuthorizationType"], "NONE")
+                    self.assertNotIn("Target", route, "Preflight must not invoke the data API")
+                else:
+                    self.assertEqual(route["AuthorizationType"], "JWT")
+                    self.assertEqual(route["AuthorizationScopes"], ["life-events/access"])
+        self.assertEqual(RESOURCES["PreflightRoute"]["Properties"]["RouteKey"], "OPTIONS /{proxy+}")
 
     def test_cors_csp_cache_and_resource_limits(self):
         self.assertEqual(RESOURCES["HttpApi"]["Properties"]["CorsConfiguration"]["AllowOrigins"], [{"Ref": "FrontendOrigin"}])
