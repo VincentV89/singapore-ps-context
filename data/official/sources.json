@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "comcare-smta",
+      "path": "raw/comcare-smta.html",
+      "requestedUrl": "https://www.msf.gov.sg/what-we-do/comcare",
+      "finalUrl": "https://www.msf.gov.sg/what-we-do/comcare",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:55Z",
+      "sourceHash": "108dde9a76cbd76ee12a9a6acc0ff8e197e6e8bed118a78698d8d2d7e6d92e02"
+    },
+    {
+      "id": "comcare-lta",
+      "path": "raw/comcare-lta.html",
+      "requestedUrl": "https://www.msf.gov.sg/what-we-do/comcare",
+      "finalUrl": "https://www.msf.gov.sg/what-we-do/comcare",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:55Z",
+      "sourceHash": "108dde9a76cbd76ee12a9a6acc0ff8e197e6e8bed118a78698d8d2d7e6d92e02"
+    },
+    {
+      "id": "chas",
+      "path": "raw/chas.html",
+      "requestedUrl": "https://www.chas.sg/Applying-for-CHAS/Eligibility",
+      "finalUrl": "https://www.chas.sg/Applying-for-CHAS/Eligibility",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:47Z",
+      "sourceHash": "19ada4f63c668df459eaf86089c62478b5d1886572020c784a681be2a238113b"
+    },
+    {
+      "id": "skillsfuture-credit",
+      "path": "raw/skillsfuture-credit.html",
+      "requestedUrl": "https://www.myskillsfuture.gov.sg/content/portal/en/career-resources/career-resources/education-career-personal-development/SkillsFuture_Credit.html",
+      "finalUrl": "https://www.myskillsfuture.gov.sg/content/portal/en/career-resources/career-resources/education-career-personal-development/SkillsFuture_Credit.html",
+      "httpStatus": 200,
+      "contentType": "text/html;charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:52Z",
+      "sourceHash": "e89d0be26d0f674687682184b61b11908c529e9140649414d4ecd077c2b271f7"
+    },
+    {
+      "id": "kifas",
+      "path": "raw/kifas.html",
+      "requestedUrl": "https://www.ecda.gov.sg/parents/preschool-subsidies/kindergarten-fee-assistance-scheme-(kifas)/overview",
+      "finalUrl": "https://www.ecda.gov.sg/parents/preschool-subsidies/kindergarten-fee-assistance-scheme-(kifas)/overview",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:47Z",
+      "sourceHash": "5404dabc726e886567d36f0d6f885594f58a50da8a6661fb5a1102ad822d4663"
+    },
+    {
+      "id": "childcare-subsidy",
+      "path": "raw/childcare-subsidy.html",
+      "requestedUrl": "https://www.ecda.gov.sg/parents/preschool-subsidies/infant-and-childcare-subsidy-scheme/overview",
+      "finalUrl": "https://www.ecda.gov.sg/parents/preschool-subsidies/infant-and-childcare-subsidy-scheme/overview",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:49Z",
+      "sourceHash": "6d13e943ee7f994febc697e19e005fd8ae5c81d661e8e140e6e09a100da2e124"
+    },
+    {
+      "id": "moe-financial-assistance",
+      "path": "raw/moe-financial-assistance.html",
+      "requestedUrl": "https://www.moe.gov.sg/financial-matters/financial-assistance",
+      "finalUrl": "https://www.moe.gov.sg/financial-matters/financial-assistance",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:48Z",
+      "sourceHash": "9640372fc889e03f8ace9279d4dc59d3691ba50d3b8f1d8226974c310ee19201"
+    },
+    {
+      "id": "edge",
+      "path": "raw/edge.html",
+      "requestedUrl": "https://www.enterprisesg.gov.sg/financial-support/edge-grant",
+      "finalUrl": "https://www.enterprisesg.gov.sg/financial-support/edge-grant",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:48Z",
+      "sourceHash": "fd23dcbfa9596e5f6b9474327b64306ef1035a28ff30bbc0a274b44c2bbedf40"
+    },
+    {
+      "id": "energy-efficiency",
+      "path": "raw/energy-efficiency.html",
+      "requestedUrl": "https://www.enterprisesg.gov.sg/financial-support/energy-efficiency-grant",
+      "finalUrl": "https://www.enterprisesg.gov.sg/financial-support/energy-efficiency-grant",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:49Z",
+      "sourceHash": "400ff2d0365abb34e99b840c89ed44fca2437007f2e4faaad8de903092118a3a"
+    },
+    {
+      "id": "efs-working-capital",
+      "path": "raw/efs-working-capital.html",
+      "requestedUrl": "https://www.enterprisesg.gov.sg/financial-support/enterprise-financing-scheme---sme-working-capital",
+      "finalUrl": "https://www.enterprisesg.gov.sg/financial-support/enterprise-financing-scheme---sme-working-capital",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:49Z",
+      "sourceHash": "d4d137c8306b6819565c0d092c2165016b0e88a06420f972b41d2c671300bbe1"
+    },
+    {
+      "id": "efs-green",
+      "path": "raw/efs-green.html",
+      "requestedUrl": "https://www.enterprisesg.gov.sg/financial-support/enterprise-financing-scheme---green",
+      "finalUrl": "https://www.enterprisesg.gov.sg/financial-support/enterprise-financing-scheme---green",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:48Z",
+      "sourceHash": "89192afc4b3b9d52e939c1e5a7adb527cf50fcbca16a449d82a4439e1e39d2d7"
+    },
+    {
+      "id": "ncss-tss",
+      "path": "raw/ncss-tss.html",
+      "requestedUrl": "https://www.ncss.gov.sg/grants/organisation-development/transformation-sustainability-scheme/",
+      "finalUrl": "https://www.ncss.gov.sg/grants/organisation-development/transformation-sustainability-scheme/",
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "fetchedAt": "2026-10-08T06:20:56Z",
+      "sourceHash": "1842510648f559ee6d20b494da92f3dc5fedc0bca5241e13b794053013cc8e32"
+    },
+    {
+      "id": "ncss-ohds",
+      "path": "raw/ncss-ohds.html",
+      "requestedUrl": "https://www.ncss.gov.sg/grants/organisation-development/organisation-health-diagnostic-scheme/",
+      "finalUrl": "https://www.ncss.gov.sg/grants/organisation-development/organisation-health-diagnostic-scheme/",
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "fetchedAt": "2026-10-08T06:20:50Z",
+      "sourceHash": "a7274b119872bc332c4d553c8779e4a7724ad1258a363ad1d29d73dc958d8be7"
+    },
+    {
+      "id": "ncss-pcg",
+      "path": "raw/ncss-pcg.html",
+      "requestedUrl": "https://www.ncss.gov.sg/grants/people-development/professional-capability-grant/",
+      "finalUrl": "https://www.ncss.gov.sg/grants/people-development/professional-capability-grant/",
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "fetchedAt": "2026-10-08T06:20:51Z",
+      "sourceHash": "e2f26c1356a4be5b9aecc5df808edde750390060149da9c9300bdd1267c015b7"
+    },
+    {
+      "id": "nac-presentation",
+      "path": "raw/nac-presentation.html",
+      "requestedUrl": "https://www.nac.gov.sg/support/funding-and-schemes/presentation-and-participation-grant/overview",
+      "finalUrl": "https://www.nac.gov.sg/support/funding-and-schemes/presentation-and-participation-grant/overview",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:53Z",
+      "sourceHash": "1a178ff43fbec9e215199365eae26a22b5830b187b39b23152d650c114638089"
+    },
+    {
+      "id": "nac-capability",
+      "path": "raw/nac-capability.html",
+      "requestedUrl": "https://www.nac.gov.sg/support/funding-and-schemes/capability-development-grant/overview",
+      "finalUrl": "https://www.nac.gov.sg/support/funding-and-schemes/capability-development-grant/overview",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:53Z",
+      "sourceHash": "5b1bdbbec0db633085353abc004f847344c3c85c4390ba2e3f0b33ac25858c74"
+    },
+    {
+      "id": "nrf-crp",
+      "path": "raw/nrf-crp.html",
+      "requestedUrl": "https://www.nrf.gov.sg/grants/crp/",
+      "finalUrl": "https://www.nrf.gov.sg/grants/crp/",
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "fetchedAt": "2026-10-08T06:20:54Z",
+      "sourceHash": "4b5edac4031a3464ec74f4f3fa9dbfca5c4a223468eb0d91641780d1ac9ef5cf"
+    },
+    {
+      "id": "nrf-fellowship",
+      "path": "raw/nrf-fellowship.html",
+      "requestedUrl": "https://www.nrf.gov.sg/grants/nrff/",
+      "finalUrl": "https://www.nrf.gov.sg/grants/nrff/",
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "fetchedAt": "2026-10-08T06:20:56Z",
+      "sourceHash": "efcc641470bd346a6c31e29a9555a4d4dc6894c7721b7e8ecf80e0e9832d0a8d"
+    },
+    {
+      "id": "nrf-investigatorship",
+      "path": "raw/nrf-investigatorship.html",
+      "requestedUrl": "https://www.nrf.gov.sg/grants/nrfi/",
+      "finalUrl": "https://www.nrf.gov.sg/grants/nrfi/",
+      "httpStatus": 200,
+      "contentType": "text/html",
+      "fetchedAt": "2026-10-08T06:20:54Z",
+      "sourceHash": "a2ea0dabb45591cd02f8139b93638907e138b68fbe2664d766202e913536c0fb"
+    },
+    {
+      "id": "iaf-icp",
+      "path": "raw/iaf-icp.html",
+      "requestedUrl": "https://www.a-star.edu.sg/research/funding-opportunities/iaf-icp",
+      "finalUrl": "https://www.a-star.edu.sg/research/funding-opportunities/iaf-icp",
+      "httpStatus": 200,
+      "contentType": "text/html; charset=utf-8",
+      "fetchedAt": "2026-10-08T06:20:49Z",
+      "sourceHash": "82a7dd2f5e6c73df1b7a2ca9fe5e4b9620c3e28951a25fda1222f558d1ce9a48"
+    }
+  ],
+  "unavailableSources": [
+    {
+      "url": "https://www.hdb.gov.sg/residential/buying-a-flat/understanding-your-eligibility-and-housing-loan-options/flat-and-grant-eligibility/couples-and-families/enhanced-cpf-housing-grant-families",
+      "status": "http-403",
+      "note": "Official HDB page was forbidden from this environment; no housing criteria imported and no access bypass attempted."
+    },
+    {
+      "url": "https://supportgowhere.life.gov.sg/schemes/COMCARE-SMTA/comcare-assistance",
+      "status": "javascript-shell",
+      "note": "The source returned a JavaScript application shell; ComCare passages are taken from MSF instead. Application link remains official."
+    },
+    {
+      "url": "https://www.imda.gov.sg/how-we-can-help/smes-go-digital/cto-as-a-service",
+      "status": "javascript-shell",
+      "note": "The page returned a loading shell with no policy passages; no criteria imported."
+    },
+    {
+      "url": "https://www.sg/oursingaporefund",
+      "status": "http-503",
+      "note": "No Our Singapore Fund passages imported because the official site was unavailable."
+    }
+  ]
+}
