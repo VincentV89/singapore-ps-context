@@ -56,3 +56,117 @@
 .empty-support>svg{color:#b0c899}.empty-support h3{font-size:16px;font-weight:400;color:#c9d7e2;margin:12px 0 9px}.empty-support p{font-size:12px;line-height:1.8;margin:0 0 20px}.empty-support .secondary-button{display:inline-flex}
 @media(max-width:950px){.audience-navigation{align-items:flex-start;flex-direction:column;gap:10px}.audience-switcher{width:100%}.audience-card{padding:24px}.audience-card h2{font-size:23px}}
 @media(max-width:700px){.audience-landing{padding:34px 0 26px}.audience-intro{margin-bottom:25px}.audience-intro .eyebrow{font-size:7px;letter-spacing:1px;gap:7px}.audience-intro h1{font-size:35px;letter-spacing:-1px;margin:17px 0 12px}.audience-intro>p{font-size:12px}.audience-intro-hint{margin-top:19px;font-size:11px}.audience-cards{grid-template-columns:1fr;gap:15px}.audience-card{padding:23px;min-height:0}.audience-card h2{font-size:25px;max-width:100%}.audience-card>p{font-size:12px}.audience-card-top{margin-bottom:17px}.audience-icon{width:46px;height:46px}.audience-segments{margin-bottom:18px}.audience-navigation{padding-top:17px}.audience-switcher{display:grid;grid-template-columns:1fr 1fr;gap:6px}.audience-switcher>button{justify-content:center;font-size:9px;padding:8px 5px}.persona-hero{padding:24px 0 20px}.persona-hero h1{font-size:29px;overflow-wrap:anywhere}.support-filter-bar{padding:13px}.support-filter-heading{flex-direction:column;align-items:flex-start;gap:4px;font-size:11px}.support-filter-chips{gap:6px}.support-filter-chips>button{font-size:9px;padding:6px 10px}.descriptor-form{display:flex;gap:14px}.descriptor-form .select-field{width:100%;min-width:0}.descriptor-form .unknown-toggle{font-size:10px}.descriptor-number .input-label,.descriptor-form .toggle-row{font-size:11px}.descriptor-form .toggle-row>span:first-child{max-width:250px}.context-panel .descriptor-form{padding:0 18px}.persona-hero p{max-width:none}.audience-bottom-note{font-size:9px;gap:7px}.audience-bottom-note>small{font-size:8px;line-height:1.8}.empty-support{padding:24px}}
+
+/* Singapore identity: custom island/skyline artwork with red and white accents.
+   Graph and eligibility colours retain their semantic meaning. */
+:root {
+  --sg-red: #e52d43;
+  --sg-action: #c6263a;
+  --sg-rose: #ff98a3;
+  --sg-white: #f6f8fc;
+}
+body { background: #0a1220; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+summary:focus-visible, .graph-node:focus-visible { outline-color: var(--sg-rose); }
+::selection { background: #fac5cb; color: #35121a; }
+.app-header, .login-header { position: relative; }
+.app-header::before, .login-header::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--sg-red) 0 17%, var(--sg-white) 17% 21%, #253244 21% 100%);
+}
+.sg-brand { gap: 11px; letter-spacing: -.75px; font-size: 21px; }
+.sg-brand-symbol {
+  width: 43px; height: 43px; border-radius: 12px; color: #fff;
+  background: #bd2339; border: 1px solid #ec6173;
+  box-shadow: 0 4px 20px #d6203530;
+}
+.sg-brand-symbol::after { display: none; }
+.brand-title { display: block; color: var(--sg-white); font-weight: 600; }
+.brand-title b { font-weight: 750; }
+.sg-brand .brand-light { color: #c5cfdc; font-weight: 400; }
+.sg-brand small { color: #a1afc0; font-size: 7px; letter-spacing: 1.75px; margin-top: 8px; }
+.app-header nav .nav-active { color: #fff0f1; }
+.nav-active::after { background: var(--sg-red); }
+.synthetic-pill, .source-pill { color: #f0bac1; border-color: #75414d; background: #b9243610; }
+.synthetic-pill > span, .source-pill > span { background: #f18592; }
+.eyebrow, .login-copy .eyebrow, .audience-intro .eyebrow { color: #d99ca7; }
+.small-line { background: var(--sg-red); }
+.hero h1 em, .login-copy h1 em, .audience-intro h1 em { color: var(--sg-rose); font-style: normal; }
+.hero-mark > svg { color: #e78f9b; }
+.primary-button { background: var(--sg-action); border-color: #e3485b; color: #fff; box-shadow: 0 5px 16px #ae1c2d18; }
+.primary-button:hover { background: #da2a40; border-color: #f16777; }
+.secondary-button:hover, .secondary-button.active { border-color: #b66672; color: #f8cbd1; background: #402332; }
+.preset-buttons button:hover { color: #ffb8c1; }
+.preset-buttons button.selected { color: #ffd3d9; border-color: #cc657355; background: #d8495b12; }
+.audience-switcher > button.selected { color: #ffcad1; border-color: #ac5362; background: #d13a4d12; }
+.back-audiences { color: #edbdc5; }
+.support-filter-chips > button.selected { color: #fff; background: var(--sg-action); border-color: #e3485b; }
+.money-input:focus-within, .descriptor-number > input:focus { border-color: #de7c8a; }
+.audience-landing { padding-top: 48px; }
+.audience-intro { position: relative; isolation: isolate; padding: 12px 0 24px; margin-bottom: 26px; }
+.audience-intro::before {
+  content: ''; position: absolute; inset: -20px -20px 0; z-index: -1; pointer-events: none;
+  background: url('/assets/singapore-skyline.svg') center bottom / min(1050px, 100%) auto no-repeat;
+  opacity: .2;
+  mask-image: linear-gradient(transparent, #000 40%, #000 82%, transparent);
+}
+.audience-intro h1 { color: #f7f7fa; letter-spacing: -1.7px; }
+.audience-intro > p { color: #a2b3c7; }
+.audience-intro-hint { color: #d0d9e3; }
+.audience-card { border-color: #3a4456; background: linear-gradient(140deg, #192334, #111c2d 70%); }
+.audience-individuals { --accent: #ff9caa; }
+.audience-businesses { --accent: #93c8f6; }
+.audience-community { --accent: #e6c392; }
+.audience-research { --accent: #c0afea; }
+.audience-icon { border-color: #b9bfce33; background: #d5dbe40a; }
+.audience-card > p { color: #9cafc2; }
+.audience-segments > span { color: #b5c4d6; border-color: #3e4b5f; }
+.audience-card-footer { border-top-color: #394456; }
+.audience-number { opacity: .4; }
+.audience-bottom-note { color: #c2cbd6; }
+.audience-bottom-note > small { color: #899bae; }
+.login-page {
+  background: radial-gradient(ellipse at 78% 36%, #33202e 0%, #111b2b 39%, #0a1220 75%);
+}
+.login-copy h1 { color: #f8f7fa; }
+.login-copy > p { color: #a1b2c5; }
+.login-security { color: #9baec1; }
+.login-platform { color: #879aad; }
+.login-platform b { color: #bfcedd; }
+.login-art { isolation: isolate; }
+.login-art::before {
+  content: ''; position: absolute; inset: auto -5% -22px; height: 180px; z-index: -1;
+  background: url('/assets/singapore-skyline.svg') center bottom / 100% auto no-repeat;
+  opacity: .6; pointer-events: none;
+}
+.art-ring { border-color: #ec64771a; }
+.ring-one { background: #ec647705; }
+.art-caption { color: #bb8e9c; }
+.login-footer { color: #93a7ba; border-top-color: #313042; }
+.login-footer > span { color: #8298ac; }
+.inline-citation { color: #fac0ca; }
+.inline-citation:hover { color: #ffe6eb; }
+@media (max-width: 1200px) {
+  .sg-brand { font-size: 19px; }
+  .sg-brand small { letter-spacing: 1.35px; font-size: 6.5px; }
+}
+@media (max-width: 700px) {
+  .sg-brand { font-size: 18px; gap: 9px; letter-spacing: -.65px; }
+  .sg-brand-symbol { width: 36px; height: 36px; border-radius: 10px; }
+  .sg-brand-symbol svg { width: 34px; height: 34px; }
+  .sg-brand small { font-size: 6px; letter-spacing: 1px; margin-top: 6px; }
+  .audience-landing { padding-top: 26px; }
+  .audience-intro { padding: 10px 0 22px; margin-bottom: 20px; }
+  .audience-intro::before { inset: -5px -18px 0; background-size: auto 150px; opacity: .19; }
+  .audience-intro h1 { font-size: 35px; line-height: 1.2; letter-spacing: -1.1px; }
+  .audience-intro .eyebrow { font-size: 7px; letter-spacing: .85px; }
+  .login-art::before { height: 105px; bottom: -8px; }
+  .login-footer { flex-direction: column; gap: 4px; }
+  .login-footer > span { max-width: none; text-align: left; }
+}
+@media (max-width: 550px) {
+  .app-header > .header-right .synthetic-pill, .login-header > .synthetic-pill,
+  .app-header > .header-right .source-pill, .login-header > .source-pill { display: none; }
+  .app-header { gap: 12px; }
+  .login-header { padding: 22px 24px; }
+}
