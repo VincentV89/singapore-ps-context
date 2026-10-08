@@ -6,7 +6,9 @@ The full-platform edition uses **Scan → Model → Serve**, with private **S3 +
 
 [CloudFront demo entry point](https://d1pbdc1b2fpdk2.cloudfront.net) · Cognito credentials are distributed privately.
 
-**Deployment status:** all 16 full-platform stacks are deployed in `us-east-1`; the deployment job succeeded on **8 October 2026 at 08:06:25 UTC**. The [accelerator console](https://d1nupu5vkgc6el.cloudfront.net) and administrator Cognito login are provisioned. All three official-source tables are scanned and approved; the reference ontology is imported and a real induction has produced a proposal. The initial Neptune instance hit memory limits during concurrent document graph ingestion and is being resized to `db.r8g.large`. Document retries, accepted mappings, live query checks and full-platform browser validation remain pending. The branded CloudFront entry point currently serves the earlier compact edition until validated full-platform publication. See the [full-platform validation record](docs/full-platform-validation.md) for completed checks and remaining work; [compact validation](docs/validation.md) covers the separate earlier edition.
+**Deployment status:** the full platform is deployed, all 20 official policy documents are processed, and reviewed ontology/mappings are accepted. Live source, graph, Athena, Ontop, document retrieval and AgentCore deep-reasoning checks passed. The branded navigator was published on **8 October 2026 at 08:35:16 UTC**, with full-platform Cognito hosted-login/PKCE verified. All four audience journeys and mobile browser checks are still being verified. See the [full-platform validation record](docs/full-platform-validation.md); [compact validation](docs/validation.md) covers the separate earlier edition.
+
+![Published SG Support Navigator showing four Singapore support audiences](docs/demo-full-entry.png)
 
 ## Four starting points
 
@@ -91,7 +93,7 @@ python scripts/full_platform_checks.py \
 
 The default ingestion limit is six policy documents covering all audiences; `--document-limit 0` stages the full document capture. Verify deep AgentCore streaming separately with `--check deep`. Keep generated passwords and checkpoint files private and ignored by Git. Refresh dated sources deliberately, review policy changes, then rescan and update models; the catalogue is not continuously synchronised with agencies.
 
-**Standing infrastructure estimate: approximately US$1,180–1,900 per 730-hour month before usage, storage and active VKG tasks.** OpenSearch, Neptune, ECS, NAT and private endpoints incur charges while idle. See the [rate assumptions and teardown procedure](docs/full-platform-operations.md). Deployment in `us-east-1` and US Bedrock inference routing are deliberate demo choices; they do not establish Singapore data residency.
+**Standing infrastructure estimate: approximately US$1,320–2,020 per 730-hour month before usage, storage and active VKG tasks.** OpenSearch, Neptune, ECS, NAT and private endpoints incur charges while idle. See the [rate assumptions and teardown procedure](docs/full-platform-operations.md). Deployment in `us-east-1` and US Bedrock inference routing are deliberate demo choices; they do not establish Singapore data residency.
 
 ## Synthetic compact mode for local/offline demonstrations
 
