@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
-from engine import InputError, SCENARIO, analyze
+from engine import InputError, SCENARIO, analyze, scenario_for_persona
 
 ROOT = Path(__file__).resolve().parent
 MAX_BODY_BYTES = 16000
@@ -22,7 +22,10 @@ def dispatch(method, path, body=None, query=None):
     if method == "GET" and path == "/api/health":
         return response(200, {"status": "ok", "graph": "RDF / SPARQL", "scenario": "life-events-navigator", "synthetic": True})
     if method == "GET" and path == "/api/scenario":
-        return response(200, SCENARIO)
+        try:
+            return response(200, scenario_for_persona((query or {}).get("persona", "individuals")))
+        except InputError as exc:
+            return response(400, {"error": str(exc)})
     if method == "GET" and path == "/api/ontology":
         kind = (query or {}).get("kind", "")
         if kind in {"schema", "instances"}:
@@ -30,7 +33,7 @@ def dispatch(method, path, body=None, query=None):
             result = response(200, (ROOT / "data" / filename).read_text(), "text/turtle")
             result["headers"]["content-disposition"] = f'attachment; filename="life-events-{kind}.ttl"'
             return result
-        return response(200, {"schema": (ROOT / "data" / "ontology.ttl").read_text(), "instances": (ROOT / "data" / "instances.ttl").read_text(), "format": "text/turtle", "schemaOnly": True, "provenance": "COA upstream serializer v0.3.4; fictional Life Events schema and separate synthetic instances."})
+        return response(200, {"schema": (ROOT / "data" / "ontology.ttl").read_text(), "instances": (ROOT / "data" / "instances.ttl").read_text(), "format": "text/turtle", "schemaOnly": True, "provenance": "COA upstream serializer v0.3.4; fictional government-support schema covering four personas and separate synthetic instances."})
     if method == "POST" and path == "/api/analyze":
         try:
             if body is None or len(body.encode("utf-8")) > MAX_BODY_BYTES:

@@ -9,6 +9,14 @@
     dcterms:created "2026-10-08T01:00:00+00:00"^^xsd:dateTime ;
     owl:versionInfo "2026-10-08T01:00:00Z" .
 
+life-events:Institution a owl:Class ;
+    rdfs:label "Institution" ;
+    rdfs:subClassOf life-events:Applicant .
+
+life-events:Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:subClassOf life-events:Applicant .
+
 life-events:administeredBy a owl:ObjectProperty ;
     rdfs:label "administeredBy" ;
     rdfs:domain life-events:Scheme ;
@@ -16,6 +24,11 @@ life-events:administeredBy a owl:ObjectProperty ;
 
 life-events:benefit a owl:DatatypeProperty ;
     rdfs:label "benefit" ;
+    rdfs:domain life-events:Scheme ;
+    rdfs:range xsd:string .
+
+life-events:category a owl:DatatypeProperty ;
+    rdfs:label "category" ;
     rdfs:domain life-events:Scheme ;
     rdfs:range xsd:string .
 
@@ -39,6 +52,11 @@ life-events:field a owl:DatatypeProperty ;
     rdfs:domain life-events:EligibilityRule ;
     rdfs:range xsd:string .
 
+life-events:hasApplicantContext a owl:ObjectProperty ;
+    rdfs:label "hasApplicantContext" ;
+    rdfs:domain life-events:Applicant ;
+    rdfs:range life-events:ApplicantContext .
+
 life-events:hasLifeEvent a owl:ObjectProperty ;
     rdfs:label "hasLifeEvent" ;
     rdfs:domain life-events:Resident ;
@@ -48,6 +66,11 @@ life-events:hasRule a owl:ObjectProperty ;
     rdfs:label "hasRule" ;
     rdfs:domain life-events:Scheme ;
     rdfs:range life-events:EligibilityRule .
+
+life-events:hasSupportNeed a owl:ObjectProperty ;
+    rdfs:label "hasSupportNeed" ;
+    rdfs:domain life-events:Applicant ;
+    rdfs:range life-events:SupportNeed .
 
 life-events:memberOf a owl:ObjectProperty ;
     rdfs:label "memberOf" ;
@@ -59,13 +82,17 @@ life-events:operator a owl:DatatypeProperty ;
     rdfs:domain life-events:EligibilityRule ;
     rdfs:range xsd:string .
 
+life-events:persona a owl:DatatypeProperty ;
+    rdfs:label "persona" ;
+    rdfs:range xsd:string .
+
 life-events:providesFact a owl:ObjectProperty ;
     rdfs:label "providesFact" ;
     rdfs:range life-events:EligibilityRule .
 
 life-events:relatedScheme a owl:ObjectProperty ;
     rdfs:label "relatedScheme" ;
-    rdfs:domain life-events:LifeEvent ;
+    rdfs:domain life-events:SupportNeed ;
     rdfs:range life-events:Scheme .
 
 life-events:requiresDocument a owl:ObjectProperty ;
@@ -81,11 +108,18 @@ life-events:source a owl:DatatypeProperty ;
 life-events:Agency a owl:Class ;
     rdfs:label "Agency" .
 
+life-events:ApplicantContext a owl:Class ;
+    rdfs:label "ApplicantContext" .
+
 life-events:Document a owl:Class ;
     rdfs:label "Document" .
 
 life-events:Household a owl:Class ;
     rdfs:label "Household" .
+
+life-events:LifeEvent a owl:Class ;
+    rdfs:label "LifeEvent" ;
+    rdfs:subClassOf life-events:SupportNeed .
 
 life-events:Relationship a owl:Class ;
     rdfs:label "Relationship" .
@@ -93,11 +127,15 @@ life-events:Relationship a owl:Class ;
 life-events:Evidence a owl:Class ;
     rdfs:label "Evidence" .
 
-life-events:LifeEvent a owl:Class ;
-    rdfs:label "LifeEvent" .
-
 life-events:Resident a owl:Class ;
-    rdfs:label "Resident" .
+    rdfs:label "Resident" ;
+    rdfs:subClassOf life-events:Applicant .
+
+life-events:SupportNeed a owl:Class ;
+    rdfs:label "SupportNeed" .
+
+life-events:Applicant a owl:Class ;
+    rdfs:label "Applicant" .
 
 life-events:EligibilityRule a owl:Class ;
     rdfs:label "EligibilityRule" .

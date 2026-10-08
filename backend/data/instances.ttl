@@ -6,427 +6,2115 @@ demo:edge-1 a demo:Relationship ;
     demo:edgePredicate demo:memberOf ;
     demo:edgeSource demo:resident-demo ;
     demo:edgeTarget demo:household-demo ;
-    demo:evidenceId "ev-profile" .
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-10 a demo:Relationship ;
-    demo:edgePredicate demo:hasRule ;
+    demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:rule-bridge-1 ;
-    demo:evidenceId "ev-bridge" .
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
 demo:edge-11 a demo:Relationship ;
-    demo:edgePredicate demo:providesFact ;
-    demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-bridge-1 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:doc-employment ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
 demo:edge-12 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:rule-bridge-2 ;
-    demo:evidenceId "ev-bridge" .
+    demo:edgeTarget demo:rule-bridge-1 ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
 demo:edge-13 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-bridge-2 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-bridge-1 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-14 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:rule-bridge-3 ;
-    demo:evidenceId "ev-bridge" .
+    demo:edgeTarget demo:rule-bridge-2 ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
 demo:edge-15 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-bridge-3 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-bridge-2 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-16 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:rule-bridge-4 ;
-    demo:evidenceId "ev-bridge" .
+    demo:edgeTarget demo:rule-bridge-3 ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
 demo:edge-17 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
-    demo:edgeSource demo:household-demo ;
-    demo:edgeTarget demo:rule-bridge-4 ;
-    demo:evidenceId "ev-calculation" .
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-bridge-3 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-18 a demo:Relationship ;
-    demo:edgePredicate demo:relatedScheme ;
-    demo:edgeSource demo:event-jobloss ;
-    demo:edgeTarget demo:scheme-skills ;
-    demo:evidenceId "ev-skills" .
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:rule-bridge-4 ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
 demo:edge-19 a demo:Relationship ;
-    demo:edgePredicate demo:administeredBy ;
-    demo:edgeSource demo:scheme-skills ;
-    demo:edgeTarget demo:agency-workforce ;
-    demo:evidenceId "ev-skills" .
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-bridge-4 ;
+    demo:evidenceId "ev-calculation" ;
+    demo:persona "individuals" .
 
 demo:edge-2 a demo:Relationship ;
     demo:edgePredicate demo:hasLifeEvent ;
     demo:edgeSource demo:resident-demo ;
     demo:edgeTarget demo:event-jobloss ;
-    demo:evidenceId "ev-profile" .
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-20 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-jobloss ;
+    demo:edgeTarget demo:scheme-skills ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
+
+demo:edge-21 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:agency-workforce ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
+
+demo:edge-22 a demo:Relationship ;
     demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-skills ;
     demo:edgeTarget demo:doc-employment ;
-    demo:evidenceId "ev-skills" .
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
 
-demo:edge-21 a demo:Relationship ;
+demo:edge-23 a demo:Relationship ;
     demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-skills ;
     demo:edgeTarget demo:doc-training ;
-    demo:evidenceId "ev-skills" .
-
-demo:edge-22 a demo:Relationship ;
-    demo:edgePredicate demo:hasRule ;
-    demo:edgeSource demo:scheme-skills ;
-    demo:edgeTarget demo:rule-skills-1 ;
-    demo:evidenceId "ev-skills" .
-
-demo:edge-23 a demo:Relationship ;
-    demo:edgePredicate demo:providesFact ;
-    demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-skills-1 ;
-    demo:evidenceId "ev-profile" .
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
 
 demo:edge-24 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-skills ;
-    demo:edgeTarget demo:rule-skills-2 ;
-    demo:evidenceId "ev-skills" .
+    demo:edgeTarget demo:rule-skills-1 ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
 
 demo:edge-25 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-skills-2 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-skills-1 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-26 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-skills ;
-    demo:edgeTarget demo:rule-skills-3 ;
-    demo:evidenceId "ev-skills" .
+    demo:edgeTarget demo:rule-skills-2 ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
 
 demo:edge-27 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-skills-3 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-skills-2 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-28 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-skills ;
-    demo:edgeTarget demo:rule-skills-4 ;
-    demo:evidenceId "ev-skills" .
+    demo:edgeTarget demo:rule-skills-3 ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
 
 demo:edge-29 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-skills-4 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-skills-3 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-3 a demo:Relationship ;
     demo:edgePredicate demo:hasLifeEvent ;
     demo:edgeSource demo:resident-demo ;
     demo:edgeTarget demo:event-caregiving ;
-    demo:evidenceId "ev-profile" .
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-30 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-skills ;
-    demo:edgeTarget demo:rule-skills-5 ;
-    demo:evidenceId "ev-skills" .
+    demo:edgeTarget demo:rule-skills-4 ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
 
 demo:edge-31 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-skills-5 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-skills-4 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-32 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:rule-skills-5 ;
+    demo:evidenceId "ev-skills" ;
+    demo:persona "individuals" .
+
+demo:edge-33 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-skills-5 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-34 a demo:Relationship ;
     demo:edgePredicate demo:relatedScheme ;
     demo:edgeSource demo:event-caregiving ;
     demo:edgeTarget demo:scheme-caregiver ;
-    demo:evidenceId "ev-caregiver" .
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
-demo:edge-33 a demo:Relationship ;
+demo:edge-35 a demo:Relationship ;
     demo:edgePredicate demo:administeredBy ;
     demo:edgeSource demo:scheme-caregiver ;
     demo:edgeTarget demo:agency-care ;
-    demo:evidenceId "ev-caregiver" .
-
-demo:edge-34 a demo:Relationship ;
-    demo:edgePredicate demo:requiresDocument ;
-    demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:doc-caregiving ;
-    demo:evidenceId "ev-caregiver" .
-
-demo:edge-35 a demo:Relationship ;
-    demo:edgePredicate demo:requiresDocument ;
-    demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:doc-income ;
-    demo:evidenceId "ev-caregiver" .
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-36 a demo:Relationship ;
     demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:doc-household ;
-    demo:evidenceId "ev-caregiver" .
+    demo:edgeTarget demo:doc-caregiving ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-37 a demo:Relationship ;
-    demo:edgePredicate demo:hasRule ;
+    demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:rule-caregiver-1 ;
-    demo:evidenceId "ev-caregiver" .
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-38 a demo:Relationship ;
-    demo:edgePredicate demo:providesFact ;
-    demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-caregiver-1 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-39 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:rule-caregiver-2 ;
-    demo:evidenceId "ev-caregiver" .
+    demo:edgeTarget demo:rule-caregiver-1 ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-4 a demo:Relationship ;
     demo:edgePredicate demo:hasLifeEvent ;
     demo:edgeSource demo:resident-demo ;
     demo:edgeTarget demo:event-accessibility ;
-    demo:evidenceId "ev-profile" .
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-40 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-caregiver-2 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-caregiver-1 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-41 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:rule-caregiver-3 ;
-    demo:evidenceId "ev-caregiver" .
+    demo:edgeTarget demo:rule-caregiver-2 ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-42 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-caregiver-3 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-caregiver-2 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-43 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-caregiver ;
-    demo:edgeTarget demo:rule-caregiver-4 ;
-    demo:evidenceId "ev-caregiver" .
+    demo:edgeTarget demo:rule-caregiver-3 ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
 
 demo:edge-44 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
-    demo:edgeSource demo:household-demo ;
-    demo:edgeTarget demo:rule-caregiver-4 ;
-    demo:evidenceId "ev-calculation" .
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-caregiver-3 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-45 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:rule-caregiver-4 ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:persona "individuals" .
+
+demo:edge-46 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-caregiver-4 ;
+    demo:evidenceId "ev-calculation" ;
+    demo:persona "individuals" .
+
+demo:edge-47 a demo:Relationship ;
     demo:edgePredicate demo:relatedScheme ;
     demo:edgeSource demo:event-accessibility ;
     demo:edgeTarget demo:scheme-accessible ;
-    demo:evidenceId "ev-accessible" .
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
-demo:edge-46 a demo:Relationship ;
+demo:edge-48 a demo:Relationship ;
     demo:edgePredicate demo:administeredBy ;
     demo:edgeSource demo:scheme-accessible ;
     demo:edgeTarget demo:agency-access ;
-    demo:evidenceId "ev-accessible" .
-
-demo:edge-47 a demo:Relationship ;
-    demo:edgePredicate demo:requiresDocument ;
-    demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:doc-accessibility ;
-    demo:evidenceId "ev-accessible" .
-
-demo:edge-48 a demo:Relationship ;
-    demo:edgePredicate demo:requiresDocument ;
-    demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:doc-income ;
-    demo:evidenceId "ev-accessible" .
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-49 a demo:Relationship ;
     demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:doc-household ;
-    demo:evidenceId "ev-accessible" .
+    demo:edgeTarget demo:doc-accessibility ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-5 a demo:Relationship ;
-    demo:edgePredicate demo:relatedScheme ;
-    demo:edgeSource demo:event-jobloss ;
-    demo:edgeTarget demo:scheme-bridge ;
-    demo:evidenceId "ev-bridge" .
+    demo:edgePredicate demo:hasLifeEvent ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:event-education ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-50 a demo:Relationship ;
-    demo:edgePredicate demo:hasRule ;
+    demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:rule-accessible-1 ;
-    demo:evidenceId "ev-accessible" .
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-51 a demo:Relationship ;
-    demo:edgePredicate demo:providesFact ;
-    demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-accessible-1 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-52 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:rule-accessible-2 ;
-    demo:evidenceId "ev-accessible" .
+    demo:edgeTarget demo:rule-accessible-1 ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-53 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-accessible-2 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-accessible-1 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-54 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:rule-accessible-3 ;
-    demo:evidenceId "ev-accessible" .
+    demo:edgeTarget demo:rule-accessible-2 ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-55 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:resident-demo ;
-    demo:edgeTarget demo:rule-accessible-3 ;
-    demo:evidenceId "ev-profile" .
+    demo:edgeTarget demo:rule-accessible-2 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
 
 demo:edge-56 a demo:Relationship ;
     demo:edgePredicate demo:hasRule ;
     demo:edgeSource demo:scheme-accessible ;
-    demo:edgeTarget demo:rule-accessible-4 ;
-    demo:evidenceId "ev-accessible" .
+    demo:edgeTarget demo:rule-accessible-3 ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
 
 demo:edge-57 a demo:Relationship ;
     demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-accessible-3 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-58 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:rule-accessible-4 ;
+    demo:evidenceId "ev-accessible" ;
+    demo:persona "individuals" .
+
+demo:edge-59 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
     demo:edgeSource demo:household-demo ;
     demo:edgeTarget demo:rule-accessible-4 ;
-    demo:evidenceId "ev-calculation" .
+    demo:evidenceId "ev-calculation" ;
+    demo:persona "individuals" .
 
 demo:edge-6 a demo:Relationship ;
+    demo:edgePredicate demo:hasLifeEvent ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:event-senior-health ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-60 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-education ;
+    demo:edgeTarget demo:scheme-student-pathways ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-61 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:agency-education-support ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-62 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:doc-enrolment ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-63 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-64 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-65 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:rule-student-pathways-1 ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-66 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-student-pathways-1 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-67 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:rule-student-pathways-2 ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-68 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-student-pathways-2 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-69 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:rule-student-pathways-3 ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-7 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-jobloss ;
+    demo:edgeTarget demo:scheme-bridge ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
+
+demo:edge-70 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-student-pathways-3 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-71 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:rule-student-pathways-4 ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-72 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-student-pathways-4 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-73 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-student-pathways ;
+    demo:edgeTarget demo:rule-student-pathways-5 ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:persona "individuals" .
+
+demo:edge-74 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-student-pathways-5 ;
+    demo:evidenceId "ev-calculation" ;
+    demo:persona "individuals" .
+
+demo:edge-75 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-senior-health ;
+    demo:edgeTarget demo:scheme-senior-health ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-76 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:agency-senior-health ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-77 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:doc-senior-health ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-78 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-79 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-8 a demo:Relationship ;
     demo:edgePredicate demo:administeredBy ;
     demo:edgeSource demo:scheme-bridge ;
     demo:edgeTarget demo:agency-support ;
-    demo:evidenceId "ev-bridge" .
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
 
-demo:edge-7 a demo:Relationship ;
-    demo:edgePredicate demo:requiresDocument ;
-    demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:doc-income ;
-    demo:evidenceId "ev-bridge" .
+demo:edge-80 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:rule-senior-health-1 ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
 
-demo:edge-8 a demo:Relationship ;
-    demo:edgePredicate demo:requiresDocument ;
-    demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:doc-household ;
-    demo:evidenceId "ev-bridge" .
+demo:edge-81 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-senior-health-1 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-82 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:rule-senior-health-2 ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-83 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-senior-health-2 ;
+    demo:evidenceId "ev-profile" ;
+    demo:persona "individuals" .
+
+demo:edge-84 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-senior-health ;
+    demo:edgeTarget demo:rule-senior-health-3 ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:persona "individuals" .
+
+demo:edge-85 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-senior-health-3 ;
+    demo:evidenceId "ev-calculation" ;
+    demo:persona "individuals" .
 
 demo:edge-9 a demo:Relationship ;
     demo:edgePredicate demo:requiresDocument ;
     demo:edgeSource demo:scheme-bridge ;
-    demo:edgeTarget demo:doc-employment ;
-    demo:evidenceId "ev-bridge" .
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-bridge" ;
+    demo:persona "individuals" .
+
+demo:edge-businesses-1 a demo:Relationship ;
+    demo:edgePredicate demo:hasApplicantContext ;
+    demo:edgeSource demo:business-demo ;
+    demo:edgeTarget demo:business-context ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-10 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:doc-business-project ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-11 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-1 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-12 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-1 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-13 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-2 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-14 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-2 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-15 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-3 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-16 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-3 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-17 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-4 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-18 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-4 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-19 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-5 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-2 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:business-demo ;
+    demo:edgeTarget demo:event-business-digital ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-20 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-5 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-21 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-6 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-22 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-6 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-23 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:rule-digital-spark-7 ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-24 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-digital-spark-7 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-25 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-business-workforce ;
+    demo:edgeTarget demo:scheme-workforce-lift ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-26 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:agency-enterprise-workforce-demo ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-27 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:doc-business-registration ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-28 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:doc-business-workforce ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-29 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:doc-business-project ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-3 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:business-demo ;
+    demo:edgeTarget demo:event-business-workforce ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-30 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:rule-workforce-lift-1 ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-31 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-workforce-lift-1 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-32 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:rule-workforce-lift-2 ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-33 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-workforce-lift-2 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-34 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:rule-workforce-lift-3 ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-35 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-workforce-lift-3 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-36 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-workforce-lift ;
+    demo:edgeTarget demo:rule-workforce-lift-4 ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-37 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-workforce-lift-4 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-38 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-business-green ;
+    demo:edgeTarget demo:scheme-green-launch ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-39 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:agency-enterprise-green-demo ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-4 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:business-demo ;
+    demo:edgeTarget demo:event-business-green ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-40 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:doc-business-registration ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-41 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:doc-business-ownership ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-42 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:doc-business-financials ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-43 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:doc-business-project ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-44 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:rule-green-launch-1 ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-45 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-green-launch-1 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-46 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:rule-green-launch-2 ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-47 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-green-launch-2 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-48 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:rule-green-launch-3 ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-49 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-green-launch-3 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-5 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-business-digital ;
+    demo:edgeTarget demo:scheme-digital-spark ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-50 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:rule-green-launch-4 ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-51 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-green-launch-4 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-52 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-green-launch ;
+    demo:edgeTarget demo:rule-green-launch-5 ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-53 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:business-context ;
+    demo:edgeTarget demo:rule-green-launch-5 ;
+    demo:evidenceId "ev-businesses-profile" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-6 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:agency-enterprise-demo ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-7 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:doc-business-registration ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-8 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:doc-business-ownership ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-businesses-9 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-digital-spark ;
+    demo:edgeTarget demo:doc-business-financials ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:persona "businesses" .
+
+demo:edge-community-1 a demo:Relationship ;
+    demo:edgePredicate demo:hasApplicantContext ;
+    demo:edgeSource demo:community-demo ;
+    demo:edgeTarget demo:community-context ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-10 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:rule-community-impact-1 ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-11 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-impact-1 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-12 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:rule-community-impact-2 ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-13 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-impact-2 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-14 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:rule-community-impact-3 ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-15 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-impact-3 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-16 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:rule-community-impact-4 ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-17 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-impact-4 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-18 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:rule-community-impact-5 ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-19 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-impact-5 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-2 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:community-demo ;
+    demo:edgeTarget demo:event-community-impact ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-20 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-community-capability ;
+    demo:edgeTarget demo:scheme-community-capability ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-21 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:agency-community-capability-demo ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-22 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:doc-community-registration ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-23 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:doc-community-charity ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-24 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:doc-community-project ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-25 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:doc-community-benefit ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-26 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:rule-community-capability-1 ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-27 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-capability-1 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-28 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:rule-community-capability-2 ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-29 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-capability-2 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-3 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:community-demo ;
+    demo:edgeTarget demo:event-community-capability ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-30 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:rule-community-capability-3 ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-31 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-capability-3 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-32 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:rule-community-capability-4 ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-33 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-capability-4 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-34 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-community-capability ;
+    demo:edgeTarget demo:rule-community-capability-5 ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:persona "community" .
+
+demo:edge-community-35 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-community-capability-5 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-36 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-community-creative ;
+    demo:edgeTarget demo:scheme-creative-youth ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-37 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:agency-community-creative-demo ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-38 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:doc-community-registration ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-39 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:doc-community-project ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-4 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:community-demo ;
+    demo:edgeTarget demo:event-community-creative ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-40 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:doc-community-benefit ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-41 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:rule-creative-youth-1 ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-42 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-creative-youth-1 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-43 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:rule-creative-youth-2 ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-44 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-creative-youth-2 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-45 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:rule-creative-youth-3 ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-46 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-creative-youth-3 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-47 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:rule-creative-youth-4 ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-48 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-creative-youth-4 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-49 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-creative-youth ;
+    demo:edgeTarget demo:rule-creative-youth-5 ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:persona "community" .
+
+demo:edge-community-5 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-community-impact ;
+    demo:edgeTarget demo:scheme-community-impact ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-50 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:community-context ;
+    demo:edgeTarget demo:rule-creative-youth-5 ;
+    demo:evidenceId "ev-community-profile" ;
+    demo:persona "community" .
+
+demo:edge-community-6 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:agency-community-demo ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-7 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:doc-community-registration ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-8 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:doc-community-project ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-community-9 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-community-impact ;
+    demo:edgeTarget demo:doc-community-benefit ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:persona "community" .
+
+demo:edge-research-1 a demo:Relationship ;
+    demo:edgePredicate demo:hasApplicantContext ;
+    demo:edgeSource demo:research-demo ;
+    demo:edgeTarget demo:research-context ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-10 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:doc-research-ethics ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-11 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:rule-discovery-catalyst-1 ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-12 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-discovery-catalyst-1 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-13 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:rule-discovery-catalyst-2 ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-14 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-discovery-catalyst-2 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-15 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:rule-discovery-catalyst-3 ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-16 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-discovery-catalyst-3 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-17 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:rule-discovery-catalyst-4 ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-18 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-discovery-catalyst-4 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-19 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:rule-discovery-catalyst-5 ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-2 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:research-demo ;
+    demo:edgeTarget demo:event-research-discovery ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-20 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-discovery-catalyst-5 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-21 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:rule-discovery-catalyst-6 ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-22 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-discovery-catalyst-6 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-23 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-research-collaboration ;
+    demo:edgeTarget demo:scheme-collaboration-forge ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-24 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:agency-research-innovation-demo ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-25 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:doc-research-registration ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-26 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:doc-research-proposal ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-27 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:doc-research-partnership ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-28 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:doc-research-ethics ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-29 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:rule-collaboration-forge-1 ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-3 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:research-demo ;
+    demo:edgeTarget demo:event-research-collaboration ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-30 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-collaboration-forge-1 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-31 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:rule-collaboration-forge-2 ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-32 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-collaboration-forge-2 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-33 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:rule-collaboration-forge-3 ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-34 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-collaboration-forge-3 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-35 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:rule-collaboration-forge-4 ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-36 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-collaboration-forge-4 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-37 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:rule-collaboration-forge-5 ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-38 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-collaboration-forge-5 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-39 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-collaboration-forge ;
+    demo:edgeTarget demo:rule-collaboration-forge-6 ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:persona "research" .
+
+demo:edge-research-4 a demo:Relationship ;
+    demo:edgePredicate demo:hasSupportNeed ;
+    demo:edgeSource demo:research-demo ;
+    demo:edgeTarget demo:event-research-learning ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-40 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-collaboration-forge-6 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-41 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-research-learning ;
+    demo:edgeTarget demo:scheme-learning-futures ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-42 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:agency-education-demo ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-43 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:doc-research-registration ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-44 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:doc-research-proposal ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-45 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:doc-research-lead ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-46 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:rule-learning-futures-1 ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-47 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-learning-futures-1 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-48 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:rule-learning-futures-2 ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-49 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-learning-futures-2 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-5 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-research-discovery ;
+    demo:edgeTarget demo:scheme-discovery-catalyst ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-50 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:rule-learning-futures-3 ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-51 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-learning-futures-3 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-52 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:rule-learning-futures-4 ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-53 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-learning-futures-4 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-54 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-learning-futures ;
+    demo:edgeTarget demo:rule-learning-futures-5 ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:persona "research" .
+
+demo:edge-research-55 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:research-context ;
+    demo:edgeTarget demo:rule-learning-futures-5 ;
+    demo:evidenceId "ev-research-profile" ;
+    demo:persona "research" .
+
+demo:edge-research-6 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:agency-research-demo ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-7 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:doc-research-registration ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-8 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:doc-research-proposal ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
+
+demo:edge-research-9 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-discovery-catalyst ;
+    demo:edgeTarget demo:doc-research-lead ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:persona "research" .
 
 demo:ev-accessible a demo:Evidence ;
     rdfs:label "Accessible Living Support · fictional rules" ;
     demo:excerpt "Fictional accessibility support: citizen, age 21 or older, accessibility need represented by the synthetic disability flag, and gross monthly household income per person at most S$2,200. Benefit: S$1,200 home adaptation credit. Accessibility and household income evidence are required." ;
+    demo:persona "individuals" ;
     demo:source "Synthetic policy catalogue v1 · ALS" ;
     demo:updatedAt "2026-10-08T09:00:00+08:00" .
 
 demo:ev-bridge a demo:Evidence ;
     rdfs:label "Household Bridge Grant · fictional rules" ;
     demo:excerpt "Fictional grant: citizen, age 21 or older, recent job loss, and gross monthly household income per person at most S$1,000. Benefit: S$450 monthly for three months. Income, household composition and employment evidence are required." ;
+    demo:persona "individuals" ;
     demo:source "Synthetic policy catalogue v1 · HBG" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-businesses-calculation a demo:Evidence ;
+    rdfs:label "Context evaluation and uncertainty" ;
+    demo:excerpt "Scheme criteria are conjunctive. A failing criterion excludes a scheme; unknown required facts produce needs review when no criterion fails. Likely eligible is fictional screening, never an approval. Thresholds are evaluated against supplied applicant and project facts without inferred citizenship or household income." ;
+    demo:persona "businesses" ;
+    demo:source "Demo reasoning specification v2" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-businesses-profile a demo:Evidence ;
+    rdfs:label "Synthetic business & project context" ;
+    demo:excerpt "Applicant and project facts come from the current editable synthetic profile. The validated request is authoritative; missing facts remain unknown and are never filled from another persona or a default profile." ;
+    demo:persona "businesses" ;
+    demo:source "Demo businesses scenario v2" ;
     demo:updatedAt "2026-10-08T09:00:00+08:00" .
 
 demo:ev-calculation a demo:Evidence ;
     rdfs:label "Context calculation and uncertainty" ;
     demo:excerpt "Per-person income is gross monthly household income divided by household size. Scheme criteria are conjunctive. A failing criterion excludes a scheme; unknown required facts produce needs review when no criterion fails. Likely eligible is a screening result, never an approval." ;
+    demo:persona "individuals" ;
     demo:source "Demo reasoning specification v1" ;
     demo:updatedAt "2026-10-08T09:00:00+08:00" .
 
 demo:ev-caregiver a demo:Evidence ;
     rdfs:label "Caregiver Relief · fictional rules" ;
     demo:excerpt "Fictional caregiver support: citizen, age 21 or older, caregiver responsibility, and gross monthly household income per person at most S$1,800. Benefit: S$250 monthly respite credit. Caregiving and household income evidence are required." ;
+    demo:persona "individuals" ;
     demo:source "Synthetic policy catalogue v1 · CR" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-collaboration-forge a demo:Evidence ;
+    rdfs:label "Collaboration Forge Grant · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered institution; Research institution or industry partner; Applied research project; Industry-academia collaboration; Required ethics approval obtained; Project budget ≤ S$500,000. Benefit: Up to S$300,000 applied innovation funding · fictional. Required illustrative evidence: Institution registration record, Research or programme proposal and budget, Industry-academia partnership agreement, Required ethics approval record. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "research" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-collaboration-forge" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-community-calculation a demo:Evidence ;
+    rdfs:label "Context evaluation and uncertainty" ;
+    demo:excerpt "Scheme criteria are conjunctive. A failing criterion excludes a scheme; unknown required facts produce needs review when no criterion fails. Likely eligible is fictional screening, never an approval. Thresholds are evaluated against supplied applicant and project facts without inferred citizenship or household income." ;
+    demo:persona "community" ;
+    demo:source "Demo reasoning specification v2" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-community-capability a demo:Evidence ;
+    rdfs:label "Social Capability Bridge · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered organisation; Registered charity status; Project provides public benefit; Capability-building project; Project budget ≤ S$50,000. Benefit: Up to S$25,000 capability-building funding · fictional. Required illustrative evidence: Organisation registration record, Charity status record, Project proposal and budget, Public-benefit statement. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "community" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-community-capability" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-community-impact a demo:Evidence ;
+    rdfs:label "Community Impact Seed Fund · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered organisation; Community or social-service organisation; Project provides public benefit; Community or social-service project; Project budget ≤ S$100,000. Benefit: Up to S$50,000 community project funding · fictional. Required illustrative evidence: Organisation registration record, Project proposal and budget, Public-benefit statement. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "community" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-community-impact" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-community-profile a demo:Evidence ;
+    rdfs:label "Synthetic community & project context" ;
+    demo:excerpt "Applicant and project facts come from the current editable synthetic profile. The validated request is authoritative; missing facts remain unknown and are never filled from another persona or a default profile." ;
+    demo:persona "community" ;
+    demo:source "Demo community scenario v2" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-creative-youth a demo:Evidence ;
+    rdfs:label "Creative Youth Connections · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered organisation; Charity, community or arts organisation; Project provides public benefit; Arts or youth programme; Project budget ≤ S$40,000. Benefit: Up to S$20,000 arts or youth programme funding · fictional. Required illustrative evidence: Organisation registration record, Project proposal and budget, Public-benefit statement. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "community" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-creative-youth" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-digital-spark a demo:Evidence ;
+    rdfs:label "Digital Spark Grant · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered business; SME, startup or self-employed applicant; Local ownership ≥ 30%; At most 200 employees; Annual revenue ≤ S$100 million; Digitalisation or AI project; Applicant co-funding ≥ 30%. Benefit: Up to S$30,000 transformation credit · fictional. Required illustrative evidence: Business registration record, Ownership declaration, Business financial statement, Project proposal and co-funding plan. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "businesses" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-digital-spark" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-discovery-catalyst a demo:Evidence ;
+    rdfs:label "Discovery Catalyst Fund · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered institution; University or research institute; Local researcher leads the project; Fundamental research project; Required ethics approval obtained; Project budget ≤ S$300,000. Benefit: Up to S$200,000 research funding · fictional. Required illustrative evidence: Institution registration record, Research or programme proposal and budget, Lead applicant affiliation record, Required ethics approval record. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "research" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-discovery-catalyst" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-green-launch a demo:Evidence ;
+    rdfs:label "Green Launch Support · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered business; Local ownership ≥ 30%; Annual revenue ≤ S$100 million; Sustainability project; Applicant co-funding ≥ 40%. Benefit: Up to S$40,000 sustainability project credit · fictional. Required illustrative evidence: Business registration record, Ownership declaration, Business financial statement, Project proposal and co-funding plan. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "businesses" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-green-launch" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-learning-futures a demo:Evidence ;
+    rdfs:label "Learning Futures Programme · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered institution; School or university; Local researcher or educator leads the programme; Education innovation or scholarship programme; Project budget ≤ S$100,000. Benefit: Up to S$60,000 education programme funding · fictional. Required illustrative evidence: Institution registration record, Research or programme proposal and budget, Lead applicant affiliation record. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "research" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-learning-futures" ;
     demo:updatedAt "2026-10-08T09:00:00+08:00" .
 
 demo:ev-profile a demo:Evidence ;
     rdfs:label "Synthetic household context" ;
     demo:excerpt "Resident and household facts come from the current editable synthetic profile. The validated request is authoritative for this screening; no household size, employment or life event is assumed. Missing facts remain unknown." ;
+    demo:persona "individuals" ;
     demo:source "Demo household scenario v1" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-research-calculation a demo:Evidence ;
+    rdfs:label "Context evaluation and uncertainty" ;
+    demo:excerpt "Scheme criteria are conjunctive. A failing criterion excludes a scheme; unknown required facts produce needs review when no criterion fails. Likely eligible is fictional screening, never an approval. Thresholds are evaluated against supplied applicant and project facts without inferred citizenship or household income." ;
+    demo:persona "research" ;
+    demo:source "Demo reasoning specification v2" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-research-profile a demo:Evidence ;
+    rdfs:label "Synthetic research & institution context" ;
+    demo:excerpt "Applicant and project facts come from the current editable synthetic profile. The validated request is authoritative; missing facts remain unknown and are never filled from another persona or a default profile." ;
+    demo:persona "research" ;
+    demo:source "Demo research scenario v2" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-senior-health a demo:Evidence ;
+    rdfs:label "Senior Health Access · fictional rules" ;
+    demo:excerpt "Fictional healthcare support: citizen or permanent resident, age 65 or older, and gross monthly household income per person at most S$1,800. Benefit: S$800 healthcare support credit. Senior care assessment, income and household evidence are required." ;
+    demo:persona "individuals" ;
+    demo:source "Synthetic policy catalogue v2 · SHA" ;
     demo:updatedAt "2026-10-08T09:00:00+08:00" .
 
 demo:ev-skills a demo:Evidence ;
     rdfs:label "Skills Restart Support · fictional rules" ;
     demo:excerpt "Fictional training support: citizen or permanent resident, age 18–60 inclusive, currently unemployed, with recent job loss. Benefit: S$600 training credit. Employment evidence and a training plan are required." ;
+    demo:persona "individuals" ;
     demo:source "Synthetic policy catalogue v1 · SRS" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-student-pathways a demo:Evidence ;
+    rdfs:label "Student Pathways Bursary · fictional rules" ;
+    demo:excerpt "Fictional education support: citizen or permanent resident, currently a student, age 16–30 inclusive, and gross monthly household income per person at most S$1,600. Benefit: S$1,500 education credit. Student enrolment, income and household evidence are required." ;
+    demo:persona "individuals" ;
+    demo:source "Synthetic policy catalogue v2 · SPB" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-workforce-lift a demo:Evidence ;
+    rdfs:label "Workforce Lift Support · fictional rules" ;
+    demo:excerpt "Fictional scheme criteria: Locally registered business; At least one employee; Workforce development project; Applicant co-funding ≥ 20%. Benefit: Up to S$12,000 workforce training credit · fictional. Required illustrative evidence: Business registration record, Workforce training plan, Project proposal and co-funding plan. All criteria must pass; documentary verification and officer review are required." ;
+    demo:persona "businesses" ;
+    demo:source "Synthetic policy catalogue v2 · scheme-workforce-lift" ;
     demo:updatedAt "2026-10-08T09:00:00+08:00" .
 
 demo:agency-access a demo:Agency ;
     rdfs:label "Demo Accessibility Office" ;
-    demo:description "Fictional demo agency." .
+    demo:description "Fictional demo agency." ;
+    demo:persona "individuals" .
 
 demo:agency-care a demo:Agency ;
     rdfs:label "Demo Care Services Office" ;
-    demo:description "Fictional demo agency." .
+    demo:description "Fictional demo agency." ;
+    demo:persona "individuals" .
+
+demo:agency-community-capability-demo a demo:Agency ;
+    rdfs:label "Demo Social Capability Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "community" .
+
+demo:agency-community-creative-demo a demo:Agency ;
+    rdfs:label "Demo Arts and Youth Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "community" .
+
+demo:agency-community-demo a demo:Agency ;
+    rdfs:label "Demo Community Partnership Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "community" .
+
+demo:agency-education-demo a demo:Agency ;
+    rdfs:label "Demo Education Futures Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "research" .
+
+demo:agency-education-support a demo:Agency ;
+    rdfs:label "Demo Student Support Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "individuals" .
+
+demo:agency-enterprise-demo a demo:Agency ;
+    rdfs:label "Demo Enterprise Transformation Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "businesses" .
+
+demo:agency-enterprise-green-demo a demo:Agency ;
+    rdfs:label "Demo Green Enterprise Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "businesses" .
+
+demo:agency-enterprise-workforce-demo a demo:Agency ;
+    rdfs:label "Demo Employer Development Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "businesses" .
+
+demo:agency-research-demo a demo:Agency ;
+    rdfs:label "Demo Research Discovery Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "research" .
+
+demo:agency-research-innovation-demo a demo:Agency ;
+    rdfs:label "Demo Innovation Partnership Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "research" .
+
+demo:agency-senior-health a demo:Agency ;
+    rdfs:label "Demo Senior Health Office" ;
+    demo:description "Fictional demo agency." ;
+    demo:persona "individuals" .
 
 demo:agency-support a demo:Agency ;
     rdfs:label "Demo Social Support Office" ;
-    demo:description "Fictional demo agency." .
+    demo:description "Fictional demo agency." ;
+    demo:persona "individuals" .
 
 demo:agency-workforce a demo:Agency ;
     rdfs:label "Demo Workforce Office" ;
-    demo:description "Fictional demo agency." .
+    demo:description "Fictional demo agency." ;
+    demo:persona "individuals" .
 
 demo:doc-accessibility a demo:Document ;
     rdfs:label "Accessibility assessment" ;
-    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
+
+demo:doc-business-workforce a demo:Document ;
+    rdfs:label "Workforce training plan" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "businesses" .
 
 demo:doc-caregiving a demo:Document ;
     rdfs:label "Caregiving declaration" ;
-    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
+
+demo:doc-community-charity a demo:Document ;
+    rdfs:label "Charity status record" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "community" .
+
+demo:doc-enrolment a demo:Document ;
+    rdfs:label "Student enrolment record" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
+
+demo:doc-research-partnership a demo:Document ;
+    rdfs:label "Industry-academia partnership agreement" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "research" .
+
+demo:doc-senior-health a demo:Document ;
+    rdfs:label "Senior care assessment" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
 
 demo:doc-training a demo:Document ;
     rdfs:label "Training plan" ;
-    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
 
 demo:event-accessibility a demo:LifeEvent ;
     rdfs:label "Accessibility need" ;
     demo:description "Editable synthetic support need." ;
+    demo:persona "individuals" ;
     demo:relatedScheme demo:scheme-accessible .
+
+demo:event-business-digital a demo:SupportNeed ;
+    rdfs:label "Digital & AI transformation" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "businesses" ;
+    demo:relatedScheme demo:scheme-digital-spark .
+
+demo:event-business-green a demo:SupportNeed ;
+    rdfs:label "Sustainability transition" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "businesses" ;
+    demo:relatedScheme demo:scheme-green-launch .
+
+demo:event-business-workforce a demo:SupportNeed ;
+    rdfs:label "Workforce development" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "businesses" ;
+    demo:relatedScheme demo:scheme-workforce-lift .
 
 demo:event-caregiving a demo:LifeEvent ;
     rdfs:label "Caregiving responsibility" ;
     demo:description "Editable synthetic life event." ;
+    demo:persona "individuals" ;
     demo:relatedScheme demo:scheme-caregiver .
+
+demo:event-community-capability a demo:SupportNeed ;
+    rdfs:label "Organisation capability building" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "community" ;
+    demo:relatedScheme demo:scheme-community-capability .
+
+demo:event-community-creative a demo:SupportNeed ;
+    rdfs:label "Arts & youth programme" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "community" ;
+    demo:relatedScheme demo:scheme-creative-youth .
+
+demo:event-community-impact a demo:SupportNeed ;
+    rdfs:label "Community & social-service project" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "community" ;
+    demo:relatedScheme demo:scheme-community-impact .
+
+demo:event-education a demo:LifeEvent ;
+    rdfs:label "Student education" ;
+    demo:description "Editable synthetic education context." ;
+    demo:persona "individuals" ;
+    demo:relatedScheme demo:scheme-student-pathways .
+
+demo:event-research-collaboration a demo:SupportNeed ;
+    rdfs:label "Industry-academia innovation" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "research" ;
+    demo:relatedScheme demo:scheme-collaboration-forge .
+
+demo:event-research-discovery a demo:SupportNeed ;
+    rdfs:label "Fundamental research" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "research" ;
+    demo:relatedScheme demo:scheme-discovery-catalyst .
+
+demo:event-research-learning a demo:SupportNeed ;
+    rdfs:label "Education innovation & scholarships" ;
+    demo:description "Illustrative support need; project focus is supplied in the editable profile." ;
+    demo:persona "research" ;
+    demo:relatedScheme demo:scheme-learning-futures .
+
+demo:event-senior-health a demo:LifeEvent ;
+    rdfs:label "Senior healthcare" ;
+    demo:description "Editable synthetic senior healthcare context." ;
+    demo:persona "individuals" ;
+    demo:relatedScheme demo:scheme-senior-health .
+
+demo:business-demo a demo:Organization ;
+    rdfs:label "Demo business" ;
+    demo:description "Fictional applicant; no real organisation or applicant identifiers." ;
+    demo:hasApplicantContext demo:business-context ;
+    demo:hasSupportNeed demo:event-business-digital,
+        demo:event-business-green,
+        demo:event-business-workforce ;
+    demo:persona "businesses" .
+
+demo:community-demo a demo:Organization ;
+    rdfs:label "Demo community organisation" ;
+    demo:description "Fictional applicant; no real organisation or applicant identifiers." ;
+    demo:hasApplicantContext demo:community-context ;
+    demo:hasSupportNeed demo:event-community-capability,
+        demo:event-community-creative,
+        demo:event-community-impact ;
+    demo:persona "community" .
+
+demo:doc-business-financials a demo:Document ;
+    rdfs:label "Business financial statement" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "businesses" .
+
+demo:doc-business-ownership a demo:Document ;
+    rdfs:label "Ownership declaration" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "businesses" .
 
 demo:doc-employment a demo:Document ;
     rdfs:label "Employment transition record" ;
-    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
+
+demo:doc-research-ethics a demo:Document ;
+    rdfs:label "Required ethics approval record" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "research" .
+
+demo:doc-research-lead a demo:Document ;
+    rdfs:label "Lead applicant affiliation record" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "research" .
 
 demo:event-jobloss a demo:LifeEvent ;
     rdfs:label "Recent job loss" ;
     demo:description "Editable synthetic life event." ;
+    demo:persona "individuals" ;
     demo:relatedScheme demo:scheme-bridge,
         demo:scheme-skills .
+
+demo:research-demo a demo:Institution ;
+    rdfs:label "Demo research institution" ;
+    demo:description "Fictional applicant; no real organisation or applicant identifiers." ;
+    demo:hasApplicantContext demo:research-context ;
+    demo:hasSupportNeed demo:event-research-collaboration,
+        demo:event-research-discovery,
+        demo:event-research-learning ;
+    demo:persona "research" .
 
 demo:rule-accessible-1 a demo:EligibilityRule ;
     rdfs:label "Citizen status" ;
@@ -434,6 +2122,7 @@ demo:rule-accessible-1 a demo:EligibilityRule ;
     demo:expected "citizen" ;
     demo:field "citizenship" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 1 .
 
 demo:rule-accessible-2 a demo:EligibilityRule ;
@@ -442,6 +2131,7 @@ demo:rule-accessible-2 a demo:EligibilityRule ;
     demo:expected 21 ;
     demo:field "age" ;
     demo:operator "gte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 2 .
 
 demo:rule-accessible-3 a demo:EligibilityRule ;
@@ -450,6 +2140,7 @@ demo:rule-accessible-3 a demo:EligibilityRule ;
     demo:expected true ;
     demo:field "disability" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 3 .
 
 demo:rule-accessible-4 a demo:EligibilityRule ;
@@ -458,6 +2149,7 @@ demo:rule-accessible-4 a demo:EligibilityRule ;
     demo:expected 2200 ;
     demo:field "perCapitaIncome" ;
     demo:operator "lte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 4 .
 
 demo:rule-bridge-1 a demo:EligibilityRule ;
@@ -466,6 +2158,7 @@ demo:rule-bridge-1 a demo:EligibilityRule ;
     demo:expected "citizen" ;
     demo:field "citizenship" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 1 .
 
 demo:rule-bridge-2 a demo:EligibilityRule ;
@@ -474,6 +2167,7 @@ demo:rule-bridge-2 a demo:EligibilityRule ;
     demo:expected 21 ;
     demo:field "age" ;
     demo:operator "gte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 2 .
 
 demo:rule-bridge-3 a demo:EligibilityRule ;
@@ -482,6 +2176,7 @@ demo:rule-bridge-3 a demo:EligibilityRule ;
     demo:expected true ;
     demo:field "recentJobLoss" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 3 .
 
 demo:rule-bridge-4 a demo:EligibilityRule ;
@@ -490,6 +2185,7 @@ demo:rule-bridge-4 a demo:EligibilityRule ;
     demo:expected 1000 ;
     demo:field "perCapitaIncome" ;
     demo:operator "lte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 4 .
 
 demo:rule-caregiver-1 a demo:EligibilityRule ;
@@ -498,6 +2194,7 @@ demo:rule-caregiver-1 a demo:EligibilityRule ;
     demo:expected "citizen" ;
     demo:field "citizenship" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 1 .
 
 demo:rule-caregiver-2 a demo:EligibilityRule ;
@@ -506,6 +2203,7 @@ demo:rule-caregiver-2 a demo:EligibilityRule ;
     demo:expected 21 ;
     demo:field "age" ;
     demo:operator "gte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 2 .
 
 demo:rule-caregiver-3 a demo:EligibilityRule ;
@@ -514,6 +2212,7 @@ demo:rule-caregiver-3 a demo:EligibilityRule ;
     demo:expected true ;
     demo:field "caregiver" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 3 .
 
 demo:rule-caregiver-4 a demo:EligibilityRule ;
@@ -522,7 +2221,431 @@ demo:rule-caregiver-4 a demo:EligibilityRule ;
     demo:expected 1800 ;
     demo:field "perCapitaIncome" ;
     demo:operator "lte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 4 .
+
+demo:rule-collaboration-forge-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered institution" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 1 .
+
+demo:rule-collaboration-forge-2 a demo:EligibilityRule ;
+    rdfs:label "Research institution or industry partner" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "university|research-institute|industry-partner" ;
+    demo:field "institutionType" ;
+    demo:operator "in" ;
+    demo:persona "research" ;
+    demo:ruleOrder 2 .
+
+demo:rule-collaboration-forge-3 a demo:EligibilityRule ;
+    rdfs:label "Applied research project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "applied-research" ;
+    demo:field "projectArea" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 3 .
+
+demo:rule-collaboration-forge-4 a demo:EligibilityRule ;
+    rdfs:label "Industry-academia collaboration" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "collaboration" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 4 .
+
+demo:rule-collaboration-forge-5 a demo:EligibilityRule ;
+    rdfs:label "Required ethics approval obtained" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "ethicsApproval" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 5 .
+
+demo:rule-collaboration-forge-6 a demo:EligibilityRule ;
+    rdfs:label "Project budget ≤ S$500,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 500000 ;
+    demo:field "projectBudget" ;
+    demo:operator "lte" ;
+    demo:persona "research" ;
+    demo:ruleOrder 6 .
+
+demo:rule-community-capability-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered organisation" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 1 .
+
+demo:rule-community-capability-2 a demo:EligibilityRule ;
+    rdfs:label "Registered charity status" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "registeredCharity" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 2 .
+
+demo:rule-community-capability-3 a demo:EligibilityRule ;
+    rdfs:label "Project provides public benefit" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "publicBenefit" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 3 .
+
+demo:rule-community-capability-4 a demo:EligibilityRule ;
+    rdfs:label "Capability-building project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "capability" ;
+    demo:field "projectArea" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 4 .
+
+demo:rule-community-capability-5 a demo:EligibilityRule ;
+    rdfs:label "Project budget ≤ S$50,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 50000 ;
+    demo:field "projectBudget" ;
+    demo:operator "lte" ;
+    demo:persona "community" ;
+    demo:ruleOrder 5 .
+
+demo:rule-community-impact-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered organisation" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 1 .
+
+demo:rule-community-impact-2 a demo:EligibilityRule ;
+    rdfs:label "Community or social-service organisation" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "registered-charity|social-service-agency|religious-organisation|community-group" ;
+    demo:field "organizationType" ;
+    demo:operator "in" ;
+    demo:persona "community" ;
+    demo:ruleOrder 2 .
+
+demo:rule-community-impact-3 a demo:EligibilityRule ;
+    rdfs:label "Project provides public benefit" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "publicBenefit" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 3 .
+
+demo:rule-community-impact-4 a demo:EligibilityRule ;
+    rdfs:label "Community or social-service project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "community|social-services" ;
+    demo:field "projectArea" ;
+    demo:operator "in" ;
+    demo:persona "community" ;
+    demo:ruleOrder 4 .
+
+demo:rule-community-impact-5 a demo:EligibilityRule ;
+    rdfs:label "Project budget ≤ S$100,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 100000 ;
+    demo:field "projectBudget" ;
+    demo:operator "lte" ;
+    demo:persona "community" ;
+    demo:ruleOrder 5 .
+
+demo:rule-creative-youth-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered organisation" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 1 .
+
+demo:rule-creative-youth-2 a demo:EligibilityRule ;
+    rdfs:label "Charity, community or arts organisation" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "registered-charity|community-group|arts-group" ;
+    demo:field "organizationType" ;
+    demo:operator "in" ;
+    demo:persona "community" ;
+    demo:ruleOrder 2 .
+
+demo:rule-creative-youth-3 a demo:EligibilityRule ;
+    rdfs:label "Project provides public benefit" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "publicBenefit" ;
+    demo:operator "eq" ;
+    demo:persona "community" ;
+    demo:ruleOrder 3 .
+
+demo:rule-creative-youth-4 a demo:EligibilityRule ;
+    rdfs:label "Arts or youth programme" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "arts|youth" ;
+    demo:field "projectArea" ;
+    demo:operator "in" ;
+    demo:persona "community" ;
+    demo:ruleOrder 4 .
+
+demo:rule-creative-youth-5 a demo:EligibilityRule ;
+    rdfs:label "Project budget ≤ S$40,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 40000 ;
+    demo:field "projectBudget" ;
+    demo:operator "lte" ;
+    demo:persona "community" ;
+    demo:ruleOrder 5 .
+
+demo:rule-digital-spark-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered business" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 1 .
+
+demo:rule-digital-spark-2 a demo:EligibilityRule ;
+    rdfs:label "SME, startup or self-employed applicant" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "sme|startup|self-employed" ;
+    demo:field "organizationType" ;
+    demo:operator "in" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 2 .
+
+demo:rule-digital-spark-3 a demo:EligibilityRule ;
+    rdfs:label "Local ownership ≥ 30%" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 30 ;
+    demo:field "localOwnership" ;
+    demo:operator "gte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 3 .
+
+demo:rule-digital-spark-4 a demo:EligibilityRule ;
+    rdfs:label "At most 200 employees" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 200 ;
+    demo:field "employeeCount" ;
+    demo:operator "lte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 4 .
+
+demo:rule-digital-spark-5 a demo:EligibilityRule ;
+    rdfs:label "Annual revenue ≤ S$100 million" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 100000000 ;
+    demo:field "annualRevenue" ;
+    demo:operator "lte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 5 .
+
+demo:rule-digital-spark-6 a demo:EligibilityRule ;
+    rdfs:label "Digitalisation or AI project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "digitalisation|ai" ;
+    demo:field "projectArea" ;
+    demo:operator "in" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 6 .
+
+demo:rule-digital-spark-7 a demo:EligibilityRule ;
+    rdfs:label "Applicant co-funding ≥ 30%" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 30 ;
+    demo:field "coFunding" ;
+    demo:operator "gte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 7 .
+
+demo:rule-discovery-catalyst-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered institution" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 1 .
+
+demo:rule-discovery-catalyst-2 a demo:EligibilityRule ;
+    rdfs:label "University or research institute" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "university|research-institute" ;
+    demo:field "institutionType" ;
+    demo:operator "in" ;
+    demo:persona "research" ;
+    demo:ruleOrder 2 .
+
+demo:rule-discovery-catalyst-3 a demo:EligibilityRule ;
+    rdfs:label "Local researcher leads the project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "local-researcher" ;
+    demo:field "leadApplicant" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 3 .
+
+demo:rule-discovery-catalyst-4 a demo:EligibilityRule ;
+    rdfs:label "Fundamental research project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "fundamental-research" ;
+    demo:field "projectArea" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 4 .
+
+demo:rule-discovery-catalyst-5 a demo:EligibilityRule ;
+    rdfs:label "Required ethics approval obtained" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "ethicsApproval" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 5 .
+
+demo:rule-discovery-catalyst-6 a demo:EligibilityRule ;
+    rdfs:label "Project budget ≤ S$300,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 300000 ;
+    demo:field "projectBudget" ;
+    demo:operator "lte" ;
+    demo:persona "research" ;
+    demo:ruleOrder 6 .
+
+demo:rule-green-launch-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered business" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 1 .
+
+demo:rule-green-launch-2 a demo:EligibilityRule ;
+    rdfs:label "Local ownership ≥ 30%" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 30 ;
+    demo:field "localOwnership" ;
+    demo:operator "gte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 2 .
+
+demo:rule-green-launch-3 a demo:EligibilityRule ;
+    rdfs:label "Annual revenue ≤ S$100 million" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 100000000 ;
+    demo:field "annualRevenue" ;
+    demo:operator "lte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 3 .
+
+demo:rule-green-launch-4 a demo:EligibilityRule ;
+    rdfs:label "Sustainability project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "sustainability" ;
+    demo:field "projectArea" ;
+    demo:operator "eq" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 4 .
+
+demo:rule-green-launch-5 a demo:EligibilityRule ;
+    rdfs:label "Applicant co-funding ≥ 40%" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 40 ;
+    demo:field "coFunding" ;
+    demo:operator "gte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 5 .
+
+demo:rule-learning-futures-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered institution" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "research" ;
+    demo:ruleOrder 1 .
+
+demo:rule-learning-futures-2 a demo:EligibilityRule ;
+    rdfs:label "School or university" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "school|university" ;
+    demo:field "institutionType" ;
+    demo:operator "in" ;
+    demo:persona "research" ;
+    demo:ruleOrder 2 .
+
+demo:rule-learning-futures-3 a demo:EligibilityRule ;
+    rdfs:label "Local researcher or educator leads the programme" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "local-researcher|educator" ;
+    demo:field "leadApplicant" ;
+    demo:operator "in" ;
+    demo:persona "research" ;
+    demo:ruleOrder 3 .
+
+demo:rule-learning-futures-4 a demo:EligibilityRule ;
+    rdfs:label "Education innovation or scholarship programme" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "education-innovation|scholarship" ;
+    demo:field "projectArea" ;
+    demo:operator "in" ;
+    demo:persona "research" ;
+    demo:ruleOrder 4 .
+
+demo:rule-learning-futures-5 a demo:EligibilityRule ;
+    rdfs:label "Project budget ≤ S$100,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 100000 ;
+    demo:field "projectBudget" ;
+    demo:operator "lte" ;
+    demo:persona "research" ;
+    demo:ruleOrder 5 .
+
+demo:rule-senior-health-1 a demo:EligibilityRule ;
+    rdfs:label "Citizen or permanent resident" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "citizen|permanent-resident" ;
+    demo:field "citizenship" ;
+    demo:operator "in" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 1 .
+
+demo:rule-senior-health-2 a demo:EligibilityRule ;
+    rdfs:label "Age 65 or above" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 65 ;
+    demo:field "age" ;
+    demo:operator "gte" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 2 .
+
+demo:rule-senior-health-3 a demo:EligibilityRule ;
+    rdfs:label "Income per person ≤ S$1,800" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 1800 ;
+    demo:field "perCapitaIncome" ;
+    demo:operator "lte" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 3 .
 
 demo:rule-skills-1 a demo:EligibilityRule ;
     rdfs:label "Citizen or permanent resident" ;
@@ -530,6 +2653,7 @@ demo:rule-skills-1 a demo:EligibilityRule ;
     demo:expected "citizen|permanent-resident" ;
     demo:field "citizenship" ;
     demo:operator "in" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 1 .
 
 demo:rule-skills-2 a demo:EligibilityRule ;
@@ -538,6 +2662,7 @@ demo:rule-skills-2 a demo:EligibilityRule ;
     demo:expected 18 ;
     demo:field "age" ;
     demo:operator "gte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 2 .
 
 demo:rule-skills-3 a demo:EligibilityRule ;
@@ -546,6 +2671,7 @@ demo:rule-skills-3 a demo:EligibilityRule ;
     demo:expected 60 ;
     demo:field "age" ;
     demo:operator "lte" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 3 .
 
 demo:rule-skills-4 a demo:EligibilityRule ;
@@ -554,6 +2680,7 @@ demo:rule-skills-4 a demo:EligibilityRule ;
     demo:expected "unemployed" ;
     demo:field "employmentStatus" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 4 .
 
 demo:rule-skills-5 a demo:EligibilityRule ;
@@ -562,33 +2689,172 @@ demo:rule-skills-5 a demo:EligibilityRule ;
     demo:expected true ;
     demo:field "recentJobLoss" ;
     demo:operator "eq" ;
+    demo:persona "individuals" ;
     demo:ruleOrder 5 .
+
+demo:rule-student-pathways-1 a demo:EligibilityRule ;
+    rdfs:label "Citizen or permanent resident" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "citizen|permanent-resident" ;
+    demo:field "citizenship" ;
+    demo:operator "in" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 1 .
+
+demo:rule-student-pathways-2 a demo:EligibilityRule ;
+    rdfs:label "Currently a student" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "student" ;
+    demo:field "employmentStatus" ;
+    demo:operator "eq" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 2 .
+
+demo:rule-student-pathways-3 a demo:EligibilityRule ;
+    rdfs:label "Age 16 or above" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 16 ;
+    demo:field "age" ;
+    demo:operator "gte" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 3 .
+
+demo:rule-student-pathways-4 a demo:EligibilityRule ;
+    rdfs:label "Age 30 or below" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 30 ;
+    demo:field "age" ;
+    demo:operator "lte" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 4 .
+
+demo:rule-student-pathways-5 a demo:EligibilityRule ;
+    rdfs:label "Income per person ≤ S$1,600" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 1600 ;
+    demo:field "perCapitaIncome" ;
+    demo:operator "lte" ;
+    demo:persona "individuals" ;
+    demo:ruleOrder 5 .
+
+demo:rule-workforce-lift-1 a demo:EligibilityRule ;
+    rdfs:label "Locally registered business" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "localRegistration" ;
+    demo:operator "eq" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 1 .
+
+demo:rule-workforce-lift-2 a demo:EligibilityRule ;
+    rdfs:label "At least one employee" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 1 ;
+    demo:field "employeeCount" ;
+    demo:operator "gte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 2 .
+
+demo:rule-workforce-lift-3 a demo:EligibilityRule ;
+    rdfs:label "Workforce development project" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "workforce" ;
+    demo:field "projectArea" ;
+    demo:operator "eq" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 3 .
+
+demo:rule-workforce-lift-4 a demo:EligibilityRule ;
+    rdfs:label "Applicant co-funding ≥ 20%" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 20 ;
+    demo:field "coFunding" ;
+    demo:operator "gte" ;
+    demo:persona "businesses" ;
+    demo:ruleOrder 4 .
+
+demo:doc-business-project a demo:Document ;
+    rdfs:label "Project proposal and co-funding plan" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "businesses" .
+
+demo:doc-business-registration a demo:Document ;
+    rdfs:label "Business registration record" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "businesses" .
+
+demo:doc-community-benefit a demo:Document ;
+    rdfs:label "Public-benefit statement" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "community" .
+
+demo:doc-community-project a demo:Document ;
+    rdfs:label "Project proposal and budget" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "community" .
+
+demo:doc-community-registration a demo:Document ;
+    rdfs:label "Organisation registration record" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "community" .
+
+demo:doc-research-proposal a demo:Document ;
+    rdfs:label "Research or programme proposal and budget" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "research" .
+
+demo:doc-research-registration a demo:Document ;
+    rdfs:label "Institution registration record" ;
+    demo:description "Illustrative evidence type; do not upload real documents to this demo." ;
+    demo:persona "research" .
 
 demo:household-demo a demo:Household ;
     rdfs:label "Household context" ;
     demo:description "Income and household size form the per-person income context." ;
+    demo:persona "individuals" ;
     demo:providesFact demo:rule-accessible-4,
         demo:rule-bridge-4,
-        demo:rule-caregiver-4 .
+        demo:rule-caregiver-4,
+        demo:rule-senior-health-3,
+        demo:rule-student-pathways-5 .
+
+demo:scheme-senior-health a demo:Scheme ;
+    rdfs:label "Senior Health Access" ;
+    demo:administeredBy demo:agency-senior-health ;
+    demo:benefit "S$800 healthcare support credit · fictional" ;
+    demo:category "healthcare" ;
+    demo:description "S$800 healthcare support credit · fictional" ;
+    demo:evidenceId "ev-senior-health" ;
+    demo:hasRule demo:rule-senior-health-1,
+        demo:rule-senior-health-2,
+        demo:rule-senior-health-3 ;
+    demo:persona "individuals" ;
+    demo:requiresDocument demo:doc-household,
+        demo:doc-income,
+        demo:doc-senior-health .
 
 demo:doc-household a demo:Document ;
     rdfs:label "Household declaration" ;
-    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
 
 demo:doc-income a demo:Document ;
     rdfs:label "Income statement" ;
-    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." ;
+    demo:persona "individuals" .
 
 demo:scheme-accessible a demo:Scheme ;
     rdfs:label "Accessible Living Support" ;
     demo:administeredBy demo:agency-access ;
     demo:benefit "S$1,200 home adaptation credit · fictional" ;
+    demo:category "accessibility" ;
     demo:description "S$1,200 home adaptation credit · fictional" ;
     demo:evidenceId "ev-accessible" ;
     demo:hasRule demo:rule-accessible-1,
         demo:rule-accessible-2,
         demo:rule-accessible-3,
         demo:rule-accessible-4 ;
+    demo:persona "individuals" ;
     demo:requiresDocument demo:doc-accessibility,
         demo:doc-household,
         demo:doc-income .
@@ -597,12 +2863,14 @@ demo:scheme-bridge a demo:Scheme ;
     rdfs:label "Household Bridge Grant" ;
     demo:administeredBy demo:agency-support ;
     demo:benefit "S$450 / month for 3 months · fictional" ;
+    demo:category "financial-assistance" ;
     demo:description "S$450 / month for 3 months · fictional" ;
     demo:evidenceId "ev-bridge" ;
     demo:hasRule demo:rule-bridge-1,
         demo:rule-bridge-2,
         demo:rule-bridge-3,
         demo:rule-bridge-4 ;
+    demo:persona "individuals" ;
     demo:requiresDocument demo:doc-employment,
         demo:doc-household,
         demo:doc-income .
@@ -611,12 +2879,14 @@ demo:scheme-caregiver a demo:Scheme ;
     rdfs:label "Caregiver Relief" ;
     demo:administeredBy demo:agency-care ;
     demo:benefit "S$250 / month respite credit · fictional" ;
+    demo:category "caregiving" ;
     demo:description "S$250 / month respite credit · fictional" ;
     demo:evidenceId "ev-caregiver" ;
     demo:hasRule demo:rule-caregiver-1,
         demo:rule-caregiver-2,
         demo:rule-caregiver-3,
         demo:rule-caregiver-4 ;
+    demo:persona "individuals" ;
     demo:requiresDocument demo:doc-caregiving,
         demo:doc-household,
         demo:doc-income .
@@ -625,6 +2895,7 @@ demo:scheme-skills a demo:Scheme ;
     rdfs:label "Skills Restart Support" ;
     demo:administeredBy demo:agency-workforce ;
     demo:benefit "S$600 training credit · fictional" ;
+    demo:category "employment" ;
     demo:description "S$600 training credit · fictional" ;
     demo:evidenceId "ev-skills" ;
     demo:hasRule demo:rule-skills-1,
@@ -632,16 +2903,261 @@ demo:scheme-skills a demo:Scheme ;
         demo:rule-skills-3,
         demo:rule-skills-4,
         demo:rule-skills-5 ;
+    demo:persona "individuals" ;
     demo:requiresDocument demo:doc-employment,
         demo:doc-training .
+
+demo:scheme-workforce-lift a demo:Scheme ;
+    rdfs:label "Workforce Lift Support" ;
+    demo:administeredBy demo:agency-enterprise-workforce-demo ;
+    demo:benefit "Up to S$12,000 workforce training credit · fictional" ;
+    demo:category "workforce" ;
+    demo:description "Up to S$12,000 workforce training credit · fictional" ;
+    demo:evidenceId "ev-workforce-lift" ;
+    demo:hasRule demo:rule-workforce-lift-1,
+        demo:rule-workforce-lift-2,
+        demo:rule-workforce-lift-3,
+        demo:rule-workforce-lift-4 ;
+    demo:persona "businesses" ;
+    demo:requiresDocument demo:doc-business-project,
+        demo:doc-business-registration,
+        demo:doc-business-workforce .
+
+demo:scheme-community-impact a demo:Scheme ;
+    rdfs:label "Community Impact Seed Fund" ;
+    demo:administeredBy demo:agency-community-demo ;
+    demo:benefit "Up to S$50,000 community project funding · fictional" ;
+    demo:category "community-projects" ;
+    demo:description "Up to S$50,000 community project funding · fictional" ;
+    demo:evidenceId "ev-community-impact" ;
+    demo:hasRule demo:rule-community-impact-1,
+        demo:rule-community-impact-2,
+        demo:rule-community-impact-3,
+        demo:rule-community-impact-4,
+        demo:rule-community-impact-5 ;
+    demo:persona "community" ;
+    demo:requiresDocument demo:doc-community-benefit,
+        demo:doc-community-project,
+        demo:doc-community-registration .
+
+demo:scheme-creative-youth a demo:Scheme ;
+    rdfs:label "Creative Youth Connections" ;
+    demo:administeredBy demo:agency-community-creative-demo ;
+    demo:benefit "Up to S$20,000 arts or youth programme funding · fictional" ;
+    demo:category "arts-youth" ;
+    demo:description "Up to S$20,000 arts or youth programme funding · fictional" ;
+    demo:evidenceId "ev-creative-youth" ;
+    demo:hasRule demo:rule-creative-youth-1,
+        demo:rule-creative-youth-2,
+        demo:rule-creative-youth-3,
+        demo:rule-creative-youth-4,
+        demo:rule-creative-youth-5 ;
+    demo:persona "community" ;
+    demo:requiresDocument demo:doc-community-benefit,
+        demo:doc-community-project,
+        demo:doc-community-registration .
+
+demo:scheme-learning-futures a demo:Scheme ;
+    rdfs:label "Learning Futures Programme" ;
+    demo:administeredBy demo:agency-education-demo ;
+    demo:benefit "Up to S$60,000 education programme funding · fictional" ;
+    demo:category "education" ;
+    demo:description "Up to S$60,000 education programme funding · fictional" ;
+    demo:evidenceId "ev-learning-futures" ;
+    demo:hasRule demo:rule-learning-futures-1,
+        demo:rule-learning-futures-2,
+        demo:rule-learning-futures-3,
+        demo:rule-learning-futures-4,
+        demo:rule-learning-futures-5 ;
+    demo:persona "research" ;
+    demo:requiresDocument demo:doc-research-lead,
+        demo:doc-research-proposal,
+        demo:doc-research-registration .
+
+demo:scheme-student-pathways a demo:Scheme ;
+    rdfs:label "Student Pathways Bursary" ;
+    demo:administeredBy demo:agency-education-support ;
+    demo:benefit "S$1,500 education credit · fictional" ;
+    demo:category "education" ;
+    demo:description "S$1,500 education credit · fictional" ;
+    demo:evidenceId "ev-student-pathways" ;
+    demo:hasRule demo:rule-student-pathways-1,
+        demo:rule-student-pathways-2,
+        demo:rule-student-pathways-3,
+        demo:rule-student-pathways-4,
+        demo:rule-student-pathways-5 ;
+    demo:persona "individuals" ;
+    demo:requiresDocument demo:doc-enrolment,
+        demo:doc-household,
+        demo:doc-income .
+
+demo:scheme-community-capability a demo:Scheme ;
+    rdfs:label "Social Capability Bridge" ;
+    demo:administeredBy demo:agency-community-capability-demo ;
+    demo:benefit "Up to S$25,000 capability-building funding · fictional" ;
+    demo:category "capability" ;
+    demo:description "Up to S$25,000 capability-building funding · fictional" ;
+    demo:evidenceId "ev-community-capability" ;
+    demo:hasRule demo:rule-community-capability-1,
+        demo:rule-community-capability-2,
+        demo:rule-community-capability-3,
+        demo:rule-community-capability-4,
+        demo:rule-community-capability-5 ;
+    demo:persona "community" ;
+    demo:requiresDocument demo:doc-community-benefit,
+        demo:doc-community-charity,
+        demo:doc-community-project,
+        demo:doc-community-registration .
+
+demo:scheme-green-launch a demo:Scheme ;
+    rdfs:label "Green Launch Support" ;
+    demo:administeredBy demo:agency-enterprise-green-demo ;
+    demo:benefit "Up to S$40,000 sustainability project credit · fictional" ;
+    demo:category "sustainability" ;
+    demo:description "Up to S$40,000 sustainability project credit · fictional" ;
+    demo:evidenceId "ev-green-launch" ;
+    demo:hasRule demo:rule-green-launch-1,
+        demo:rule-green-launch-2,
+        demo:rule-green-launch-3,
+        demo:rule-green-launch-4,
+        demo:rule-green-launch-5 ;
+    demo:persona "businesses" ;
+    demo:requiresDocument demo:doc-business-financials,
+        demo:doc-business-ownership,
+        demo:doc-business-project,
+        demo:doc-business-registration .
+
+demo:scheme-collaboration-forge a demo:Scheme ;
+    rdfs:label "Collaboration Forge Grant" ;
+    demo:administeredBy demo:agency-research-innovation-demo ;
+    demo:benefit "Up to S$300,000 applied innovation funding · fictional" ;
+    demo:category "collaboration" ;
+    demo:description "Up to S$300,000 applied innovation funding · fictional" ;
+    demo:evidenceId "ev-collaboration-forge" ;
+    demo:hasRule demo:rule-collaboration-forge-1,
+        demo:rule-collaboration-forge-2,
+        demo:rule-collaboration-forge-3,
+        demo:rule-collaboration-forge-4,
+        demo:rule-collaboration-forge-5,
+        demo:rule-collaboration-forge-6 ;
+    demo:persona "research" ;
+    demo:requiresDocument demo:doc-research-ethics,
+        demo:doc-research-partnership,
+        demo:doc-research-proposal,
+        demo:doc-research-registration .
+
+demo:scheme-discovery-catalyst a demo:Scheme ;
+    rdfs:label "Discovery Catalyst Fund" ;
+    demo:administeredBy demo:agency-research-demo ;
+    demo:benefit "Up to S$200,000 research funding · fictional" ;
+    demo:category "research-funding" ;
+    demo:description "Up to S$200,000 research funding · fictional" ;
+    demo:evidenceId "ev-discovery-catalyst" ;
+    demo:hasRule demo:rule-discovery-catalyst-1,
+        demo:rule-discovery-catalyst-2,
+        demo:rule-discovery-catalyst-3,
+        demo:rule-discovery-catalyst-4,
+        demo:rule-discovery-catalyst-5,
+        demo:rule-discovery-catalyst-6 ;
+    demo:persona "research" ;
+    demo:requiresDocument demo:doc-research-ethics,
+        demo:doc-research-lead,
+        demo:doc-research-proposal,
+        demo:doc-research-registration .
+
+demo:scheme-digital-spark a demo:Scheme ;
+    rdfs:label "Digital Spark Grant" ;
+    demo:administeredBy demo:agency-enterprise-demo ;
+    demo:benefit "Up to S$30,000 transformation credit · fictional" ;
+    demo:category "digital-ai" ;
+    demo:description "Up to S$30,000 transformation credit · fictional" ;
+    demo:evidenceId "ev-digital-spark" ;
+    demo:hasRule demo:rule-digital-spark-1,
+        demo:rule-digital-spark-2,
+        demo:rule-digital-spark-3,
+        demo:rule-digital-spark-4,
+        demo:rule-digital-spark-5,
+        demo:rule-digital-spark-6,
+        demo:rule-digital-spark-7 ;
+    demo:persona "businesses" ;
+    demo:requiresDocument demo:doc-business-financials,
+        demo:doc-business-ownership,
+        demo:doc-business-project,
+        demo:doc-business-registration .
+
+demo:community-context a demo:ApplicantContext ;
+    rdfs:label "Community & project context" ;
+    demo:description "Request-scoped synthetic organisation and project facts." ;
+    demo:persona "community" ;
+    demo:providesFact demo:rule-community-capability-1,
+        demo:rule-community-capability-2,
+        demo:rule-community-capability-3,
+        demo:rule-community-capability-4,
+        demo:rule-community-capability-5,
+        demo:rule-community-impact-1,
+        demo:rule-community-impact-2,
+        demo:rule-community-impact-3,
+        demo:rule-community-impact-4,
+        demo:rule-community-impact-5,
+        demo:rule-creative-youth-1,
+        demo:rule-creative-youth-2,
+        demo:rule-creative-youth-3,
+        demo:rule-creative-youth-4,
+        demo:rule-creative-youth-5 .
+
+demo:business-context a demo:ApplicantContext ;
+    rdfs:label "Business & project context" ;
+    demo:description "Request-scoped synthetic organisation and project facts." ;
+    demo:persona "businesses" ;
+    demo:providesFact demo:rule-digital-spark-1,
+        demo:rule-digital-spark-2,
+        demo:rule-digital-spark-3,
+        demo:rule-digital-spark-4,
+        demo:rule-digital-spark-5,
+        demo:rule-digital-spark-6,
+        demo:rule-digital-spark-7,
+        demo:rule-green-launch-1,
+        demo:rule-green-launch-2,
+        demo:rule-green-launch-3,
+        demo:rule-green-launch-4,
+        demo:rule-green-launch-5,
+        demo:rule-workforce-lift-1,
+        demo:rule-workforce-lift-2,
+        demo:rule-workforce-lift-3,
+        demo:rule-workforce-lift-4 .
+
+demo:research-context a demo:ApplicantContext ;
+    rdfs:label "Research & project context" ;
+    demo:description "Request-scoped synthetic organisation and project facts." ;
+    demo:persona "research" ;
+    demo:providesFact demo:rule-collaboration-forge-1,
+        demo:rule-collaboration-forge-2,
+        demo:rule-collaboration-forge-3,
+        demo:rule-collaboration-forge-4,
+        demo:rule-collaboration-forge-5,
+        demo:rule-collaboration-forge-6,
+        demo:rule-discovery-catalyst-1,
+        demo:rule-discovery-catalyst-2,
+        demo:rule-discovery-catalyst-3,
+        demo:rule-discovery-catalyst-4,
+        demo:rule-discovery-catalyst-5,
+        demo:rule-discovery-catalyst-6,
+        demo:rule-learning-futures-1,
+        demo:rule-learning-futures-2,
+        demo:rule-learning-futures-3,
+        demo:rule-learning-futures-4,
+        demo:rule-learning-futures-5 .
 
 demo:resident-demo a demo:Resident ;
     rdfs:label "Demo resident" ;
     demo:description "Fictional profile; no name, NRIC or other personal identifiers." ;
     demo:hasLifeEvent demo:event-accessibility,
         demo:event-caregiving,
-        demo:event-jobloss ;
+        demo:event-education,
+        demo:event-jobloss,
+        demo:event-senior-health ;
     demo:memberOf demo:household-demo ;
+    demo:persona "individuals" ;
     demo:providesFact demo:rule-accessible-1,
         demo:rule-accessible-2,
         demo:rule-accessible-3,
@@ -651,9 +3167,15 @@ demo:resident-demo a demo:Resident ;
         demo:rule-caregiver-1,
         demo:rule-caregiver-2,
         demo:rule-caregiver-3,
+        demo:rule-senior-health-1,
+        demo:rule-senior-health-2,
         demo:rule-skills-1,
         demo:rule-skills-2,
         demo:rule-skills-3,
         demo:rule-skills-4,
-        demo:rule-skills-5 .
+        demo:rule-skills-5,
+        demo:rule-student-pathways-1,
+        demo:rule-student-pathways-2,
+        demo:rule-student-pathways-3,
+        demo:rule-student-pathways-4 .
 

@@ -61,7 +61,7 @@ class EligibilityTests(unittest.TestCase):
         self.assertEqual(schemes["scheme-skills"]["status"], "likely-eligible")
         self.assertIsNone(result["metrics"]["perCapitaIncome"])
         omitted = analyze({"profile": {}})
-        self.assertEqual(omitted["metrics"]["needsReview"], 4)
+        self.assertEqual(omitted["metrics"]["needsReview"], 6)
         self.assertEqual(omitted["metrics"]["likelyEligible"], 0)
 
     def test_known_failure_precedes_unknown_in_conjunction(self):

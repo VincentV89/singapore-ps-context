@@ -49,6 +49,18 @@
       "description": "Editable synthetic support need."
     },
     {
+      "id": "event-education",
+      "label": "Student education",
+      "type": "event",
+      "description": "Editable synthetic education context."
+    },
+    {
+      "id": "event-senior-health",
+      "label": "Senior healthcare",
+      "type": "event",
+      "description": "Editable synthetic senior healthcare context."
+    },
+    {
       "id": "agency-support",
       "label": "Demo Social Support Office",
       "type": "agency",
@@ -69,6 +81,18 @@
     {
       "id": "agency-access",
       "label": "Demo Accessibility Office",
+      "type": "agency",
+      "description": "Fictional demo agency."
+    },
+    {
+      "id": "agency-education-support",
+      "label": "Demo Student Support Office",
+      "type": "agency",
+      "description": "Fictional demo agency."
+    },
+    {
+      "id": "agency-senior-health",
+      "label": "Demo Senior Health Office",
       "type": "agency",
       "description": "Fictional demo agency."
     },
@@ -105,6 +129,18 @@
     {
       "id": "doc-accessibility",
       "label": "Accessibility assessment",
+      "type": "document",
+      "description": "Illustrative evidence type; do not upload personal documents to this demo."
+    },
+    {
+      "id": "doc-enrolment",
+      "label": "Student enrolment record",
+      "type": "document",
+      "description": "Illustrative evidence type; do not upload personal documents to this demo."
+    },
+    {
+      "id": "doc-senior-health",
+      "label": "Senior care assessment",
       "type": "document",
       "description": "Illustrative evidence type; do not upload personal documents to this demo."
     },
@@ -237,6 +273,68 @@
       "label": "Income per person ≤ S$2,200",
       "type": "rule",
       "description": "Fictional screening criterion."
+    },
+    {
+      "id": "scheme-student-pathways",
+      "label": "Student Pathways Bursary",
+      "type": "scheme",
+      "agency": "Demo Student Support Office",
+      "description": "S$1,500 education credit · fictional"
+    },
+    {
+      "id": "rule-student-pathways-1",
+      "label": "Citizen or permanent resident",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "rule-student-pathways-2",
+      "label": "Currently a student",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "rule-student-pathways-3",
+      "label": "Age 16 or above",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "rule-student-pathways-4",
+      "label": "Age 30 or below",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "rule-student-pathways-5",
+      "label": "Income per person ≤ S$1,600",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "scheme-senior-health",
+      "label": "Senior Health Access",
+      "type": "scheme",
+      "agency": "Demo Senior Health Office",
+      "description": "S$800 healthcare support credit · fictional"
+    },
+    {
+      "id": "rule-senior-health-1",
+      "label": "Citizen or permanent resident",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "rule-senior-health-2",
+      "label": "Age 65 or above",
+      "type": "rule",
+      "description": "Fictional screening criterion."
+    },
+    {
+      "id": "rule-senior-health-3",
+      "label": "Income per person ≤ S$1,800",
+      "type": "rule",
+      "description": "Fictional screening criterion."
     }
   ],
   "edges": [
@@ -270,372 +368,568 @@
     },
     {
       "id": "edge-5",
+      "source": "resident-demo",
+      "target": "event-education",
+      "label": "has context",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-6",
+      "source": "resident-demo",
+      "target": "event-senior-health",
+      "label": "has context",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-7",
       "source": "event-jobloss",
       "target": "scheme-bridge",
       "label": "may connect to",
       "evidenceId": "ev-bridge"
     },
     {
-      "id": "edge-6",
+      "id": "edge-8",
       "source": "scheme-bridge",
       "target": "agency-support",
       "label": "administered by",
       "evidenceId": "ev-bridge"
     },
     {
-      "id": "edge-7",
-      "source": "scheme-bridge",
-      "target": "doc-income",
-      "label": "requires evidence",
-      "evidenceId": "ev-bridge"
-    },
-    {
-      "id": "edge-8",
-      "source": "scheme-bridge",
-      "target": "doc-household",
-      "label": "requires evidence",
-      "evidenceId": "ev-bridge"
-    },
-    {
       "id": "edge-9",
       "source": "scheme-bridge",
-      "target": "doc-employment",
+      "target": "doc-income",
       "label": "requires evidence",
       "evidenceId": "ev-bridge"
     },
     {
       "id": "edge-10",
       "source": "scheme-bridge",
-      "target": "rule-bridge-1",
-      "label": "evaluated against",
+      "target": "doc-household",
+      "label": "requires evidence",
       "evidenceId": "ev-bridge"
     },
     {
       "id": "edge-11",
-      "source": "resident-demo",
-      "target": "rule-bridge-1",
-      "label": "provides fact",
-      "evidenceId": "ev-profile"
+      "source": "scheme-bridge",
+      "target": "doc-employment",
+      "label": "requires evidence",
+      "evidenceId": "ev-bridge"
     },
     {
       "id": "edge-12",
       "source": "scheme-bridge",
-      "target": "rule-bridge-2",
+      "target": "rule-bridge-1",
       "label": "evaluated against",
       "evidenceId": "ev-bridge"
     },
     {
       "id": "edge-13",
       "source": "resident-demo",
-      "target": "rule-bridge-2",
+      "target": "rule-bridge-1",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-14",
       "source": "scheme-bridge",
-      "target": "rule-bridge-3",
+      "target": "rule-bridge-2",
       "label": "evaluated against",
       "evidenceId": "ev-bridge"
     },
     {
       "id": "edge-15",
       "source": "resident-demo",
-      "target": "rule-bridge-3",
+      "target": "rule-bridge-2",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-16",
       "source": "scheme-bridge",
-      "target": "rule-bridge-4",
+      "target": "rule-bridge-3",
       "label": "evaluated against",
       "evidenceId": "ev-bridge"
     },
     {
       "id": "edge-17",
+      "source": "resident-demo",
+      "target": "rule-bridge-3",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-18",
+      "source": "scheme-bridge",
+      "target": "rule-bridge-4",
+      "label": "evaluated against",
+      "evidenceId": "ev-bridge"
+    },
+    {
+      "id": "edge-19",
       "source": "household-demo",
       "target": "rule-bridge-4",
       "label": "provides fact",
       "evidenceId": "ev-calculation"
     },
     {
-      "id": "edge-18",
+      "id": "edge-20",
       "source": "event-jobloss",
       "target": "scheme-skills",
       "label": "may connect to",
       "evidenceId": "ev-skills"
     },
     {
-      "id": "edge-19",
+      "id": "edge-21",
       "source": "scheme-skills",
       "target": "agency-workforce",
       "label": "administered by",
       "evidenceId": "ev-skills"
     },
     {
-      "id": "edge-20",
+      "id": "edge-22",
       "source": "scheme-skills",
       "target": "doc-employment",
       "label": "requires evidence",
       "evidenceId": "ev-skills"
     },
     {
-      "id": "edge-21",
+      "id": "edge-23",
       "source": "scheme-skills",
       "target": "doc-training",
       "label": "requires evidence",
       "evidenceId": "ev-skills"
     },
     {
-      "id": "edge-22",
-      "source": "scheme-skills",
-      "target": "rule-skills-1",
-      "label": "evaluated against",
-      "evidenceId": "ev-skills"
-    },
-    {
-      "id": "edge-23",
-      "source": "resident-demo",
-      "target": "rule-skills-1",
-      "label": "provides fact",
-      "evidenceId": "ev-profile"
-    },
-    {
       "id": "edge-24",
       "source": "scheme-skills",
-      "target": "rule-skills-2",
+      "target": "rule-skills-1",
       "label": "evaluated against",
       "evidenceId": "ev-skills"
     },
     {
       "id": "edge-25",
       "source": "resident-demo",
-      "target": "rule-skills-2",
+      "target": "rule-skills-1",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-26",
       "source": "scheme-skills",
-      "target": "rule-skills-3",
+      "target": "rule-skills-2",
       "label": "evaluated against",
       "evidenceId": "ev-skills"
     },
     {
       "id": "edge-27",
       "source": "resident-demo",
-      "target": "rule-skills-3",
+      "target": "rule-skills-2",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-28",
       "source": "scheme-skills",
-      "target": "rule-skills-4",
+      "target": "rule-skills-3",
       "label": "evaluated against",
       "evidenceId": "ev-skills"
     },
     {
       "id": "edge-29",
       "source": "resident-demo",
-      "target": "rule-skills-4",
+      "target": "rule-skills-3",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-30",
       "source": "scheme-skills",
-      "target": "rule-skills-5",
+      "target": "rule-skills-4",
       "label": "evaluated against",
       "evidenceId": "ev-skills"
     },
     {
       "id": "edge-31",
       "source": "resident-demo",
-      "target": "rule-skills-5",
+      "target": "rule-skills-4",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-32",
+      "source": "scheme-skills",
+      "target": "rule-skills-5",
+      "label": "evaluated against",
+      "evidenceId": "ev-skills"
+    },
+    {
+      "id": "edge-33",
+      "source": "resident-demo",
+      "target": "rule-skills-5",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-34",
       "source": "event-caregiving",
       "target": "scheme-caregiver",
       "label": "may connect to",
       "evidenceId": "ev-caregiver"
     },
     {
-      "id": "edge-33",
+      "id": "edge-35",
       "source": "scheme-caregiver",
       "target": "agency-care",
       "label": "administered by",
       "evidenceId": "ev-caregiver"
     },
     {
-      "id": "edge-34",
+      "id": "edge-36",
       "source": "scheme-caregiver",
       "target": "doc-caregiving",
       "label": "requires evidence",
       "evidenceId": "ev-caregiver"
     },
     {
-      "id": "edge-35",
+      "id": "edge-37",
       "source": "scheme-caregiver",
       "target": "doc-income",
       "label": "requires evidence",
       "evidenceId": "ev-caregiver"
     },
     {
-      "id": "edge-36",
+      "id": "edge-38",
       "source": "scheme-caregiver",
       "target": "doc-household",
       "label": "requires evidence",
       "evidenceId": "ev-caregiver"
     },
     {
-      "id": "edge-37",
-      "source": "scheme-caregiver",
-      "target": "rule-caregiver-1",
-      "label": "evaluated against",
-      "evidenceId": "ev-caregiver"
-    },
-    {
-      "id": "edge-38",
-      "source": "resident-demo",
-      "target": "rule-caregiver-1",
-      "label": "provides fact",
-      "evidenceId": "ev-profile"
-    },
-    {
       "id": "edge-39",
       "source": "scheme-caregiver",
-      "target": "rule-caregiver-2",
+      "target": "rule-caregiver-1",
       "label": "evaluated against",
       "evidenceId": "ev-caregiver"
     },
     {
       "id": "edge-40",
       "source": "resident-demo",
-      "target": "rule-caregiver-2",
+      "target": "rule-caregiver-1",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-41",
       "source": "scheme-caregiver",
-      "target": "rule-caregiver-3",
+      "target": "rule-caregiver-2",
       "label": "evaluated against",
       "evidenceId": "ev-caregiver"
     },
     {
       "id": "edge-42",
       "source": "resident-demo",
-      "target": "rule-caregiver-3",
+      "target": "rule-caregiver-2",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-43",
       "source": "scheme-caregiver",
-      "target": "rule-caregiver-4",
+      "target": "rule-caregiver-3",
       "label": "evaluated against",
       "evidenceId": "ev-caregiver"
     },
     {
       "id": "edge-44",
+      "source": "resident-demo",
+      "target": "rule-caregiver-3",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-45",
+      "source": "scheme-caregiver",
+      "target": "rule-caregiver-4",
+      "label": "evaluated against",
+      "evidenceId": "ev-caregiver"
+    },
+    {
+      "id": "edge-46",
       "source": "household-demo",
       "target": "rule-caregiver-4",
       "label": "provides fact",
       "evidenceId": "ev-calculation"
     },
     {
-      "id": "edge-45",
+      "id": "edge-47",
       "source": "event-accessibility",
       "target": "scheme-accessible",
       "label": "may connect to",
       "evidenceId": "ev-accessible"
     },
     {
-      "id": "edge-46",
+      "id": "edge-48",
       "source": "scheme-accessible",
       "target": "agency-access",
       "label": "administered by",
       "evidenceId": "ev-accessible"
     },
     {
-      "id": "edge-47",
+      "id": "edge-49",
       "source": "scheme-accessible",
       "target": "doc-accessibility",
       "label": "requires evidence",
       "evidenceId": "ev-accessible"
     },
     {
-      "id": "edge-48",
+      "id": "edge-50",
       "source": "scheme-accessible",
       "target": "doc-income",
       "label": "requires evidence",
       "evidenceId": "ev-accessible"
     },
     {
-      "id": "edge-49",
+      "id": "edge-51",
       "source": "scheme-accessible",
       "target": "doc-household",
       "label": "requires evidence",
       "evidenceId": "ev-accessible"
     },
     {
-      "id": "edge-50",
-      "source": "scheme-accessible",
-      "target": "rule-accessible-1",
-      "label": "evaluated against",
-      "evidenceId": "ev-accessible"
-    },
-    {
-      "id": "edge-51",
-      "source": "resident-demo",
-      "target": "rule-accessible-1",
-      "label": "provides fact",
-      "evidenceId": "ev-profile"
-    },
-    {
       "id": "edge-52",
       "source": "scheme-accessible",
-      "target": "rule-accessible-2",
+      "target": "rule-accessible-1",
       "label": "evaluated against",
       "evidenceId": "ev-accessible"
     },
     {
       "id": "edge-53",
       "source": "resident-demo",
-      "target": "rule-accessible-2",
+      "target": "rule-accessible-1",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-54",
       "source": "scheme-accessible",
-      "target": "rule-accessible-3",
+      "target": "rule-accessible-2",
       "label": "evaluated against",
       "evidenceId": "ev-accessible"
     },
     {
       "id": "edge-55",
       "source": "resident-demo",
-      "target": "rule-accessible-3",
+      "target": "rule-accessible-2",
       "label": "provides fact",
       "evidenceId": "ev-profile"
     },
     {
       "id": "edge-56",
       "source": "scheme-accessible",
-      "target": "rule-accessible-4",
+      "target": "rule-accessible-3",
       "label": "evaluated against",
       "evidenceId": "ev-accessible"
     },
     {
       "id": "edge-57",
+      "source": "resident-demo",
+      "target": "rule-accessible-3",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-58",
+      "source": "scheme-accessible",
+      "target": "rule-accessible-4",
+      "label": "evaluated against",
+      "evidenceId": "ev-accessible"
+    },
+    {
+      "id": "edge-59",
       "source": "household-demo",
       "target": "rule-accessible-4",
+      "label": "provides fact",
+      "evidenceId": "ev-calculation"
+    },
+    {
+      "id": "edge-60",
+      "source": "event-education",
+      "target": "scheme-student-pathways",
+      "label": "may connect to",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-61",
+      "source": "scheme-student-pathways",
+      "target": "agency-education-support",
+      "label": "administered by",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-62",
+      "source": "scheme-student-pathways",
+      "target": "doc-enrolment",
+      "label": "requires evidence",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-63",
+      "source": "scheme-student-pathways",
+      "target": "doc-income",
+      "label": "requires evidence",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-64",
+      "source": "scheme-student-pathways",
+      "target": "doc-household",
+      "label": "requires evidence",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-65",
+      "source": "scheme-student-pathways",
+      "target": "rule-student-pathways-1",
+      "label": "evaluated against",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-66",
+      "source": "resident-demo",
+      "target": "rule-student-pathways-1",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-67",
+      "source": "scheme-student-pathways",
+      "target": "rule-student-pathways-2",
+      "label": "evaluated against",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-68",
+      "source": "resident-demo",
+      "target": "rule-student-pathways-2",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-69",
+      "source": "scheme-student-pathways",
+      "target": "rule-student-pathways-3",
+      "label": "evaluated against",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-70",
+      "source": "resident-demo",
+      "target": "rule-student-pathways-3",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-71",
+      "source": "scheme-student-pathways",
+      "target": "rule-student-pathways-4",
+      "label": "evaluated against",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-72",
+      "source": "resident-demo",
+      "target": "rule-student-pathways-4",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-73",
+      "source": "scheme-student-pathways",
+      "target": "rule-student-pathways-5",
+      "label": "evaluated against",
+      "evidenceId": "ev-student-pathways"
+    },
+    {
+      "id": "edge-74",
+      "source": "household-demo",
+      "target": "rule-student-pathways-5",
+      "label": "provides fact",
+      "evidenceId": "ev-calculation"
+    },
+    {
+      "id": "edge-75",
+      "source": "event-senior-health",
+      "target": "scheme-senior-health",
+      "label": "may connect to",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-76",
+      "source": "scheme-senior-health",
+      "target": "agency-senior-health",
+      "label": "administered by",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-77",
+      "source": "scheme-senior-health",
+      "target": "doc-senior-health",
+      "label": "requires evidence",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-78",
+      "source": "scheme-senior-health",
+      "target": "doc-income",
+      "label": "requires evidence",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-79",
+      "source": "scheme-senior-health",
+      "target": "doc-household",
+      "label": "requires evidence",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-80",
+      "source": "scheme-senior-health",
+      "target": "rule-senior-health-1",
+      "label": "evaluated against",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-81",
+      "source": "resident-demo",
+      "target": "rule-senior-health-1",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-82",
+      "source": "scheme-senior-health",
+      "target": "rule-senior-health-2",
+      "label": "evaluated against",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-83",
+      "source": "resident-demo",
+      "target": "rule-senior-health-2",
+      "label": "provides fact",
+      "evidenceId": "ev-profile"
+    },
+    {
+      "id": "edge-84",
+      "source": "scheme-senior-health",
+      "target": "rule-senior-health-3",
+      "label": "evaluated against",
+      "evidenceId": "ev-senior-health"
+    },
+    {
+      "id": "edge-85",
+      "source": "household-demo",
+      "target": "rule-senior-health-3",
       "label": "provides fact",
       "evidenceId": "ev-calculation"
     }
@@ -681,6 +975,20 @@
       "title": "Context calculation and uncertainty",
       "source": "Demo reasoning specification v1",
       "excerpt": "Per-person income is gross monthly household income divided by household size. Scheme criteria are conjunctive. A failing criterion excludes a scheme; unknown required facts produce needs review when no criterion fails. Likely eligible is a screening result, never an approval.",
+      "updatedAt": "2026-10-08T09:00:00+08:00"
+    },
+    {
+      "id": "ev-student-pathways",
+      "title": "Student Pathways Bursary · fictional rules",
+      "source": "Synthetic policy catalogue v2 · SPB",
+      "excerpt": "Fictional education support: citizen or permanent resident, currently a student, age 16–30 inclusive, and gross monthly household income per person at most S$1,600. Benefit: S$1,500 education credit. Student enrolment, income and household evidence are required.",
+      "updatedAt": "2026-10-08T09:00:00+08:00"
+    },
+    {
+      "id": "ev-senior-health",
+      "title": "Senior Health Access · fictional rules",
+      "source": "Synthetic policy catalogue v2 · SHA",
+      "excerpt": "Fictional healthcare support: citizen or permanent resident, age 65 or older, and gross monthly household income per person at most S$1,800. Benefit: S$800 healthcare support credit. Senior care assessment, income and household evidence are required.",
       "updatedAt": "2026-10-08T09:00:00+08:00"
     }
   ],
@@ -754,6 +1062,701 @@
         "disability": false,
         "recentJobLoss": true
       }
+    },
+    {
+      "id": "student-education",
+      "label": "Student education support",
+      "profile": {
+        "householdIncome": 4800,
+        "householdSize": 4,
+        "age": 20,
+        "citizenship": "citizen",
+        "employmentStatus": "student",
+        "caregiver": false,
+        "disability": false,
+        "recentJobLoss": false
+      }
+    },
+    {
+      "id": "senior-healthcare",
+      "label": "Senior healthcare support",
+      "profile": {
+        "householdIncome": 4800,
+        "householdSize": 4,
+        "age": 70,
+        "citizenship": "citizen",
+        "employmentStatus": "retired",
+        "caregiver": false,
+        "disability": false,
+        "recentJobLoss": false
+      }
+    }
+  ],
+  "persona": {
+    "id": "individuals",
+    "name": "Individuals & Families",
+    "tagline": "Support for everyday life",
+    "description": "Explore fictional financial assistance, education, healthcare, training, caregiving and accessibility support using household context.",
+    "segments": [
+      "Parents",
+      "Students",
+      "Seniors",
+      "Caregivers",
+      "Jobseekers",
+      "Persons with disabilities"
+    ],
+    "contextTitle": "Household context",
+    "profileTitle": "Your household profile",
+    "prompts": [
+      "What support could this household receive?",
+      "What evidence should this household prepare?",
+      "Why does this household need review?"
+    ],
+    "supportCategories": [
+      {
+        "id": "financial-assistance",
+        "label": "Financial assistance"
+      },
+      {
+        "id": "employment",
+        "label": "Employment & training"
+      },
+      {
+        "id": "caregiving",
+        "label": "Caregiving"
+      },
+      {
+        "id": "accessibility",
+        "label": "Accessibility"
+      },
+      {
+        "id": "education",
+        "label": "Education"
+      },
+      {
+        "id": "healthcare",
+        "label": "Healthcare"
+      }
+    ],
+    "fields": [
+      {
+        "key": "householdIncome",
+        "label": "Monthly household income (S$)",
+        "type": "number",
+        "allowUnknown": true,
+        "min": 0,
+        "max": 1000000,
+        "step": 0.01
+      },
+      {
+        "key": "householdSize",
+        "label": "Household size",
+        "type": "number",
+        "allowUnknown": true,
+        "min": 1,
+        "max": 20,
+        "step": 1
+      },
+      {
+        "key": "age",
+        "label": "Age",
+        "type": "number",
+        "allowUnknown": true,
+        "min": 0,
+        "max": 120,
+        "step": 1
+      },
+      {
+        "key": "citizenship",
+        "label": "Residency status",
+        "type": "select",
+        "allowUnknown": true,
+        "options": [
+          {
+            "value": "citizen",
+            "label": "Citizen"
+          },
+          {
+            "value": "permanent-resident",
+            "label": "Permanent resident"
+          },
+          {
+            "value": "other",
+            "label": "Other eligible resident"
+          }
+        ]
+      },
+      {
+        "key": "employmentStatus",
+        "label": "Employment status",
+        "type": "select",
+        "allowUnknown": true,
+        "options": [
+          {
+            "value": "unemployed",
+            "label": "Unemployed"
+          },
+          {
+            "value": "employed",
+            "label": "Employed"
+          },
+          {
+            "value": "retired",
+            "label": "Retired"
+          },
+          {
+            "value": "student",
+            "label": "Student"
+          }
+        ]
+      },
+      {
+        "key": "caregiver",
+        "label": "Caregiving responsibility",
+        "type": "boolean",
+        "allowUnknown": true
+      },
+      {
+        "key": "disability",
+        "label": "Accessibility need",
+        "type": "boolean",
+        "allowUnknown": true
+      },
+      {
+        "key": "recentJobLoss",
+        "label": "Recent job loss",
+        "type": "boolean",
+        "allowUnknown": true
+      }
+    ]
+  },
+  "personas": [
+    {
+      "id": "individuals",
+      "name": "Individuals & Families",
+      "tagline": "Support for everyday life",
+      "description": "Explore fictional financial assistance, education, healthcare, training, caregiving and accessibility support using household context.",
+      "segments": [
+        "Parents",
+        "Students",
+        "Seniors",
+        "Caregivers",
+        "Jobseekers",
+        "Persons with disabilities"
+      ],
+      "contextTitle": "Household context",
+      "profileTitle": "Your household profile",
+      "prompts": [
+        "What support could this household receive?",
+        "What evidence should this household prepare?",
+        "Why does this household need review?"
+      ],
+      "supportCategories": [
+        {
+          "id": "financial-assistance",
+          "label": "Financial assistance"
+        },
+        {
+          "id": "employment",
+          "label": "Employment & training"
+        },
+        {
+          "id": "caregiving",
+          "label": "Caregiving"
+        },
+        {
+          "id": "accessibility",
+          "label": "Accessibility"
+        },
+        {
+          "id": "education",
+          "label": "Education"
+        },
+        {
+          "id": "healthcare",
+          "label": "Healthcare"
+        }
+      ],
+      "fields": [
+        {
+          "key": "householdIncome",
+          "label": "Monthly household income (S$)",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 1000000,
+          "step": 0.01
+        },
+        {
+          "key": "householdSize",
+          "label": "Household size",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 1,
+          "max": 20,
+          "step": 1
+        },
+        {
+          "key": "age",
+          "label": "Age",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 120,
+          "step": 1
+        },
+        {
+          "key": "citizenship",
+          "label": "Residency status",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "citizen",
+              "label": "Citizen"
+            },
+            {
+              "value": "permanent-resident",
+              "label": "Permanent resident"
+            },
+            {
+              "value": "other",
+              "label": "Other eligible resident"
+            }
+          ]
+        },
+        {
+          "key": "employmentStatus",
+          "label": "Employment status",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "unemployed",
+              "label": "Unemployed"
+            },
+            {
+              "value": "employed",
+              "label": "Employed"
+            },
+            {
+              "value": "retired",
+              "label": "Retired"
+            },
+            {
+              "value": "student",
+              "label": "Student"
+            }
+          ]
+        },
+        {
+          "key": "caregiver",
+          "label": "Caregiving responsibility",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "disability",
+          "label": "Accessibility need",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "recentJobLoss",
+          "label": "Recent job loss",
+          "type": "boolean",
+          "allowUnknown": true
+        }
+      ]
+    },
+    {
+      "id": "businesses",
+      "name": "Businesses & Entrepreneurs",
+      "tagline": "Grow and transform",
+      "description": "Explore fictional digitalisation, AI adoption, workforce and sustainability support using business and project context.",
+      "segments": [
+        "Startup founders",
+        "SME owners",
+        "Self-employed",
+        "Employers",
+        "Exporters"
+      ],
+      "contextTitle": "Business & project context",
+      "profileTitle": "Your business profile",
+      "prompts": [
+        "What support could this business qualify for?",
+        "What documents should this business prepare?",
+        "Why does the Digital Spark Grant need review?"
+      ],
+      "supportCategories": [
+        {
+          "id": "digital-ai",
+          "label": "Digitalisation & AI"
+        },
+        {
+          "id": "workforce",
+          "label": "Workforce development"
+        },
+        {
+          "id": "sustainability",
+          "label": "Sustainability"
+        }
+      ],
+      "fields": [
+        {
+          "key": "organizationType",
+          "label": "Business type",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "sme",
+              "label": "SME"
+            },
+            {
+              "value": "startup",
+              "label": "Startup"
+            },
+            {
+              "value": "self-employed",
+              "label": "Self-employed"
+            },
+            {
+              "value": "enterprise",
+              "label": "Larger enterprise"
+            }
+          ]
+        },
+        {
+          "key": "localRegistration",
+          "label": "Registered locally",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "localOwnership",
+          "label": "Local ownership (%)",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 100,
+          "step": 0.1
+        },
+        {
+          "key": "employeeCount",
+          "label": "Number of employees",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 100000,
+          "step": 1
+        },
+        {
+          "key": "annualRevenue",
+          "label": "Annual revenue (S$)",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 10000000000,
+          "step": 0.01
+        },
+        {
+          "key": "projectArea",
+          "label": "Project focus",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "digitalisation",
+              "label": "Digitalisation"
+            },
+            {
+              "value": "ai",
+              "label": "AI adoption"
+            },
+            {
+              "value": "workforce",
+              "label": "Workforce development"
+            },
+            {
+              "value": "sustainability",
+              "label": "Sustainability"
+            },
+            {
+              "value": "internationalisation",
+              "label": "International expansion"
+            },
+            {
+              "value": "rd",
+              "label": "Research & development"
+            }
+          ]
+        },
+        {
+          "key": "coFunding",
+          "label": "Applicant co-funding (%)",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 100,
+          "step": 0.1
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "name": "Nonprofits & Community Organisations",
+      "tagline": "Fund social impact",
+      "description": "Explore fictional community projects, social-service capability and arts or youth programmes using organisation and public-benefit context.",
+      "segments": [
+        "Registered charities",
+        "Social service agencies",
+        "Voluntary welfare organisations",
+        "Religious organisations",
+        "Community initiatives",
+        "Arts groups"
+      ],
+      "contextTitle": "Community & project context",
+      "profileTitle": "Your organisation profile",
+      "prompts": [
+        "What support could this community organisation receive?",
+        "What evidence should this organisation prepare?",
+        "Which agencies support this project?"
+      ],
+      "supportCategories": [
+        {
+          "id": "community-projects",
+          "label": "Community & social services"
+        },
+        {
+          "id": "capability",
+          "label": "Capability building"
+        },
+        {
+          "id": "arts-youth",
+          "label": "Arts & youth"
+        }
+      ],
+      "fields": [
+        {
+          "key": "organizationType",
+          "label": "Organisation type",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "registered-charity",
+              "label": "Registered charity"
+            },
+            {
+              "value": "social-service-agency",
+              "label": "Social service agency"
+            },
+            {
+              "value": "religious-organisation",
+              "label": "Religious organisation"
+            },
+            {
+              "value": "community-group",
+              "label": "Community group"
+            },
+            {
+              "value": "arts-group",
+              "label": "Arts group"
+            }
+          ]
+        },
+        {
+          "key": "localRegistration",
+          "label": "Registered locally",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "registeredCharity",
+          "label": "Registered charity status",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "publicBenefit",
+          "label": "Project has public benefit",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "projectArea",
+          "label": "Project focus",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "community",
+              "label": "Community projects"
+            },
+            {
+              "value": "social-services",
+              "label": "Social services"
+            },
+            {
+              "value": "capability",
+              "label": "Capability building"
+            },
+            {
+              "value": "arts",
+              "label": "Arts"
+            },
+            {
+              "value": "youth",
+              "label": "Youth programmes"
+            }
+          ]
+        },
+        {
+          "key": "projectBudget",
+          "label": "Project budget (S$)",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 10000000,
+          "step": 0.01
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Researchers & Educational Institutions",
+      "tagline": "Advance knowledge",
+      "description": "Explore fictional research, industry-academia collaboration and education innovation funding using institution and project context.",
+      "segments": [
+        "University researchers",
+        "Educators",
+        "Research institutes",
+        "Schools",
+        "Industry-academia partnerships"
+      ],
+      "contextTitle": "Research & institution context",
+      "profileTitle": "Your institution profile",
+      "prompts": [
+        "What funding could this research project qualify for?",
+        "What evidence should the lead applicant prepare?",
+        "Why does this project need review?"
+      ],
+      "supportCategories": [
+        {
+          "id": "research-funding",
+          "label": "Research funding"
+        },
+        {
+          "id": "collaboration",
+          "label": "Innovation & collaboration"
+        },
+        {
+          "id": "education",
+          "label": "Education & scholarships"
+        }
+      ],
+      "fields": [
+        {
+          "key": "institutionType",
+          "label": "Institution type",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "university",
+              "label": "University"
+            },
+            {
+              "value": "research-institute",
+              "label": "Research institute"
+            },
+            {
+              "value": "school",
+              "label": "School"
+            },
+            {
+              "value": "industry-partner",
+              "label": "Industry partner"
+            }
+          ]
+        },
+        {
+          "key": "localRegistration",
+          "label": "Institution registered locally",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "leadApplicant",
+          "label": "Lead applicant",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "local-researcher",
+              "label": "Local researcher"
+            },
+            {
+              "value": "educator",
+              "label": "Educator"
+            },
+            {
+              "value": "industry-lead",
+              "label": "Industry lead"
+            },
+            {
+              "value": "international-researcher",
+              "label": "International researcher"
+            }
+          ]
+        },
+        {
+          "key": "projectArea",
+          "label": "Project focus",
+          "type": "select",
+          "allowUnknown": true,
+          "options": [
+            {
+              "value": "fundamental-research",
+              "label": "Fundamental research"
+            },
+            {
+              "value": "applied-research",
+              "label": "Applied research"
+            },
+            {
+              "value": "education-innovation",
+              "label": "Education innovation"
+            },
+            {
+              "value": "scholarship",
+              "label": "Scholarship programme"
+            }
+          ]
+        },
+        {
+          "key": "collaboration",
+          "label": "Industry-academia collaboration",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "ethicsApproval",
+          "label": "Required ethics approval obtained",
+          "type": "boolean",
+          "allowUnknown": true
+        },
+        {
+          "key": "projectBudget",
+          "label": "Project budget (S$)",
+          "type": "number",
+          "allowUnknown": true,
+          "min": 0,
+          "max": 100000000,
+          "step": 0.01
+        }
+      ]
     }
   ]
 }
