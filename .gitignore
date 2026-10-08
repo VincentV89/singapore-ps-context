@@ -6,6 +6,8 @@ __pycache__/
 .pytest_cache/
 backend/package/
 backend/lambda.zip
+backend/package.zip
+*.tsbuildinfo
 deployment.json
 *.local.json
 .env

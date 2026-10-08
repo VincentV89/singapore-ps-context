@@ -1,0 +1,659 @@
+@prefix demo: <https://demo.example.gov.sg/life-events/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+demo:edge-1 a demo:Relationship ;
+    demo:edgePredicate demo:memberOf ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:household-demo ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-10 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:rule-bridge-1 ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-11 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-bridge-1 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-12 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:rule-bridge-2 ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-13 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-bridge-2 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-14 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:rule-bridge-3 ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-15 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-bridge-3 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-16 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:rule-bridge-4 ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-17 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-bridge-4 ;
+    demo:evidenceId "ev-calculation" .
+
+demo:edge-18 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-jobloss ;
+    demo:edgeTarget demo:scheme-skills ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-19 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:agency-workforce ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-2 a demo:Relationship ;
+    demo:edgePredicate demo:hasLifeEvent ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:event-jobloss ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-20 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:doc-employment ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-21 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:doc-training ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-22 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:rule-skills-1 ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-23 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-skills-1 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-24 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:rule-skills-2 ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-25 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-skills-2 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-26 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:rule-skills-3 ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-27 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-skills-3 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-28 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:rule-skills-4 ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-29 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-skills-4 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-3 a demo:Relationship ;
+    demo:edgePredicate demo:hasLifeEvent ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:event-caregiving ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-30 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-skills ;
+    demo:edgeTarget demo:rule-skills-5 ;
+    demo:evidenceId "ev-skills" .
+
+demo:edge-31 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-skills-5 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-32 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-caregiving ;
+    demo:edgeTarget demo:scheme-caregiver ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-33 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:agency-care ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-34 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:doc-caregiving ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-35 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-36 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-37 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:rule-caregiver-1 ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-38 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-caregiver-1 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-39 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:rule-caregiver-2 ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-4 a demo:Relationship ;
+    demo:edgePredicate demo:hasLifeEvent ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:event-accessibility ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-40 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-caregiver-2 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-41 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:rule-caregiver-3 ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-42 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-caregiver-3 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-43 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-caregiver ;
+    demo:edgeTarget demo:rule-caregiver-4 ;
+    demo:evidenceId "ev-caregiver" .
+
+demo:edge-44 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-caregiver-4 ;
+    demo:evidenceId "ev-calculation" .
+
+demo:edge-45 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-accessibility ;
+    demo:edgeTarget demo:scheme-accessible ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-46 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:agency-access ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-47 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:doc-accessibility ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-48 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-49 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-5 a demo:Relationship ;
+    demo:edgePredicate demo:relatedScheme ;
+    demo:edgeSource demo:event-jobloss ;
+    demo:edgeTarget demo:scheme-bridge ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-50 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:rule-accessible-1 ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-51 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-accessible-1 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-52 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:rule-accessible-2 ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-53 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-accessible-2 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-54 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:rule-accessible-3 ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-55 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:resident-demo ;
+    demo:edgeTarget demo:rule-accessible-3 ;
+    demo:evidenceId "ev-profile" .
+
+demo:edge-56 a demo:Relationship ;
+    demo:edgePredicate demo:hasRule ;
+    demo:edgeSource demo:scheme-accessible ;
+    demo:edgeTarget demo:rule-accessible-4 ;
+    demo:evidenceId "ev-accessible" .
+
+demo:edge-57 a demo:Relationship ;
+    demo:edgePredicate demo:providesFact ;
+    demo:edgeSource demo:household-demo ;
+    demo:edgeTarget demo:rule-accessible-4 ;
+    demo:evidenceId "ev-calculation" .
+
+demo:edge-6 a demo:Relationship ;
+    demo:edgePredicate demo:administeredBy ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:agency-support ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-7 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:doc-income ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-8 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:doc-household ;
+    demo:evidenceId "ev-bridge" .
+
+demo:edge-9 a demo:Relationship ;
+    demo:edgePredicate demo:requiresDocument ;
+    demo:edgeSource demo:scheme-bridge ;
+    demo:edgeTarget demo:doc-employment ;
+    demo:evidenceId "ev-bridge" .
+
+demo:ev-accessible a demo:Evidence ;
+    rdfs:label "Accessible Living Support · fictional rules" ;
+    demo:excerpt "Fictional accessibility support: citizen, age 21 or older, accessibility need represented by the synthetic disability flag, and gross monthly household income per person at most S$2,200. Benefit: S$1,200 home adaptation credit. Accessibility and household income evidence are required." ;
+    demo:source "Synthetic policy catalogue v1 · ALS" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-bridge a demo:Evidence ;
+    rdfs:label "Household Bridge Grant · fictional rules" ;
+    demo:excerpt "Fictional grant: citizen, age 21 or older, recent job loss, and gross monthly household income per person at most S$1,000. Benefit: S$450 monthly for three months. Income, household composition and employment evidence are required." ;
+    demo:source "Synthetic policy catalogue v1 · HBG" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-calculation a demo:Evidence ;
+    rdfs:label "Context calculation and uncertainty" ;
+    demo:excerpt "Per-person income is gross monthly household income divided by household size. Scheme criteria are conjunctive. A failing criterion excludes a scheme; unknown required facts produce needs review when no criterion fails. Likely eligible is a screening result, never an approval." ;
+    demo:source "Demo reasoning specification v1" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-caregiver a demo:Evidence ;
+    rdfs:label "Caregiver Relief · fictional rules" ;
+    demo:excerpt "Fictional caregiver support: citizen, age 21 or older, caregiver responsibility, and gross monthly household income per person at most S$1,800. Benefit: S$250 monthly respite credit. Caregiving and household income evidence are required." ;
+    demo:source "Synthetic policy catalogue v1 · CR" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-profile a demo:Evidence ;
+    rdfs:label "Synthetic household context" ;
+    demo:excerpt "A fictional adult resident in a household of four recently lost employment. All inputs are editable synthetic facts; missing facts must not be assumed." ;
+    demo:source "Demo household scenario v1" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:ev-skills a demo:Evidence ;
+    rdfs:label "Skills Restart Support · fictional rules" ;
+    demo:excerpt "Fictional training support: citizen or permanent resident, age 18–60 inclusive, currently unemployed, with recent job loss. Benefit: S$600 training credit. Employment evidence and a training plan are required." ;
+    demo:source "Synthetic policy catalogue v1 · SRS" ;
+    demo:updatedAt "2026-10-08T09:00:00+08:00" .
+
+demo:agency-access a demo:Agency ;
+    rdfs:label "Demo Accessibility Office" ;
+    demo:description "Fictional demo agency." .
+
+demo:agency-care a demo:Agency ;
+    rdfs:label "Demo Care Services Office" ;
+    demo:description "Fictional demo agency." .
+
+demo:agency-support a demo:Agency ;
+    rdfs:label "Demo Social Support Office" ;
+    demo:description "Fictional demo agency." .
+
+demo:agency-workforce a demo:Agency ;
+    rdfs:label "Demo Workforce Office" ;
+    demo:description "Fictional demo agency." .
+
+demo:doc-accessibility a demo:Document ;
+    rdfs:label "Accessibility assessment" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+
+demo:doc-caregiving a demo:Document ;
+    rdfs:label "Caregiving declaration" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+
+demo:doc-training a demo:Document ;
+    rdfs:label "Training plan" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+
+demo:event-accessibility a demo:LifeEvent ;
+    rdfs:label "Accessibility need" ;
+    demo:description "Editable synthetic support need." ;
+    demo:relatedScheme demo:scheme-accessible .
+
+demo:event-caregiving a demo:LifeEvent ;
+    rdfs:label "Caregiving responsibility" ;
+    demo:description "Editable synthetic life event." ;
+    demo:relatedScheme demo:scheme-caregiver .
+
+demo:doc-employment a demo:Document ;
+    rdfs:label "Employment transition record" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+
+demo:event-jobloss a demo:LifeEvent ;
+    rdfs:label "Recent job loss" ;
+    demo:description "Editable synthetic life event." ;
+    demo:relatedScheme demo:scheme-bridge,
+        demo:scheme-skills .
+
+demo:rule-accessible-1 a demo:EligibilityRule ;
+    rdfs:label "Citizen status" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "citizen" ;
+    demo:field "citizenship" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 1 .
+
+demo:rule-accessible-2 a demo:EligibilityRule ;
+    rdfs:label "Age 21 or above" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 21 ;
+    demo:field "age" ;
+    demo:operator "gte" ;
+    demo:ruleOrder 2 .
+
+demo:rule-accessible-3 a demo:EligibilityRule ;
+    rdfs:label "Accessibility need" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "disability" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 3 .
+
+demo:rule-accessible-4 a demo:EligibilityRule ;
+    rdfs:label "Income per person ≤ S$2,200" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 2200 ;
+    demo:field "perCapitaIncome" ;
+    demo:operator "lte" ;
+    demo:ruleOrder 4 .
+
+demo:rule-bridge-1 a demo:EligibilityRule ;
+    rdfs:label "Citizen status" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "citizen" ;
+    demo:field "citizenship" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 1 .
+
+demo:rule-bridge-2 a demo:EligibilityRule ;
+    rdfs:label "Age 21 or above" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 21 ;
+    demo:field "age" ;
+    demo:operator "gte" ;
+    demo:ruleOrder 2 .
+
+demo:rule-bridge-3 a demo:EligibilityRule ;
+    rdfs:label "Recent job loss" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "recentJobLoss" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 3 .
+
+demo:rule-bridge-4 a demo:EligibilityRule ;
+    rdfs:label "Income per person ≤ S$1,000" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 1000 ;
+    demo:field "perCapitaIncome" ;
+    demo:operator "lte" ;
+    demo:ruleOrder 4 .
+
+demo:rule-caregiver-1 a demo:EligibilityRule ;
+    rdfs:label "Citizen status" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "citizen" ;
+    demo:field "citizenship" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 1 .
+
+demo:rule-caregiver-2 a demo:EligibilityRule ;
+    rdfs:label "Age 21 or above" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 21 ;
+    demo:field "age" ;
+    demo:operator "gte" ;
+    demo:ruleOrder 2 .
+
+demo:rule-caregiver-3 a demo:EligibilityRule ;
+    rdfs:label "Caregiving responsibility" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "caregiver" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 3 .
+
+demo:rule-caregiver-4 a demo:EligibilityRule ;
+    rdfs:label "Income per person ≤ S$1,800" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 1800 ;
+    demo:field "perCapitaIncome" ;
+    demo:operator "lte" ;
+    demo:ruleOrder 4 .
+
+demo:rule-skills-1 a demo:EligibilityRule ;
+    rdfs:label "Citizen or permanent resident" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "citizen|permanent-resident" ;
+    demo:field "citizenship" ;
+    demo:operator "in" ;
+    demo:ruleOrder 1 .
+
+demo:rule-skills-2 a demo:EligibilityRule ;
+    rdfs:label "Age 18 or above" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 18 ;
+    demo:field "age" ;
+    demo:operator "gte" ;
+    demo:ruleOrder 2 .
+
+demo:rule-skills-3 a demo:EligibilityRule ;
+    rdfs:label "Age 60 or below" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected 60 ;
+    demo:field "age" ;
+    demo:operator "lte" ;
+    demo:ruleOrder 3 .
+
+demo:rule-skills-4 a demo:EligibilityRule ;
+    rdfs:label "Currently unemployed" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected "unemployed" ;
+    demo:field "employmentStatus" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 4 .
+
+demo:rule-skills-5 a demo:EligibilityRule ;
+    rdfs:label "Recent job loss" ;
+    demo:description "Fictional screening criterion." ;
+    demo:expected true ;
+    demo:field "recentJobLoss" ;
+    demo:operator "eq" ;
+    demo:ruleOrder 5 .
+
+demo:household-demo a demo:Household ;
+    rdfs:label "Household context" ;
+    demo:description "Income and household size form the per-person income context." ;
+    demo:providesFact demo:rule-accessible-4,
+        demo:rule-bridge-4,
+        demo:rule-caregiver-4 .
+
+demo:doc-household a demo:Document ;
+    rdfs:label "Household declaration" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+
+demo:doc-income a demo:Document ;
+    rdfs:label "Income statement" ;
+    demo:description "Illustrative evidence type; do not upload personal documents to this demo." .
+
+demo:scheme-accessible a demo:Scheme ;
+    rdfs:label "Accessible Living Support" ;
+    demo:administeredBy demo:agency-access ;
+    demo:benefit "S$1,200 home adaptation credit · fictional" ;
+    demo:description "S$1,200 home adaptation credit · fictional" ;
+    demo:evidenceId "ev-accessible" ;
+    demo:hasRule demo:rule-accessible-1,
+        demo:rule-accessible-2,
+        demo:rule-accessible-3,
+        demo:rule-accessible-4 ;
+    demo:requiresDocument demo:doc-accessibility,
+        demo:doc-household,
+        demo:doc-income .
+
+demo:scheme-bridge a demo:Scheme ;
+    rdfs:label "Household Bridge Grant" ;
+    demo:administeredBy demo:agency-support ;
+    demo:benefit "S$450 / month for 3 months · fictional" ;
+    demo:description "S$450 / month for 3 months · fictional" ;
+    demo:evidenceId "ev-bridge" ;
+    demo:hasRule demo:rule-bridge-1,
+        demo:rule-bridge-2,
+        demo:rule-bridge-3,
+        demo:rule-bridge-4 ;
+    demo:requiresDocument demo:doc-employment,
+        demo:doc-household,
+        demo:doc-income .
+
+demo:scheme-caregiver a demo:Scheme ;
+    rdfs:label "Caregiver Relief" ;
+    demo:administeredBy demo:agency-care ;
+    demo:benefit "S$250 / month respite credit · fictional" ;
+    demo:description "S$250 / month respite credit · fictional" ;
+    demo:evidenceId "ev-caregiver" ;
+    demo:hasRule demo:rule-caregiver-1,
+        demo:rule-caregiver-2,
+        demo:rule-caregiver-3,
+        demo:rule-caregiver-4 ;
+    demo:requiresDocument demo:doc-caregiving,
+        demo:doc-household,
+        demo:doc-income .
+
+demo:scheme-skills a demo:Scheme ;
+    rdfs:label "Skills Restart Support" ;
+    demo:administeredBy demo:agency-workforce ;
+    demo:benefit "S$600 training credit · fictional" ;
+    demo:description "S$600 training credit · fictional" ;
+    demo:evidenceId "ev-skills" ;
+    demo:hasRule demo:rule-skills-1,
+        demo:rule-skills-2,
+        demo:rule-skills-3,
+        demo:rule-skills-4,
+        demo:rule-skills-5 ;
+    demo:requiresDocument demo:doc-employment,
+        demo:doc-training .
+
+demo:resident-demo a demo:Resident ;
+    rdfs:label "Demo resident" ;
+    demo:description "Fictional profile; no name, NRIC or other personal identifiers." ;
+    demo:hasLifeEvent demo:event-accessibility,
+        demo:event-caregiving,
+        demo:event-jobloss ;
+    demo:memberOf demo:household-demo ;
+    demo:providesFact demo:rule-accessible-1,
+        demo:rule-accessible-2,
+        demo:rule-accessible-3,
+        demo:rule-bridge-1,
+        demo:rule-bridge-2,
+        demo:rule-bridge-3,
+        demo:rule-caregiver-1,
+        demo:rule-caregiver-2,
+        demo:rule-caregiver-3,
+        demo:rule-skills-1,
+        demo:rule-skills-2,
+        demo:rule-skills-3,
+        demo:rule-skills-4,
+        demo:rule-skills-5 .
+

@@ -1,0 +1,107 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix life-events: <https://demo.example.gov.sg/life-events/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://demo.example.gov.sg/life-events> a owl:Ontology ;
+    rdfs:label "life-events"^^xsd:string ;
+    dcterms:created "2026-10-08T01:00:00+00:00"^^xsd:dateTime ;
+    owl:versionInfo "2026-10-08T01:00:00Z" .
+
+life-events:administeredBy a owl:ObjectProperty ;
+    rdfs:label "administeredBy" ;
+    rdfs:domain life-events:Scheme ;
+    rdfs:range life-events:Agency .
+
+life-events:benefit a owl:DatatypeProperty ;
+    rdfs:label "benefit" ;
+    rdfs:domain life-events:Scheme ;
+    rdfs:range xsd:string .
+
+life-events:evidenceId a owl:DatatypeProperty ;
+    rdfs:label "evidenceId" ;
+    rdfs:domain life-events:Relationship ;
+    rdfs:range xsd:string .
+
+life-events:excerpt a owl:DatatypeProperty ;
+    rdfs:label "excerpt" ;
+    rdfs:domain life-events:Evidence ;
+    rdfs:range xsd:string .
+
+life-events:expected a owl:DatatypeProperty ;
+    rdfs:label "expected" ;
+    rdfs:domain life-events:EligibilityRule ;
+    rdfs:range rdfs:Literal .
+
+life-events:field a owl:DatatypeProperty ;
+    rdfs:label "field" ;
+    rdfs:domain life-events:EligibilityRule ;
+    rdfs:range xsd:string .
+
+life-events:hasLifeEvent a owl:ObjectProperty ;
+    rdfs:label "hasLifeEvent" ;
+    rdfs:domain life-events:Resident ;
+    rdfs:range life-events:LifeEvent .
+
+life-events:hasRule a owl:ObjectProperty ;
+    rdfs:label "hasRule" ;
+    rdfs:domain life-events:Scheme ;
+    rdfs:range life-events:EligibilityRule .
+
+life-events:memberOf a owl:ObjectProperty ;
+    rdfs:label "memberOf" ;
+    rdfs:domain life-events:Resident ;
+    rdfs:range life-events:Household .
+
+life-events:operator a owl:DatatypeProperty ;
+    rdfs:label "operator" ;
+    rdfs:domain life-events:EligibilityRule ;
+    rdfs:range xsd:string .
+
+life-events:providesFact a owl:ObjectProperty ;
+    rdfs:label "providesFact" ;
+    rdfs:range life-events:EligibilityRule .
+
+life-events:relatedScheme a owl:ObjectProperty ;
+    rdfs:label "relatedScheme" ;
+    rdfs:domain life-events:LifeEvent ;
+    rdfs:range life-events:Scheme .
+
+life-events:requiresDocument a owl:ObjectProperty ;
+    rdfs:label "requiresDocument" ;
+    rdfs:domain life-events:Scheme ;
+    rdfs:range life-events:Document .
+
+life-events:source a owl:DatatypeProperty ;
+    rdfs:label "source" ;
+    rdfs:domain life-events:Evidence ;
+    rdfs:range xsd:string .
+
+life-events:Agency a owl:Class ;
+    rdfs:label "Agency" .
+
+life-events:Document a owl:Class ;
+    rdfs:label "Document" .
+
+life-events:Household a owl:Class ;
+    rdfs:label "Household" .
+
+life-events:Relationship a owl:Class ;
+    rdfs:label "Relationship" .
+
+life-events:Evidence a owl:Class ;
+    rdfs:label "Evidence" .
+
+life-events:LifeEvent a owl:Class ;
+    rdfs:label "LifeEvent" .
+
+life-events:Resident a owl:Class ;
+    rdfs:label "Resident" .
+
+life-events:EligibilityRule a owl:Class ;
+    rdfs:label "EligibilityRule" .
+
+life-events:Scheme a owl:Class ;
+    rdfs:label "Scheme" .
+
