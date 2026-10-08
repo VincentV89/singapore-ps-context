@@ -6,9 +6,9 @@ Validated on 8 October 2026 (Singapore time) in AWS account `879594333699`, regi
 
 ## Automated checks
 
-- 20 backend tests passed: explicit rule results, changed context, exact income boundaries, unknown facts, changed RDF policy, current-profile provenance, authoritative edge direction, scoped citations, optional synthesis fallback, API input limits, and empty preflight responses.
+- 37 backend tests passed: four-audience isolation, audience-specific presets, explicit rule results, changed context, inclusive numeric boundaries, unknown facts, changed RDF policy/category, current-profile provenance, authoritative edge direction, scoped citations, optional synthesis fallback, API input limits, and empty preflight responses.
 - 6 infrastructure tests passed: dependency cycles, private encrypted buckets, OAuth and JWT scopes, CORS/CSP/cache settings, executed SPA routing, and Lambda permissions.
-- 2 browser tests passed against the real local API: profile changes and evidence/checklist flow; Cognito cover before data access. Mobile width 390 pixels had no document overflow.
+- 5 browser tests passed against the real local API: household changes and evidence/checklist flow; Cognito cover before data access; all four audience journeys and scoped graph/evidence; support filters and missing organisation facts; delayed responses during audience switching. Mobile width 390 pixels had no document overflow.
 - TypeScript/Vite production build passed. GitHub Actions runs backend/infrastructure checks and builds the frontend without AWS credentials.
 
 ## Live AWS results
@@ -34,6 +34,23 @@ The live HTTPS smoke checks verified:
 | Browser application errors | Zero |
 
 The managed executor's proxy certificate is trusted by its HTTPS client but not Chromium. Live browser verification relayed actual remote responses through that existing TLS-validating client and followed Cognito's redirect targets in the driver. No certificate verification was disabled, no browser trust store was changed, and no authentication or application response was fabricated. Normal customer browsers access the public CloudFront/Cognito certificates directly.
+
+## Four-audience expansion
+
+The updated deployment was verified through the actual Cognito hosted login and frontend PKCE callback. All four entry cards opened their own context, schemes, graph and evidence against the live API. Both scenario retrieval and analysis returned HTTP 200 for every audience.
+
+| Audience | Fictional schemes | Starting likely eligible | Missing-fact review | Traversed context entities |
+| --- | ---: | ---: | ---: | ---: |
+| Individuals & Families | 6 | 2 | 2 | 16 |
+| Businesses & Entrepreneurs | 3 | 1 | 1 | 13 |
+| Nonprofits & Community Organisations | 3 | 1 | 1 | 10 |
+| Researchers & Educational Institutions | 3 | 1 | 1 | 12 |
+
+The live checks confirmed that returned schemes and traversal entities belong to the selected audience. Changing the business project focus from digitalisation to sustainability excluded Digital Spark Grant and matched Green Launch Support. Selecting the Sustainability discovery filter displayed one scheme and its graph. A live business Bedrock explanation returned supported evidence citations. ID tokens remained rejected with HTTP 403; scoped access tokens were required.
+
+The live browser reported zero application errors. The mobile entry and business workspace had no document overflow at 390 pixels. [Entry screenshot](demo-preview.png) and [filtered business workspace](demo-business.png) were captured from the deployed site. No credentials appear in these artifacts.
+
+The expanded shared ontology contains 106 triples; the combined synthetic instance export contains 2,764 triples. This remains a bundled, in-memory RDFLib demo with 15 fictional schemes, without live source discovery or deployment of the complete accelerator.
 
 ## Reproduce
 

@@ -6,7 +6,7 @@ A public sector demonstration of knowledge graphs and context intelligence: choo
 
 [Open the deployed demo](https://d1pbdc1b2fpdk2.cloudfront.net). Cognito sign-in is required; credentials are distributed separately.
 
-![Life Events Navigator showing context, connected graph, support pathways and evidence](docs/demo-preview.png)
+![Deployed Life Events Navigator showing four support entry points](docs/demo-preview.png)
 
 ## Deployment target
 
@@ -35,6 +35,8 @@ This compact demo reuses accelerator components; it is **not a deployment of the
 | Researchers & Educational Institutions | Research, innovation, education funding, and collaboration |
 
 The included programmes are deliberately small fictional examples, not a complete catalogue of Singapore support. The four entry points provide a structure for adding further support types such as housing or international expansion later.
+
+There are 15 fictional schemes: six for individuals and families, and three for each other audience. Each journey has its own editable context, example profiles, graph, criteria, evidence and checklist. [See a business support workspace](docs/demo-business.png).
 
 ## Run locally
 
