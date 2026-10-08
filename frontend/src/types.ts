@@ -1,0 +1,10 @@
+export type Profile = { householdIncome: number | null; householdSize: number; age: number; citizenship: string; employmentStatus: string; caregiver: boolean; disability: boolean; recentJobLoss: boolean };
+export type GraphNode = { id: string; label: string; type: string; agency?: string; description?: string };
+export type GraphEdge = { id: string; source: string; target: string; label: string; evidenceId?: string };
+export type Evidence = { id: string; title: string; source: string; excerpt: string; updatedAt?: string };
+export type Preset = { id: string; label: string; profile: Profile };
+export type Scenario = { scenario: { id: string; title: string; timestamp: string; description: string; synthetic: boolean }; profile: Profile; nodes: GraphNode[]; edges: GraphEdge[]; evidence: Evidence[]; presets: Preset[] };
+export type Rule = { id: string; label: string; field: string; operator: string; expected: unknown; actual: unknown; result: 'pass' | 'fail' | 'unknown'; evidenceId: string };
+export type Scheme = { id: string; name: string; status: 'likely-eligible' | 'not-eligible' | 'needs-review'; reason: string; benefit: string; ruleResults: Rule[]; documentIds: string[]; evidenceIds: string[]; pathNodeIds: string[]; agency: string };
+export type Analysis = { schemes: Scheme[]; summary: string; metrics: { perCapitaIncome: number | null; likelyEligible: number; notEligible: number; needsReview: number; rulesEvaluated: number; graphNodes: number; graphEdges: number; contextEntities: number }; reasoning: { step: number; title: string; detail: string; nodeIds: string[]; evidenceIds: string[] }[]; citations: Evidence[]; answer: string; engine: { graph: string; synthesis: string; accelerator: string }; warnings: string[]; affectedNodeIds: string[]; highlightedEdgeIds: string[] };
+export type AppConfig = { apiUrl: string; region: string; localPreview?: boolean; cognito: { authority: string; clientId: string; domain: string; scope?: string } };

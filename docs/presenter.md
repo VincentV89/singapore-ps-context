@@ -2,7 +2,7 @@
 
 ## Before the session
 
-Open the deployed CloudFront site and verify Cognito sign-in with your demo account. Use a desktop browser at about 1440 pixels wide so the household controls, graph, and assistant can be seen together. Start with **Job loss · household of four** and **Amazon Bedrock synthesis off**. The explicit screening and evidence story works without a model call; use the optional model only after rehearsing it in the deployed account.
+Open the deployed CloudFront site and verify Cognito sign-in with your demo account. Use a desktop browser at about 1440 pixels wide for the household controls and graph; scroll down to the support pathways and assistant. Start with **Job loss · household of four** and **Amazon Bedrock synthesis off**. The explicit screening and evidence story works without a model call; use the optional model only after rehearsing it in the deployed account.
 
 Have the source repository and `backend/data/ontology.ttl` available in a second tab/editor if the audience asks how this relates to the accelerator. Use the file export for an architectural discussion, not an unplanned deployment during the presentation.
 

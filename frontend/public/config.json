@@ -1,0 +1,6 @@
+{
+  "apiUrl": "",
+  "region": "us-east-1",
+  "localPreview": true,
+  "cognito": { "authority": "", "clientId": "", "domain": "" }
+}
