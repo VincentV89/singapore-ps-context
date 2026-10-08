@@ -36,7 +36,7 @@ index 2349dbc..0ed5dbc 100644
      );
      if (!res.User) throw new Error("Failed to create user");
 diff --git a/infra/lib/stacks/foundation/storage-stack.ts b/infra/lib/stacks/foundation/storage-stack.ts
-index 59bcaa6..3465fd8 100644
+index 59bcaa6..d34fd5f 100644
 --- a/infra/lib/stacks/foundation/storage-stack.ts
 +++ b/infra/lib/stacks/foundation/storage-stack.ts
 @@ -115,7 +115,8 @@ export class StorageStack extends SCLStack {
@@ -49,6 +49,15 @@ index 59bcaa6..3465fd8 100644
          dbClusterIdentifier: neptuneCluster.dbClusterIdentifier!,
        },
      );
+@@ -281,7 +282,7 @@ export class StorageStack extends SCLStack {
+       this,
+       "VectorStoreGroup",
+       {
+-        name: this.prefixed("vector-store-group"),
++        name: this.prefixed("vector-group"),
+         standbyReplicas: "ENABLED",
+         generation: "NEXTGEN",
+         capacityLimits: {
 diff --git a/infra/lib/stacks/foundation/web-stack.ts b/infra/lib/stacks/foundation/web-stack.ts
 index 4f494d6..8b1f586 100644
 --- a/infra/lib/stacks/foundation/web-stack.ts
@@ -88,3 +97,29 @@ index 4f494d6..8b1f586 100644
          "gatewayresponse.header.Strict-Transport-Security":
            "'max-age=63072000; includeSubDomains; preload'",
          "gatewayresponse.header.X-Content-Type-Options": "'nosniff'",
+diff --git a/infra/lib/stacks/services/metric-service-stack.ts b/infra/lib/stacks/services/metric-service-stack.ts
+index 2b851a4..bfa8baa 100644
+--- a/infra/lib/stacks/services/metric-service-stack.ts
++++ b/infra/lib/stacks/services/metric-service-stack.ts
+@@ -269,7 +269,7 @@ export class MetricServiceStack extends SCLStack {
+     // OpenSearch Serverless requires a data access policy in addition
+     // to IAM permissions. Without this, the role cannot read/write documents.
+     new opensearchserverless.CfnAccessPolicy(this, "OSSDataAccessPolicy", {
+-      name: this.prefixed("metric-data-access"),
++      name: this.prefixed("metric-access"),
+       type: "data",
+       policy: JSON.stringify([
+         {
+diff --git a/infra/lib/stacks/services/sources-stack.ts b/infra/lib/stacks/services/sources-stack.ts
+index b21ed39..aa9c8c9 100644
+--- a/infra/lib/stacks/services/sources-stack.ts
++++ b/infra/lib/stacks/services/sources-stack.ts
+@@ -2282,7 +2282,7 @@ export class SourcesStack extends SCLStack {
+       this,
+       "SourcesOSSDataAccessPolicy",
+       {
+-        name: this.prefixed("src-ingestion-access"),
++        name: this.prefixed("src-access"),
+         type: "data",
+         policy: JSON.stringify([
+           {

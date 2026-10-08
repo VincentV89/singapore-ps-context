@@ -202,6 +202,7 @@ def prepare(args):
     if args.metadata.exists():
         previous = load_state(args.metadata)
         state["builds"] = previous.get("builds", [])
+        state["assemblyRepairs"] = previous.get("assemblyRepairs", [])
     save(args.metadata, state)
     emit({**state, "metadata": str(args.metadata)})
 
@@ -224,16 +225,22 @@ def start(args):
         raise ValueError("Assembly must be an artifact from this project's build bucket")
     aws = aws_session()
     recovery = None
+    repair = None
     if args.phase == "deploy":
         candidates = [item for item in state.get("builds", [])
                       if item.get("phase") == "build" and item.get("artifactS3Uri") == args.assembly]
         if not candidates:
-            raise ValueError("Assembly is not recorded as this project's build output")
-        previous = get_build(aws, candidates[-1]["id"])
-        if previous["buildStatus"] != "SUCCEEDED":
-            if not args.recover_diagnostics_only:
-                raise ValueError("Assembly deployment requires a successful build; diagnostic-only recovery requires --recover-diagnostics-only")
-            recovery = recover_diagnostics(aws, previous, args.assembly, args.assembly_file)
+            repaired = [item for item in state.get("assemblyRepairs", [])
+                        if item.get("artifactS3Uri") == args.assembly]
+            if not repaired:
+                raise ValueError("Assembly is not recorded as this project's build output or verified narrow repair")
+            repair = verify_name_repair(aws, state, repaired[-1])
+        else:
+            previous = get_build(aws, candidates[-1]["id"])
+            if previous["buildStatus"] != "SUCCEEDED":
+                if not args.recover_diagnostics_only:
+                    raise ValueError("Assembly deployment requires a successful build; diagnostic-only recovery requires --recover-diagnostics-only")
+                recovery = recover_diagnostics(aws, previous, args.assembly, args.assembly_file)
     token = uuid.uuid4().hex
     artifact_name = f"{args.phase}-{token}.zip"
     result = aws.client("codebuild").start_build(
@@ -252,9 +259,49 @@ def start(args):
              "artifactS3Uri": f"s3://{state['bucket']}/builds/{artifact_name}"}
     if recovery:
         build["diagnosticRecovery"] = recovery
+    if repair:
+        build["assemblyRepair"] = repair
     state.setdefault("builds", []).append(build)
     save(args.metadata, state)
     emit(build)
+
+
+def verify_name_repair(aws, state, recorded):
+    """Accept only a published receipt from the fixed three-name repair tool."""
+    prefix = f"s3://{state['bucket']}/builds/aoss-name-repair-"
+    digest = recorded.get("sha256", "")
+    if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+        raise ValueError("Invalid repaired assembly content hash")
+    if recorded.get("artifactS3Uri") != prefix + digest + ".zip" or recorded.get("receiptS3Uri") != prefix + digest + ".receipt.json":
+        raise ValueError("Recorded repair URI is outside the scoped content-addressed namespace")
+    s3 = aws.client("s3")
+    key = f"builds/aoss-name-repair-{digest}"
+    head = s3.head_object(Bucket=state["bucket"], Key=key + ".zip")
+    receipt = json.loads(s3.get_object(Bucket=state["bucket"], Key=key + ".receipt.json")["Body"].read())
+    expected_changed = {"cdk.out/manifest.json"}
+    for name in ["storage", "sources", "metric-service"]:
+        expected_changed.update({f"cdk.out/sgsupport-demo-{name}.template.json", f"cdk.out/sgsupport-demo-{name}.assets.json"})
+    if (receipt.get("repairKind") != "aoss-three-name-limit"
+        or receipt.get("account") != ACCOUNT or receipt.get("region") != REGION
+        or receipt.get("projectName") != PROJECT
+        or receipt.get("derivedArtifactS3Uri") != recorded["artifactS3Uri"]
+        or receipt.get("derivedAssemblySha256") != digest
+        or head.get("Metadata", {}).get("sha256") != digest
+        or head["ContentLength"] != receipt.get("derivedAssemblyBytes")
+        or head["ContentLength"] != recorded.get("bytes")
+        or set(receipt.get("stackNames", [])) != EXPECTED_STACKS
+        or set(receipt.get("changedZipEntries", [])) != expected_changed
+        or receipt.get("unchangedApplicationAssets") is not True):
+        raise ValueError("Published repair receipt or artifact does not match the narrow allowlist")
+    original = get_build(aws, recorded["originalBuildId"])
+    phases = {p["phaseType"]: p.get("phaseStatus") for p in original["phases"]}
+    if (original["buildStatus"] != "FAILED"
+        or {n for n, v in phases.items() if v == "FAILED"} != {"POST_BUILD"}
+        or any(phases.get(n) != "SUCCEEDED" for n in ["INSTALL", "BUILD", "UPLOAD_ARTIFACTS"])):
+        raise ValueError("Original asset publication proof is invalid")
+    return {"repairKind": receipt["repairKind"], "receiptS3Uri": recorded["receiptS3Uri"],
+            "originalBuildId": original["id"], "originalBuildStatus": "FAILED",
+            "derivedAssemblySha256": digest, "changedTemplateCount": 3}
 
 
 def inspect_assembly_archive(path):
