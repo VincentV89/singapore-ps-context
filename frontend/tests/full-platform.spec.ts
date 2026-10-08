@@ -140,6 +140,9 @@ test('full mode shows all four official catalogues, actual response graph and tr
     expect(call.authorization).not.toContain(fixtureAccessToken);
     expect(call.url).toBe(`${config.platform!.apiUrl}/namespaces/${config.platform!.namespaceId}/query`);
     expect(call.body.mode).toBe('standard');
+    expect(call.body.tierOverride).toBe(3);
+    expect(call.body.maxResults).toBe(8);
+    expect(call.body.timeoutMs).toBe(26000);
     expect(call.body.includeSupporting).toBe(true);
     expect(call.body.options).toBeUndefined();
   }
@@ -163,7 +166,7 @@ test('editing hypothetical facts changes the platform query and standard mode us
   expect(second.url).toBe(`${config.platform!.apiUrl}/namespaces/${config.platform!.namespaceId}/query`);
   expect(second.authorization).toBe(`Bearer ${fixtureIdToken}`);
   expect(second.body.query).toContain('Monthly household income (S$): 9000');
-  expect(second.body.mode).toBe('standard'); expect(second.body.includeSupporting).toBe(true);
+  expect(second.body.mode).toBe('standard'); expect(second.body.tierOverride).toBe(3); expect(second.body.includeSupporting).toBe(true);
   expect(second.body.options).toBeUndefined();
   await expect(page.locator('.scheme-card .status-badge').first()).toHaveText('Agency assessment required');
   await expect(page.getByRole('status')).toHaveCount(0);

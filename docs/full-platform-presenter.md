@@ -12,7 +12,7 @@ Before presenting, sign in through Cognito, confirm the **Singapore agency sourc
 4. **Inspect execution.** Open **Trace the reasoning**. Show actual step status, duration and tools from this request. Explain only the paths that ran. A short request may use fewer tools than a deep request; a tier number alone does not prove that all graph, structured and document paths executed.
 5. **Change context and ask again.** For example, use a caregiving household or a business sustainability project. Compare the evidence and requirements returned. Programme cards continue to say **Agency assessment required**. A different answer does not establish an entitlement, approved grant amount or submitted application.
 
-Audience entry uses standard mode. The assistant's **Deep context reasoning** option uses AgentCore streaming; the validated deep requests took about 2½ minutes. Enable it for a follow-up whose relevant documents and mappings have been validated, then show the actual outcome and trace. If the platform marks an answer partial or reports a failure, present that status and investigate it; do not substitute a scripted trace.
+Audience entry uses standard mode to retrieve cited agency requirements. The assistant's **Deep context reasoning** option uses AgentCore streaming; the validated deep requests took about 2½ minutes. Enable it for a follow-up whose relevant documents and mappings have been validated, then show the actual outcome and trace. If the platform marks an answer partial or reports a failure, present that status and investigate it; do not substitute a scripted trace.
 
 ## Questions for the other audiences
 

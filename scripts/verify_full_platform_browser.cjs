@@ -154,7 +154,7 @@ async function main(args) {
           for (const passage of Array.isArray(result?.supportingContent) ? result.supportingContent : []) if (typeof passage.text === 'string') actualPassages.add(passage.text.trim().replace(/\s+/g, ' '));
           const persona = personas.find(item => String(body.query).includes(`Audience: ${item.name}.`));
           const call = {
-            persona: persona?.id, status: response.status(), transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
+            persona: persona?.id, status: response.status(), transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, tierOverride: body.tierOverride, maxResults: body.maxResults, timeoutMs: body.timeoutMs, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
             idTokenMatches: Boolean(idToken && request.headers().authorization === `Bearer ${idToken}`), accessTokenUsed: Boolean(accessToken && request.headers().authorization === `Bearer ${accessToken}`),
             actualSseDone: Boolean(done), sseStepEvents: events.filter(event => event.type === 'step').length, sseErrorEvents: events.filter(event => event.type === 'error').length,
             answerCharacters: typeof result?.synthesizedAnswer === 'string' ? result.synthesizedAnswer.length : 0, supportingPassages: Array.isArray(result?.supportingContent) ? result.supportingContent.length : 0,
@@ -285,7 +285,7 @@ async function main(args) {
     const deepCalls = report.runtimeCalls.filter(call => call.transport === 'sse');
     check(standardCalls.length >= 4 && new Set(standardCalls.map(call => call.persona)).size === 4, 'Expected actual standard Serve queries from all four audiences.');
     check(deepCalls.length >= 1 && report.explicitDeepFollowup, 'Expected an explicit real AgentCore deep-reasoning query.');
-    check(report.runtimeCalls.every(call => call.status === 200 && call.mode === (call.transport === 'sse' ? 'deep-reasoning' : 'standard') && call.namespaceMatches && call.idTokenMatches && !call.accessTokenUsed && (call.transport !== 'sse' || call.actualSseDone) && !call.sseErrorEvents && call.answerCharacters > 20 && call.supportingPassages > 0 && call.trace.length > 0), 'The browser requests must use the full platform and its actual grounded results.');
+    check(report.runtimeCalls.every(call => call.status === 200 && call.mode === (call.transport === 'sse' ? 'deep-reasoning' : 'standard') && (call.transport === 'sse' || call.tierOverride === 3) && call.namespaceMatches && call.idTokenMatches && !call.accessTokenUsed && (call.transport !== 'sse' || call.actualSseDone) && !call.sseErrorEvents && call.answerCharacters > 20 && call.supportingPassages > 0 && call.trace.length > 0), 'The browser requests must use the full platform and its actual grounded results.');
     check(report.pageErrors.length === 0 && report.relayErrors.length === 0, 'The live browser reported application or relay errors.');
     report.passed = true; report.mobileEntryOverflow = false;
     privateJson(reportPath, report);

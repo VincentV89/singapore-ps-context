@@ -371,7 +371,9 @@ export async function analyzeOfficialScenario({ config, persona, profile, questi
   const query = contextQuery(persona, profile, question);
   // REST uses flat Smithy fields; the data-layer proxy constructs the nested
   // AgentCore options. Sending nested options here silently drops them.
-  const response = mode === 'deep-reasoning' ? await queryStreaming(platform, query, idToken, requestSignal, fetcher, onStep) : normalizeResponse(await (await checkedResponse(await fetcher(`${platform.apiUrl.replace(/\/$/, '')}/namespaces/${encodeURIComponent(platform.namespaceId)}/query`, { method: 'POST', headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ query, mode: 'standard', includeSupporting: true }), signal: requestSignal }))).json());
+  // Navigation needs cited policy context; force the documented Tier 3 path
+  // rather than accepting an early structured SQL result from Tier 2.
+  const response = mode === 'deep-reasoning' ? await queryStreaming(platform, query, idToken, requestSignal, fetcher, onStep) : normalizeResponse(await (await checkedResponse(await fetcher(`${platform.apiUrl.replace(/\/$/, '')}/namespaces/${encodeURIComponent(platform.namespaceId)}/query`, { method: 'POST', headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ query, mode: 'standard', tierOverride: 3, includeSupporting: true, maxResults: 8, timeoutMs: 26000 }), signal: requestSignal }))).json());
   if (mode === 'standard') response.result.trace.forEach(step => onStep?.(step));
   const result = response.result;
   let graph = graphFromContext(result.graphContext);
