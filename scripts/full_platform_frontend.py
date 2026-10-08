@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Bootstrap the full demo login, or publish its branded S3/CloudFront UI.
 
---bootstrap collects deployed full-platform outputs and creates/reuses a private
-permanent Cognito administrator password. Invitations are always suppressed.
+--bootstrap collects completed authentication/API/Serve outputs and creates/reuses
+a private permanent Cognito administrator password. The owned web console may
+still be provisioning. Invitations are always suppressed.
 --collect-only reads deployment metadata without changing Cognito.
 --publish requires completed source ingestion and an actually accepted ontology,
 updates the existing navigator's CSP parameters, and publishes frontend/dist
@@ -58,17 +59,22 @@ def select_output(result, key, optional=False):
     raise ValueError(f"Cannot resolve unique deployed output {key}.")
 
 
-def require_full_stack(cf, component):
+def assert_full_stack_identity(stack, component):
     name = f"{PREFIX}-demo-{component}"
-    stack = describe_stack(cf, name)
-    if not stack or stack["StackStatus"] not in {"CREATE_COMPLETE", "UPDATE_COMPLETE", "UPDATE_ROLLBACK_COMPLETE"}:
-        raise RuntimeError(f"Full stack {name} has not completed deployment.")
     if not stack["StackId"].startswith(f"arn:aws:cloudformation:{REGION}:{ACCOUNT}:stack/{name}/"):
         raise ValueError("Full stack account/region/name ownership does not match this task.")
     tags = {tag["Key"]: tag["Value"] for tag in stack.get("Tags", [])}
     if tags.get("Project") not in {"sgsupport", "SingaporeContext"} or tags.get("Environment") != "demo":
         raise ValueError(f"Full stack {name} lacks its expected demo ownership tags.")
     return stack
+
+
+def require_full_stack(cf, component):
+    name = f"{PREFIX}-demo-{component}"
+    stack = describe_stack(cf, name)
+    if not stack or stack["StackStatus"] not in {"CREATE_COMPLETE", "UPDATE_COMPLETE", "UPDATE_ROLLBACK_COMPLETE"}:
+        raise RuntimeError(f"Full stack {name} has not completed deployment.")
+    return assert_full_stack_identity(stack, component)
 
 
 def require_original_deployment(aws, deployment_path):
@@ -96,13 +102,19 @@ def require_original_deployment(aws, deployment_path):
     return deployment, main, actual
 
 
-def collect(aws, deployment_path, metadata_path):
+def collect(aws, deployment_path, metadata_path, require_web=True):
     deployment, main, original = require_original_deployment(aws, deployment_path)
     cf = aws.client("cloudformation")
     auth = outputs(require_full_stack(cf, "auth"))
     api = outputs(require_full_stack(cf, "api"))
     serve = outputs(require_full_stack(cf, "serve"))
-    web = outputs(require_full_stack(cf, "web"))
+    web_stack = require_full_stack(cf, "web") if require_web else describe_stack(cf, f"{PREFIX}-demo-web")
+    if web_stack:
+        assert_full_stack_identity(web_stack, "web")
+    web_status = web_stack["StackStatus"] if web_stack else "NOT_CREATED"
+    web_ready = web_status in {"CREATE_COMPLETE", "UPDATE_COMPLETE", "UPDATE_ROLLBACK_COMPLETE"}
+    if not web_ready and web_status not in {"NOT_CREATED", "REVIEW_IN_PROGRESS", "CREATE_IN_PROGRESS", "UPDATE_IN_PROGRESS", "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS"}:
+        raise RuntimeError(f"Owned web stack is not provisioning normally: {web_status}.")
     pool, client_id = select_output(auth, "UserPoolId"), select_output(auth, "UserPoolClientId")
     api_url = select_output(api, "ApiEndpoint").rstrip("/")
     runtime = aws.client("ssm").get_parameter(Name="/sgsupport/serve/runtime-arn")["Parameter"]["Value"]
@@ -110,13 +122,15 @@ def collect(aws, deployment_path, metadata_path):
         raise ValueError("Serve SSM ARN does not match the owned full deployment.")
     if not pool.startswith("us-east-1_") or urlparse(api_url).scheme != "https" or not (urlparse(api_url).hostname or "").endswith(".execute-api.us-east-1.amazonaws.com"):
         raise ValueError("Full authentication/API outputs have unexpected region or endpoint identities.")
-    console_url = select_output(web, "WebsiteURL")
-    if urlparse(console_url).scheme != "https":
+    console_url = select_output(outputs(web_stack), "WebsiteURL") if web_ready else None
+    if web_ready and urlparse(console_url).scheme != "https":
         raise ValueError("Full administrator console URL is not HTTPS.")
     metadata = json.loads(metadata_path.read_text()) if metadata_path.exists() else {}
-    metadata.update({"schemaVersion": 1, "region": REGION, "accountId": ACCOUNT, "prefix": PREFIX, "environment": "demo", "apiUrl": api_url, "serveRuntimeArn": runtime, "cognito": {"userPoolId": pool, "clientId": client_id, "authority": f"https://cognito-idp.{REGION}.amazonaws.com/{pool}", "domain": select_output(auth, "CognitoDomainUrl").rstrip("/"), "scope": "openid email profile"}, "websiteUrl": original["WebsiteUrl"], "frontendBucket": original["FrontendBucket"], "distributionId": original["DistributionId"], "adminConsoleUrl": console_url, "fullStackNames": {name: f"sgsupport-demo-{name}" for name in ("auth", "api", "serve", "web", "sources", "ontology")}, "originalMainStack": deployment["mainStack"]})
+    metadata.update({"schemaVersion": 1, "region": REGION, "accountId": ACCOUNT, "prefix": PREFIX, "environment": "demo", "apiUrl": api_url, "serveRuntimeArn": runtime, "cognito": {"userPoolId": pool, "clientId": client_id, "authority": f"https://cognito-idp.{REGION}.amazonaws.com/{pool}", "domain": select_output(auth, "CognitoDomainUrl").rstrip("/"), "scope": "openid email profile"}, "websiteUrl": original["WebsiteUrl"], "frontendBucket": original["FrontendBucket"], "distributionId": original["DistributionId"], "adminConsoleUrl": console_url, "webReady": web_ready, "webStackStatus": web_status, "fullStackNames": {name: f"sgsupport-demo-{name}" for name in ("auth", "api", "serve", "web", "sources", "ontology")}, "originalMainStack": deployment["mainStack"]})
     write_private(metadata_path, metadata)
     print(f"Full-platform metadata saved to {metadata_path}.", flush=True)
+    if not web_ready:
+        print(f"Authentication, API and Serve are ready. The full web console is {web_status}; full platform deployment is not yet complete.", flush=True)
     return metadata, main, original
 
 
@@ -390,7 +404,7 @@ def main():
     aws = session(REGION)
     if aws.client("sts").get_caller_identity()["Account"] != ACCOUNT:
         raise ValueError("AWS credentials do not identify the authorized account.")
-    metadata, main_stack, original = collect(aws, args.deployment, args.metadata)
+    metadata, main_stack, original = collect(aws, args.deployment, args.metadata, require_web=not args.bootstrap)
     if args.bootstrap or args.publish:
         configure_login(aws, metadata, args.credentials)
     if args.publish:
