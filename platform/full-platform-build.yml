@@ -115,10 +115,10 @@ phases:
         stacks = {}
         if manifest_path.exists():
             manifest = json.loads(manifest_path.read_text())
-            for value in manifest.get("artifacts", {}).values():
+            for artifact_id, value in manifest.get("artifacts", {}).items():
                 if value.get("type") != "aws:cloudformation:stack":
                     continue
-                name = value["properties"]["stackName"]
+                name = value.get("properties", {}).get("stackName", artifact_id)
                 if not name.startswith("sgsupport-demo-"):
                     raise RuntimeError("Assembly contains an unexpected stack")
                 result = subprocess.run(

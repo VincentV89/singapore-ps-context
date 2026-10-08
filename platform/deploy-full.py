@@ -48,6 +48,11 @@ EXCLUDED_PARTS = {
     "build", "smithy-generated", "platform-artifacts", "artifacts",
     "htmlcov", "coverage", "test-results", "playwright-report",
 }
+EXPECTED_STACKS = {f"sgsupport-demo-{suffix}" for suffix in [
+    "network", "auth", "guardrail", "storage", "authnz", "vkg", "namespace",
+    "metric-service", "api", "serve", "sources", "data-layer", "edge-waf",
+    "web", "ontology", "mcp",
+]}
 
 
 def stamp():
@@ -218,6 +223,7 @@ def start(args):
     if args.assembly and not args.assembly.startswith(f"s3://{state['bucket']}/builds/"):
         raise ValueError("Assembly must be an artifact from this project's build bucket")
     aws = aws_session()
+    recovery = None
     if args.phase == "deploy":
         candidates = [item for item in state.get("builds", [])
                       if item.get("phase") == "build" and item.get("artifactS3Uri") == args.assembly]
@@ -225,7 +231,9 @@ def start(args):
             raise ValueError("Assembly is not recorded as this project's build output")
         previous = get_build(aws, candidates[-1]["id"])
         if previous["buildStatus"] != "SUCCEEDED":
-            raise ValueError("Assembly deployment requires a successfully completed build")
+            if not args.recover_diagnostics_only:
+                raise ValueError("Assembly deployment requires a successful build; diagnostic-only recovery requires --recover-diagnostics-only")
+            recovery = recover_diagnostics(aws, previous, args.assembly, args.assembly_file)
     token = uuid.uuid4().hex
     artifact_name = f"{args.phase}-{token}.zip"
     result = aws.client("codebuild").start_build(
@@ -242,9 +250,103 @@ def start(args):
     )["build"]
     build = {"id": result["id"], "phase": args.phase, "startedAt": stamp(),
              "artifactS3Uri": f"s3://{state['bucket']}/builds/{artifact_name}"}
+    if recovery:
+        build["diagnosticRecovery"] = recovery
     state.setdefault("builds", []).append(build)
     save(args.metadata, state)
     emit(build)
+
+
+def inspect_assembly_archive(path):
+    """Validate stack boundaries and every ZIP entry without extracting code."""
+    with ZipFile(path) as archive:
+        names = archive.namelist()
+        if len(names) != len(set(names)):
+            raise ValueError("Assembly ZIP contains duplicate paths")
+        for item in archive.infolist():
+            relative = Path(item.filename)
+            if relative.is_absolute() or ".." in relative.parts or "\\" in item.filename:
+                raise ValueError("Unsafe assembly ZIP path")
+            if (item.external_attr >> 16) & 0o170000 == 0o120000:
+                raise ValueError("Assembly ZIP contains a symbolic link")
+        manifest = json.loads(archive.read("cdk.out/manifest.json"))
+        stacks = {
+            value.get("properties", {}).get("stackName", artifact_id): value
+            for artifact_id, value in manifest.get("artifacts", {}).items()
+            if value.get("type") == "aws:cloudformation:stack"
+        }
+        if set(stacks) != EXPECTED_STACKS:
+            raise ValueError("Assembly must contain exactly the 16 expected Singapore platform stacks")
+        for value in stacks.values():
+            template = value["properties"]["templateFile"]
+            if "cdk.out/" + template not in names:
+                raise ValueError("Assembly is missing a stack template")
+            if value.get("environment") not in {
+                "aws://unknown-account/unknown-region", f"aws://{ACCOUNT}/{REGION}",
+            }:
+                raise ValueError("Assembly targets an unauthorized account or region")
+        asset_manifests = []
+        files = set()
+        images = set()
+        for name in names:
+            if name.startswith("cdk.out/") and name.endswith(".assets.json") and name.count("/") == 1:
+                data = json.loads(archive.read(name))
+                asset_manifests.append(name)
+                files.update(data.get("files", {}))
+                images.update(data.get("dockerImages", {}))
+        if not asset_manifests or not files or not images:
+            raise ValueError("Assembly is missing its published asset manifests")
+    return {"stackNames": sorted(stacks), "assetManifests": sorted(asset_manifests),
+            "uniqueFileAssetCount": len(files), "uniqueDockerAssetCount": len(images)}
+
+
+def recover_diagnostics(aws, build, uri, assembly_file):
+    """Recover an intact build whose sole failure is the known summary bug."""
+    phases = {phase["phaseType"]: phase.get("phaseStatus") for phase in build["phases"]}
+    failures = {name for name, status in phases.items() if status == "FAILED"}
+    if build["buildStatus"] != "FAILED" or failures != {"POST_BUILD"}:
+        raise ValueError("Recovery is restricted to a POST_BUILD-only failed build")
+    if any(phases.get(name) != "SUCCEEDED" for name in ["INSTALL", "BUILD", "UPLOAD_ARTIFACTS"]):
+        raise ValueError("Install, asset build/publication, and artifact upload must all have succeeded")
+    logs = build.get("logs", {})
+    events = aws.client("logs").filter_log_events(
+        logGroupName=logs["groupName"], logStreamNames=[logs["streamName"]],
+        filterPattern='"KeyError"', limit=100,
+    )["events"]
+    proof = next((event for event in events if event["message"].strip() == "KeyError: 'stackName'"), None)
+    if proof is None:
+        raise ValueError("Exact known stackName diagnostic exception was not found in this build's CloudWatch log")
+    bucket, key = uri.removeprefix("s3://").split("/", 1)
+    if build.get("artifacts", {}).get("location") != f"arn:aws:s3:::{bucket}/{key}":
+        raise ValueError("Assembly URI does not match the original build's actual S3 artifact")
+    s3 = aws.client("s3")
+    remote = s3.head_object(Bucket=bucket, Key=key)
+    if assembly_file is None:
+        assembly_file = ROOT / "artifacts" / f"recovery-{build['id'].split(':')[-1]}.zip"
+        assembly_file.parent.mkdir(parents=True, exist_ok=True)
+        s3.download_file(bucket, key, str(assembly_file))
+        assembly_file.chmod(0o600)
+    if not assembly_file.is_file() or assembly_file.stat().st_size != remote["ContentLength"]:
+        raise ValueError("Local assembly file does not match the original artifact size")
+    validated = inspect_assembly_archive(assembly_file)
+    receipt = {
+        "diagnosticsOnlyRecovery": True, "originalBuildId": build["id"],
+        "originalBuildStatus": build["buildStatus"], "phaseStates": phases,
+        "cloudWatchError": "KeyError: 'stackName'", "cloudWatchEventId": proof["eventId"],
+        "artifactS3Uri": uri, "artifactETag": remote["ETag"],
+        "artifactBytes": remote["ContentLength"],
+        "inspectedFile": str(assembly_file.resolve()),
+        "inspectedFileSha256": hashlib.sha256(assembly_file.read_bytes()).hexdigest(),
+        "validatedAt": stamp(), **validated,
+        "publicationProof": "BUILD phase succeeded after checked publication of every CDK asset manifest",
+    }
+    receipt_path = ROOT / "artifacts" / f"diagnostic-recovery-{build['id'].split(':')[-1]}.local.json"
+    save(receipt_path, receipt)
+    emit({"diagnosticRecoveryValidated": True, "originalBuildStatus": "FAILED",
+          "stackCount": len(validated["stackNames"]), "receipt": str(receipt_path)})
+    return {"receipt": str(receipt_path), "originalBuildId": build["id"],
+            "originalBuildStatus": "FAILED", "diagnosticsOnlyRecovery": True,
+            "inspectedFileSha256": receipt["inspectedFileSha256"]}
 
 
 def get_build(aws, build_id):
@@ -296,6 +398,10 @@ def main():
     run = commands.add_parser("start", help="Start a nonblocking build or assembly deployment")
     run.add_argument("--phase", choices=["build", "deploy"], required=True)
     run.add_argument("--assembly")
+    run.add_argument("--recover-diagnostics-only", action="store_true",
+                     help="Recover only the verified post-build stackName summary failure; preserve its FAILED evidence")
+    run.add_argument("--assembly-file", type=Path,
+                     help="Already downloaded original assembly ZIP for diagnostic recovery; size and manifest are validated")
     run.add_argument("--metadata", type=Path, default=METADATA)
     poll = commands.add_parser("status", help="Read build status and scoped log/artifact locations")
     poll.add_argument("--build-id", required=True)
