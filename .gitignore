@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+backend/package/
+backend/lambda.zip
+deployment.json
+*.local.json
+.env
+.env.*
+playwright-report/
+test-results/
+artifacts/
