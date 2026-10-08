@@ -5,7 +5,7 @@ test('changing household context changes auditable pathways and prepares a real 
   const browserErrors: string[] = [];
   page.on('pageerror', error => browserErrors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Find Government Support', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Find support in Singapore', exact: true })).toBeVisible();
   await page.locator('.persona-card').filter({ hasText: 'Individuals & Families' }).click();
   const update = page.getByRole('button', { name: 'Update context' });
   await expect(update).toBeEnabled();

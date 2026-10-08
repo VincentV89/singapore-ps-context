@@ -35,7 +35,7 @@ test('all four audiences open their own context, schemes, graph and evidence', a
     await page.getByRole('button', { name: 'Close entity details' }).click();
     previousNames.push(...expected.schemes.map(scheme => scheme.name));
     await page.getByRole('button', { name: 'All audiences', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'Find Government Support', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Find support in Singapore', exact: true })).toBeVisible();
   }
   expect(errors).toEqual([]);
 });

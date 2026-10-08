@@ -170,3 +170,12 @@ summary:focus-visible, .graph-node:focus-visible { outline-color: var(--sg-rose)
   .app-header { gap: 12px; }
   .login-header { padding: 22px 24px; }
 }
+
+/* Full platform provenance and live execution feedback. */
+.policy-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.detail-section blockquote { margin: 12px 0; white-space: pre-line; line-height: 1.7; color: var(--text-muted); }
+.evidence-disclaimer { flex-wrap: wrap; }
+.evidence-disclaimer a { display: inline-flex; gap: 6px; align-items: center; color: var(--accent); text-decoration: underline; }
+.platform-progress { list-style: none; padding: 12px; width: min(440px, 100%); background: #142334; border-radius: 12px; text-align: left; }
+.platform-progress li { display: flex; justify-content: space-between; gap: 14px; padding: 7px; font-size: 12px; color: #e4eaf0; }
+.platform-progress small { color: #aabacb; white-space: nowrap; }

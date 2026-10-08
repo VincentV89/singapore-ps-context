@@ -7,7 +7,9 @@
     "LambdaCodeKey": {"Type": "String"},
     "FrontendOrigin": {"Type": "String", "Default": "https://deployment.invalid", "AllowedPattern": "https://[a-z0-9.-]+", "Description": "Deploy script updates this to the exact CloudFront origin after initial creation, avoiding a circular dependency."},
     "EnableBedrock": {"Type": "String", "Default": "false", "AllowedValues": ["true", "false"]},
-    "BedrockModelId": {"Type": "String", "Default": "amazon.nova-lite-v1:0", "AllowedValues": ["amazon.nova-lite-v1:0"]}
+    "BedrockModelId": {"Type": "String", "Default": "amazon.nova-lite-v1:0", "AllowedValues": ["amazon.nova-lite-v1:0"]},
+    "FullPlatformApiOrigin": {"Type": "String", "Default": "", "AllowedPattern": "(|https://[a-z0-9]+[.]execute-api[.]us-east-1[.]amazonaws[.]com)", "Description": "Optional exact origin of the full accelerator API for the branded navigator."},
+    "FullPlatformCognitoOrigin": {"Type": "String", "Default": "", "AllowedPattern": "(|https://[a-z0-9-]+[.]auth[.]us-east-1[.]amazoncognito[.]com)", "Description": "Optional exact hosted-login origin of the full accelerator user pool."}
   },
   "Conditions": {"UseBedrock": {"Fn::Equals": [{"Ref": "EnableBedrock"}, "true"]}},
   "Resources": {
@@ -42,7 +44,7 @@
           "Name": {"Fn::Sub": "${ProjectName}-headers"},
           "Comment": "Exact API origin and regional Cognito endpoints; no external fonts/scripts",
           "SecurityHeadersConfig": {
-            "ContentSecurityPolicy": {"Override": true, "ContentSecurityPolicy": {"Fn::Sub": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com https://cognito-idp.${AWS::Region}.amazonaws.com https://${ProjectName}-${AWS::AccountId}-${AWS::Region}.auth.${AWS::Region}.amazoncognito.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://${ProjectName}-${AWS::AccountId}-${AWS::Region}.auth.${AWS::Region}.amazoncognito.com; upgrade-insecure-requests"}},
+            "ContentSecurityPolicy": {"Override": true, "ContentSecurityPolicy": {"Fn::Sub": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com https://cognito-idp.${AWS::Region}.amazonaws.com https://${ProjectName}-${AWS::AccountId}-${AWS::Region}.auth.${AWS::Region}.amazoncognito.com ${FullPlatformApiOrigin} ${FullPlatformCognitoOrigin} https://bedrock-agentcore.${AWS::Region}.amazonaws.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://${ProjectName}-${AWS::AccountId}-${AWS::Region}.auth.${AWS::Region}.amazoncognito.com ${FullPlatformCognitoOrigin}; upgrade-insecure-requests"}},
             "ContentTypeOptions": {"Override": true},
             "FrameOptions": {"FrameOption": "DENY", "Override": true},
             "ReferrerPolicy": {"ReferrerPolicy": "no-referrer", "Override": true},
