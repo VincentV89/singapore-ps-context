@@ -138,13 +138,10 @@ test('full mode shows all four official catalogues, actual response graph and tr
   for (const call of calls) {
     expect(call.authorization).toBe(`Bearer ${fixtureIdToken}`);
     expect(call.authorization).not.toContain(fixtureAccessToken);
-    expect(call.url).toBe(`${config.platform!.apiUrl}/namespaces/${config.platform!.namespaceId}/query`);
-    expect(call.body.mode).toBe('standard');
-    expect(call.body.tierOverride).toBe(3);
-    expect(call.body.maxResults).toBe(8);
-    expect(call.body.timeoutMs).toBe(26000);
-    expect(call.body.includeSupporting).toBe(true);
-    expect(call.body.options).toBeUndefined();
+    expect(runtimePattern.test(call.url)).toBe(true);
+    expect(call.body.namespace).toBe(config.platform!.namespaceId);
+    expect(call.body.options).toMatchObject({ mode: 'standard', tierOverride: 3, includeSupporting: true, maxResults: 8, timeoutMs: 120000 });
+    expect(call.body.stream).toBe(true);
   }
   expect(browserErrors).toEqual([]);
 });
@@ -152,6 +149,7 @@ test('full mode shows all four official catalogues, actual response graph and tr
 test('editing hypothetical facts changes the platform query and standard mode uses flat REST fields', async ({ page }) => {
   const calls: CapturedCall[] = [];
   await baseRoutes(page); await successfulRoutes(page, calls);
+  await page.route('**/config.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...config, platform: { ...config.platform!, serveRuntimeArn: undefined } }) }));
   await page.goto('/');
   await page.locator('.persona-card').filter({ hasText: audienceNames.individuals }).click();
   await expect(page.getByRole('button', { name: 'Update context', exact: false })).toBeEnabled();
@@ -176,11 +174,12 @@ test('opaque synthesis document IDs resolve through authenticated KBSearch metad
   const calls: CapturedCall[] = [], first = firstScheme('individuals');
   const originalPassage = 'TEST FIXTURE ORIGINAL SYNTHESIS PASSAGE retained after provenance lookup.';
   await baseRoutes(page);
-  await page.route(queryPattern, async route => {
+  await page.route(runtimePattern, async route => {
     if (!await capture(route, calls)) return;
     const result = mockResult(first);
     result.supportingContent = [{ chunkId: `fixture-${first.id}-chunk`, text: originalPassage, sourceDoc: 'opaque-platform-document-id' }];
-    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ requestId: 'opaque-provenance-fixture', result }) });
+    const event = { type: 'done', requestId: 'opaque-provenance-fixture', payload: { result } };
+    await route.fulfill({ contentType: 'text/event-stream', headers: corsHeaders, body: `data: ${JSON.stringify(event)}\n\n` });
   });
   await page.route('https://context-platform.test/namespaces/test-fixture-namespace/kb/search', async route => {
     if (!await capture(route, calls)) return;
@@ -207,7 +206,7 @@ test('opaque synthesis document IDs resolve through authenticated KBSearch metad
 test('a namespace 403 shows the actual failure without a fabricated platform answer or graph', async ({ page }) => {
   const calls: CapturedCall[] = [];
   await baseRoutes(page);
-  await page.route(queryPattern, async route => {
+  await page.route(runtimePattern, async route => {
     if (!await capture(route, calls)) return;
     await route.fulfill({ status: 403, contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ message: 'TEST FIXTURE namespace access denied' }) });
   });
@@ -226,17 +225,17 @@ test('switching audiences cancels the old platform request and prevents a late r
   const captured = new Promise<void>(resolve => { capturedPrevious = resolve; });
   const held = new Promise<void>(resolve => { releasePrevious = resolve; });
   await baseRoutes(page);
-  await page.route(queryPattern, async route => {
+  await page.route(runtimePattern, async route => {
     const body = await capture(route, calls); if (!body) return;
     const persona = personaFromQuery(body.query);
     if (persona === 'businesses') { capturedPrevious(); await held; }
     // The first request has already been aborted by the browser after switching.
-    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ result: mockResult(firstScheme(persona)) }) }).catch(() => undefined);
+    await route.fulfill({ contentType: 'text/event-stream', headers: corsHeaders, body: sseBody(firstScheme(persona)) }).catch(() => undefined);
   });
   await page.goto('/');
   await page.locator('.persona-card').filter({ hasText: audienceNames.businesses }).click();
   await captured;
-  const cancellation = page.waitForEvent('requestfailed', { predicate: (request: Request) => queryPattern.test(request.url()) && String(request.postDataJSON().query).includes(`Audience: ${audienceNames.businesses}.`), timeout: 10000 });
+  const cancellation = page.waitForEvent('requestfailed', { predicate: (request: Request) => runtimePattern.test(request.url()) && String(request.postDataJSON().query).includes(`Audience: ${audienceNames.businesses}.`), timeout: 10000 });
   await page.getByRole('button', { name: 'All audiences', exact: true }).click();
   const cancelled = await cancellation;
   expect(cancelled.failure()?.errorText).toContain('ERR_ABORTED');
@@ -290,10 +289,10 @@ test('schema fallback uses nonblank match-all search and preserves real neighbor
   const referenceUri = 'https://test-fixture.example/ontology/Agency';
   await baseRoutes(page);
   await page.route('**/config.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...config, platform: { ...config.platform!, ontologyId: 'https://test-fixture.example/ontology/' } }) }));
-  await page.route(queryPattern, async route => {
+  await page.route(runtimePattern, async route => {
     if (!await capture(route, calls)) return;
     const result = mockResult(first); result.graphContext.relationships = [];
-    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ result }) });
+    await route.fulfill({ contentType: 'text/event-stream', headers: corsHeaders, body: `data: ${JSON.stringify({ type: 'done', requestId: 'schema-fixture', payload: { result } })}\n\n` });
   });
   await page.route('https://context-platform.test/namespaces/test-fixture-namespace/graph/search?**', async route => {
     const url = new URL(route.request().url());

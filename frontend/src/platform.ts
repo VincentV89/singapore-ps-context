@@ -172,11 +172,11 @@ function invocationUrl(platform: FullPlatformConfig) {
 }
 
 /** SSE events follow the upstream AgentCore JSON-in-data protocol. */
-async function queryStreaming(platform: FullPlatformConfig, query: string, idToken: string, signal: AbortSignal, fetcher: Fetcher, onStep?: (step: PlatformTraceStep) => void): Promise<PlatformResponse> {
+async function queryStreaming(platform: FullPlatformConfig, query: string, idToken: string, mode: 'standard' | 'deep-reasoning', signal: AbortSignal, fetcher: Fetcher, onStep?: (step: PlatformTraceStep) => void): Promise<PlatformResponse> {
   const requestId = crypto.randomUUID();
   const response = await checkedResponse(await fetcher(invocationUrl(platform), {
     method: 'POST', headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json', 'X-Amzn-Bedrock-AgentCore-Runtime-Session-Id': crypto.randomUUID() },
-    body: JSON.stringify({ query, namespace: platform.namespaceId, requestId, options: { mode: 'deep-reasoning', includeSupporting: true }, stream: true }), signal,
+    body: JSON.stringify({ query, namespace: platform.namespaceId, requestId, options: { mode, includeSupporting: true, ...(mode === 'standard' ? { tierOverride: 3, maxResults: 8, timeoutMs: 120000 } : {}) }, stream: true }), signal,
   }));
   if (!response.body) throw new PlatformRequestError('The platform returned an empty analysis stream.');
   const reader = response.body.getReader();
@@ -366,15 +366,18 @@ export type OfficialAnalysisRequest = { config: AppConfig; persona: PersonaId; p
 export async function analyzeOfficialScenario({ config, persona, profile, question, idToken, mode = 'standard', signal, onStep, fetcher = fetch }: OfficialAnalysisRequest): Promise<Analysis> {
   const platform = requirePlatform(config);
   if (!idToken) throw new PlatformRequestError('Sign in to query the full context platform.', 401);
-  const requestSignal = signal ? AbortSignal.any([signal, AbortSignal.timeout(mode === 'deep-reasoning' ? 210000 : 60000)]) : AbortSignal.timeout(mode === 'deep-reasoning' ? 210000 : 60000);
+  const requestSignal = signal ? AbortSignal.any([signal, AbortSignal.timeout(mode === 'deep-reasoning' ? 210000 : 150000)]) : AbortSignal.timeout(mode === 'deep-reasoning' ? 210000 : 150000);
   const catalogue = await loadOfficialCatalogue(platform.catalogueUrl, fetcher);
   const query = contextQuery(persona, profile, question);
   // REST uses flat Smithy fields; the data-layer proxy constructs the nested
   // AgentCore options. Sending nested options here silently drops them.
   // Navigation needs cited policy context; force the documented Tier 3 path
   // rather than accepting an early structured SQL result from Tier 2.
-  const response = mode === 'deep-reasoning' ? await queryStreaming(platform, query, idToken, requestSignal, fetcher, onStep) : normalizeResponse(await (await checkedResponse(await fetcher(`${platform.apiUrl.replace(/\/$/, '')}/namespaces/${encodeURIComponent(platform.namespaceId)}/query`, { method: 'POST', headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ query, mode: 'standard', tierOverride: 3, includeSupporting: true, maxResults: 8, timeoutMs: 26000 }), signal: requestSignal }))).json());
-  if (mode === 'standard') response.result.trace.forEach(step => onStep?.(step));
+  // AgentCore streams both single-shot standard and multi-step deep analysis.
+  // Direct streaming avoids the REST transport's 29-second synthesis ceiling.
+  const useStreaming = Boolean(platform.serveRuntimeArn) || mode === 'deep-reasoning';
+  const response = useStreaming ? await queryStreaming(platform, query, idToken, mode, requestSignal, fetcher, onStep) : normalizeResponse(await (await checkedResponse(await fetcher(`${platform.apiUrl.replace(/\/$/, '')}/namespaces/${encodeURIComponent(platform.namespaceId)}/query`, { method: 'POST', headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ query, mode: 'standard', tierOverride: 3, includeSupporting: true, maxResults: 8, timeoutMs: 26000 }), signal: requestSignal }))).json());
+  if (!useStreaming) response.result.trace.forEach(step => onStep?.(step));
   const result = response.result;
   let graph = graphFromContext(result.graphContext);
   let graphKind: Analysis['graphKind'] = graph.nodes.length ? 'retrieved-context' : 'empty';

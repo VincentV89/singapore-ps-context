@@ -154,7 +154,7 @@ async function main(args) {
           for (const passage of Array.isArray(result?.supportingContent) ? result.supportingContent : []) if (typeof passage.text === 'string') actualPassages.add(passage.text.trim().replace(/\s+/g, ' '));
           const persona = personas.find(item => String(body.query).includes(`Audience: ${item.name}.`));
           const call = {
-            persona: persona?.id, status: response.status(), transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, tierOverride: body.tierOverride, maxResults: body.maxResults, timeoutMs: body.timeoutMs, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
+            persona: persona?.id, status: response.status(), transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, tierOverride: runtimeCall ? body.options?.tierOverride : body.tierOverride, maxResults: runtimeCall ? body.options?.maxResults : body.maxResults, timeoutMs: runtimeCall ? body.options?.timeoutMs : body.timeoutMs, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
             idTokenMatches: Boolean(idToken && request.headers().authorization === `Bearer ${idToken}`), accessTokenUsed: Boolean(accessToken && request.headers().authorization === `Bearer ${accessToken}`),
             actualSseDone: Boolean(done), sseStepEvents: events.filter(event => event.type === 'step').length, sseErrorEvents: events.filter(event => event.type === 'error').length,
             answerCharacters: typeof result?.synthesizedAnswer === 'string' ? result.synthesizedAnswer.length : 0, supportingPassages: Array.isArray(result?.supportingContent) ? result.supportingContent.length : 0,
@@ -268,7 +268,7 @@ async function main(args) {
     check(await page.getByRole('alert').count() === 0, 'The explicit deep follow-up reported an application error.');
     check((await page.locator('.answer-content').innerText()).trim().length > 20, 'The explicit deep answer is empty.');
     report.explicitDeepFollowup = true;
-    const deepCall = report.runtimeCalls.findLast(call => call.transport === 'sse');
+    const deepCall = report.runtimeCalls.findLast(call => call.mode === 'deep-reasoning');
     await page.getByText('Trace the reasoning', { exact: true }).click();
     const deepTraceSteps = await page.locator('.reasoning-details li').count();
     check(deepCall && deepCall.trace.length === deepTraceSteps && deepTraceSteps > 0, 'The deep trace display must match the actual AgentCore result.');
@@ -281,11 +281,11 @@ async function main(args) {
     await page.getByRole('button', { name: 'Close evidence' }).click();
     report.deepFollowup = { traceSteps: deepTraceSteps, officialEvidenceUrl: deepEvidenceUrl, actualSseDone: true };
     await page.screenshot({ path: path.join(args.artifacts, 'full-platform-deep-followup.png'), fullPage: true });
-    const standardCalls = report.runtimeCalls.filter(call => call.transport === 'rest');
-    const deepCalls = report.runtimeCalls.filter(call => call.transport === 'sse');
-    check(standardCalls.length >= 4 && new Set(standardCalls.map(call => call.persona)).size === 4, 'Expected actual standard Serve queries from all four audiences.');
+    const standardCalls = report.runtimeCalls.filter(call => call.mode === 'standard');
+    const deepCalls = report.runtimeCalls.filter(call => call.mode === 'deep-reasoning');
+    check(standardCalls.length >= 4 && new Set(standardCalls.map(call => call.persona)).size === 4, 'Expected actual standard AgentCore Serve queries from all four audiences.');
     check(deepCalls.length >= 1 && report.explicitDeepFollowup, 'Expected an explicit real AgentCore deep-reasoning query.');
-    check(report.runtimeCalls.every(call => call.status === 200 && call.mode === (call.transport === 'sse' ? 'deep-reasoning' : 'standard') && (call.transport === 'sse' || call.tierOverride === 3) && call.namespaceMatches && call.idTokenMatches && !call.accessTokenUsed && (call.transport !== 'sse' || call.actualSseDone) && !call.sseErrorEvents && call.answerCharacters > 20 && call.supportingPassages > 0 && call.trace.length > 0), 'The browser requests must use the full platform and its actual grounded results.');
+    check(report.runtimeCalls.every(call => call.status === 200 && ['standard', 'deep-reasoning'].includes(call.mode) && (call.mode === 'deep-reasoning' || (call.tierOverride === 3 && call.maxResults === 8 && call.timeoutMs === 120000)) && call.namespaceMatches && call.idTokenMatches && !call.accessTokenUsed && call.transport === 'sse' && call.actualSseDone && !call.sseErrorEvents && call.answerCharacters > 20 && call.supportingPassages > 0 && call.trace.length > 0), 'The browser requests must use the full platform and its actual grounded results.');
     check(report.pageErrors.length === 0 && report.relayErrors.length === 0, 'The live browser reported application or relay errors.');
     report.passed = true; report.mobileEntryOverflow = false;
     privateJson(reportPath, report);
