@@ -94,6 +94,8 @@ async function main(args) {
   let callbackCaptured = false;
   page.on('pageerror', error => report.pageErrors.push(error.name));
   const reportPath = path.join(args.artifacts, 'full-platform-browser.local.json');
+  const observedQueries = [];
+  const queryAuditPath = path.join(args.artifacts, 'full-platform-browser-queries.local.json');
   fs.mkdirSync(args.artifacts, { recursive: true });
   try {
     progress('validate the published full-platform configuration');
@@ -154,8 +156,9 @@ async function main(args) {
           for (const entity of graph.entities) if (typeof entity.uri === 'string') actualGraphUris.add(entity.uri);
           for (const passage of Array.isArray(result?.supportingContent) ? result.supportingContent : []) if (typeof passage.text === 'string') actualPassages.add(passage.text.trim().replace(/\s+/g, ' '));
           const persona = personas.find(item => String(body.query).includes(`Audience: ${item.name}.`));
+          observedQueries.push({ persona: persona?.id, query: body.query, requestId: body.requestId || done?.requestId || null, mode: runtimeCall ? body.options?.mode : body.mode, guardrailBlocked: result?.guardrailBlocked === true, partial: result?.partial === true });
           const call = {
-            persona: persona?.id, status: response.status(), durationMs: Date.now() - requestStartedAt, transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, tierOverride: runtimeCall ? body.options?.tierOverride : body.tierOverride, maxResults: runtimeCall ? body.options?.maxResults : body.maxResults, timeoutMs: runtimeCall ? body.options?.timeoutMs : body.timeoutMs, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
+            persona: persona?.id, requestId: body.requestId || done?.requestId || null, status: response.status(), durationMs: Date.now() - requestStartedAt, transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, tierOverride: runtimeCall ? body.options?.tierOverride : body.tierOverride, maxResults: runtimeCall ? body.options?.maxResults : body.maxResults, timeoutMs: runtimeCall ? body.options?.timeoutMs : body.timeoutMs, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
             idTokenMatches: Boolean(idToken && request.headers().authorization === `Bearer ${idToken}`), accessTokenUsed: Boolean(accessToken && request.headers().authorization === `Bearer ${accessToken}`),
             actualSseDone: Boolean(done), sseStepEvents: events.filter(event => event.type === 'step').length, sseErrorEvents: events.filter(event => event.type === 'error').length,
             guardrailBlocked: result?.guardrailBlocked === true, partial: result?.partial === true, substantiveAnswer: typeof result?.synthesizedAnswer === 'string' && result.synthesizedAnswer.trim().length > 200 && !/^response blocked by content guardrail[.]?$/i.test(result.synthesizedAnswer.trim()),
@@ -305,6 +308,7 @@ async function main(args) {
     privateJson(reportPath, report);
     throw error;
   } finally {
+    privateJson(queryAuditPath, { schemaVersion: 1, origin: 'Actual browser request bodies; hypothetical demo contexts only. No authentication headers or tokens retained.', queries: observedQueries });
     idToken = ''; accessToken = '';
     await context.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => undefined);
     await browser.close();

@@ -62,6 +62,22 @@ The demo build settings and deployed primary use Neptune `db.r8g.large` (**2 vCP
 
 The initial Neptune `db.t4g.medium` trial provided 4 GiB and completed infrastructure deployment, but all four document knowledge-graph tasks subsequently failed with `MemoryLimitExceededException` during VersionManager source-node lookup or writes. The primary instance resize to `db.r8g.large` changes its compute capacity while preserving the cluster, endpoints and exports. Pause ingestion during the modification, confirm the instance is available and the storage stack update completes, then retry the failed graph tasks and validate their results. Infrastructure creation alone did not establish adequate ingestion capacity.
 
+## Guardrail calibration
+
+The first audience walkthrough exposed false positives: the primary guardrail blocked legitimate business, community and research programme questions. On 8 October 2026, the owned guardrail stack completed a narrow update of **`PROMPT_ATTACK.InputStrength` from `HIGH` to `MEDIUM`**. The primary guardrail ID/version, remaining primary policies, retrieval guardrail and SSM values were preserved. The verified change set contained one primary policy modification and two derived SSM reference refreshes with unchanged values; no resources were replaced.
+
+[The calibration helper](../scripts/calibrate_full_platform_guardrail.py) defaults to read-only inspection. It records private before/after receipts, rejects unexpected policy differences and executes only the constrained change set when `--apply` is specified:
+
+```bash
+env -u AWS_PROFILE python scripts/calibrate_full_platform_guardrail.py
+env -u AWS_PROFILE python scripts/calibrate_full_platform_guardrail.py --apply
+env -u AWS_PROFILE python scripts/probe_full_platform_guardrail.py
+```
+
+An already calibrated deployment reports `ALREADY_CALIBRATED`. [The probe](../scripts/probe_full_platform_guardrail.py) requires the saved verified update receipt and reconstructed-query fixture `artifacts/full-platform-guardrail-queries.local.json`; retain both privately on the operator workstation. It defaults to the latest verified receipt and checks the actual primary input guardrail without changing its configuration. The 09:44 UTC report allowed all three reconstructed default programme questions and blocked both a system-prompt jailbreak and forged-grant/invoice-fraud instructions. Other content and topic protections remained active. These inputs reconstruct the published default profiles: the original failed browser requests were not retained, so the probe does not claim to replay their exact bytes. Input-policy checks also do not establish successful generated answers; require the separate live audience and deep-reasoning browser checks.
+
+The project patch exposes `prompt_attack_input_strength`, restricted to `HIGH` or `MEDIUM`; the upstream default remains `HIGH`. The current [build specification](../platform/full-platform-build.yml) explicitly selects `MEDIUM`. Package the current patched source and create a new assembly for future deployment so it preserves the reviewed calibration. Historical assemblies predate this setting; review their guardrail template before replaying them. The narrow calibration itself updates CloudFormation configuration and does not rebuild Docker images.
+
 ## Administrator and branded frontend
 
 After the full stacks complete, initialize the private login and collect the deployed endpoints:

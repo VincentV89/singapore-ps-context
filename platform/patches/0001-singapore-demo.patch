@@ -35,6 +35,36 @@ index 2349dbc..0ed5dbc 100644
        }),
      );
      if (!res.User) throw new Error("Failed to create user");
+diff --git a/infra/lib/stacks/foundation/guardrail-stack.ts b/infra/lib/stacks/foundation/guardrail-stack.ts
+index 9597a82..ad79698 100644
+--- a/infra/lib/stacks/foundation/guardrail-stack.ts
++++ b/infra/lib/stacks/foundation/guardrail-stack.ts
+@@ -144,6 +144,16 @@ export class GuardrailStack extends SCLStack {
+ 
+     const { ssmPrefix } = resolveContext(this.node);
+ 
++    // The Singapore demo's ordinary programme questions triggered LOW-confidence
++    // prompt-attack false positives at HIGH. Keep HIGH as the upstream default;
++    // allow the calibrated MEDIUM setting without disabling the filter.
++    const promptAttackInputStrength = String(
++      this.node.tryGetContext("prompt_attack_input_strength") ?? "HIGH",
++    );
++    if (!["HIGH", "MEDIUM"].includes(promptAttackInputStrength)) {
++      throw new Error("prompt_attack_input_strength must be HIGH or MEDIUM");
++    }
++
+     // ── Primary guardrail: HIGH sensitivity for user queries ─────────────
+     const guardrail = new bedrock.CfnGuardrail(this, "BedrockGuardrail", {
+       name: this.prefixed("guardrail"),
+@@ -158,7 +168,7 @@ export class GuardrailStack extends SCLStack {
+           { type: "MISCONDUCT", inputStrength: "HIGH", outputStrength: "HIGH" },
+           {
+             type: "PROMPT_ATTACK",
+-            inputStrength: "HIGH",
++            inputStrength: promptAttackInputStrength,
+             outputStrength: "NONE",
+           },
+         ],
 diff --git a/infra/lib/stacks/foundation/storage-stack.ts b/infra/lib/stacks/foundation/storage-stack.ts
 index 59bcaa6..d34fd5f 100644
 --- a/infra/lib/stacks/foundation/storage-stack.ts
