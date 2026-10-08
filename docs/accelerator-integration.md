@@ -4,6 +4,8 @@
 
 The runnable Life Events Navigator vendors real components from [AWS Context Ontology Accelerator](https://github.com/aws/context-ontology-accelerator), release **`v0.3.4`**, commit **`c84a3043a989c30fe33658c763f5f279c6981aba`**. Its backend executes the upstream `GraphTraverser` through an RDFLib `GraphClient` adapter and uses the upstream serializer for its OWL/Turtle schema export. The demo's policy evaluator, visual frontend, API, and synthetic data are purpose-built additions.
 
+The current UI starts with four audience journeys: **Individuals & Families**, **Businesses & Entrepreneurs**, **Nonprofits & Community Organisations**, and **Researchers & Educational Institutions**. Each selects a relevant synthetic profile, support catalogue, context form, graph, and evidence. Optional support-type discovery filters narrow the display; they do not change screening rules or act as personalised segment filters. The graph remains file-backed RDFLib in Lambda. No official Singapore scheme catalogue or live agency source is connected.
+
 The complete accelerator has **Scan → Model → Serve** services including Neptune, OpenSearch Serverless, DataZone/SageMaker Unified Studio, ontology induction, Ontop virtual knowledge graph mappings, and AgentCore-hosted context orchestration. Those services are **future integration work**, not services deployed by this compact demo. The recipes below were checked against the named release's source contracts and routing code; they have not been executed against a live full-accelerator deployment as part of this implementation.
 
 Both the compact deployment and this proposed expansion use **`us-east-1`**, as selected by the user. A Singapore-resident deployment would require regional service/model checks and different Bedrock model routing. The default US inference profiles cannot simply be invoked from Singapore.
@@ -33,8 +35,8 @@ Content-Type: application/json
 
 {
   "name": "sg-life-events",
-  "displayName": "Singapore Life Events Demo",
-  "description": "Fictional citizen-service context and screening rules",
+  "displayName": "Singapore Public Support Demo",
+  "description": "Fictional individual, business, community and research support context and screening rules",
   "owner": "<your-valid-demo-owner-email>"
 }
 ```
@@ -85,7 +87,7 @@ Use `encodeURIComponent(ontologyId)` for the path segment. This responds with HT
 
 4. Poll `GET /namespaces/{namespaceId}/ontologies/{urlEncodedOntologyId}/ingest-status/{jobId}`. The statuses are `pending`, `running`, `embeddings_sync`, `completed`, and `failed`. Continue only after `result.status` is `completed`; surface `result.error` on failure. Successful parsing alone is insufficient because vectors become searchable asynchronously.
 
-5. Confirm the registered ontology with `GET /namespaces/{namespaceId}/ontologies` and inspect `GET /namespaces/{namespaceId}/schema`. The latter returns queryable class/property metadata, not resident facts or computed eligibility.
+5. Confirm the registered ontology with `GET /namespaces/{namespaceId}/ontologies` and inspect `GET /namespaces/{namespaceId}/schema`. The latter returns queryable class/property metadata, not applicant facts or computed eligibility.
 
 **Named graphs.** `coa_ontology/stores/neptune_db_graph.py` stores each ontology under:
 
@@ -99,7 +101,7 @@ Do not set a custom Serve-only graph prefix: it would no longer match the graphs
 
 ## 4. Supply queryable facts and grounded mappings
 
-The schema upload enables ontology browsing and grounding. It **does not** create Glue tables, synthetic resident rows, or R2RML mappings. The compact backend's generic evaluator is also not automatically installed into the accelerator.
+The schema upload enables ontology browsing and grounding. It **does not** create Glue tables, synthetic applicant rows, or R2RML mappings. The compact backend's generic evaluator is also not automatically installed into the accelerator. Retain that evaluator as a controlled application capability while Serve supplies richer context and evidence.
 
 For a genuine Scan/Model demonstration, a practical next step is to convert the fixture into a small S3/Glue dataset. The following table design is a proposed mapping, not an exporter already implemented here:
 
@@ -107,14 +109,17 @@ For a genuine Scan/Model demonstration, a practical next step is to convert the 
 | --- | --- | --- |
 | `households` | PK `household_id`; `household_income`, `household_size` | Household |
 | `residents` | PK `resident_id`; FK `household_id`; age, citizenship, employment, caregiving, accessibility and job-loss flags | Resident |
-| `schemes` | PK `scheme_id`; name, benefit; FK `agency_id` | Scheme |
+| `audiences` | PK `audience_id`; name; one of `individuals`, `businesses`, `community`, `research` | Audience classification |
+| `organisations` | PK `organisation_id`; FK `audience_id`; organisation/institution type, local registration, ownership, employee count, revenue, charity status | Organisation or institution applicant |
+| `projects` | PK `project_id`; FK `organisation_id`; project area, budget, co-funding, public benefit, lead applicant, collaboration, ethics approval | Applicant project context |
+| `schemes` | PK `scheme_id`; name, benefit; FKs `agency_id`, `audience_id`; support category | Scheme |
 | `eligibility_rules` | PK `rule_id`; FK `scheme_id`; field, operator, typed expected value, rule order, FK `evidence_id` | EligibilityRule |
 | `agencies` | PK `agency_id`; name | Agency |
 | `documents` | PK `document_id`; name | Document |
 | `scheme_documents` | Composite PK `scheme_id`, `document_id`; FKs to both | Scheme → Document relationship |
 | `evidence` | PK `evidence_id`; title, excerpt, source, revision timestamp | Evidence |
 
-Declare keys and relationships during steward review. Glue's table metadata alone may not contain the business meaning of all joins; the accelerator can infer relationships, but review them against the intended model. Preserve types instead of treating Boolean/numeric expected values as indistinguishable strings. Keep missing income null.
+Declare keys and relationships during steward review. Glue's table metadata alone may not contain the business meaning of all joins; the accelerator can infer relationships, but review them against the intended model. Preserve types instead of treating Boolean/numeric expected values as indistinguishable strings. Keep missing income, ownership, public benefit, or ethics approval null. Keep audience classification separate from source authorization: choosing an audience in the UI does not grant permission to read an organisation's records.
 
 After S3 files and Glue tables exist, register the source using the verified `CreateSource` body:
 
@@ -126,7 +131,7 @@ Content-Type: application/json
 {
   "sourceType": "DATABASE",
   "databaseSource": {
-    "name": "Synthetic life events tables",
+    "name": "Synthetic public support tables",
     "glueConfiguration": {
       "catalogId": "<12-digit-account-id>",
       "region": "us-east-1",
@@ -158,7 +163,7 @@ Content-Type: application/json
 
 Poll `GET /namespaces/{namespaceId}/induce/jobs/{jobId}`, inspect the proposal, and validate the proposed vocabulary and join paths. Accept with `POST /namespaces/{namespaceId}/proposals/{proposalId}/accept` and `{}` to use the proposal's ontology ID. Poll `GET /namespaces/{namespaceId}/proposals/{proposalId}` until accepted. The `ontop` query strategy requires accepted, published R2RML mappings; a reference ontology without mappings does not satisfy it.
 
-The upstream demo's `parse_ddl_to_config.py` and `stage_fixtures.py` can stage schemas into its local mock data catalog for induction development. That fixture service is not an actual SQL database: staging metadata is insufficient to demonstrate an executed structured query. No citizen-table exporter or R2RML generator for this repository is claimed to be complete.
+The upstream demo's `parse_ddl_to_config.py` and `stage_fixtures.py` can stage schemas into its local mock data catalog for induction development. That fixture service is not an actual SQL database: staging metadata is insufficient to demonstrate an executed structured query. No applicant-table exporter or R2RML generator for this repository is claimed to be complete.
 
 If the desired architecture instead imports RDF instance facts directly into Neptune, design that as a separate ingestion operation with explicit named-graph placement, provenance, and access scope. It is not equivalent to uploading a T-Box reference ontology, and it does not create a virtual mapping to an operational source.
 
@@ -191,7 +196,7 @@ This produces the full comparison: document retrieval returns policy passages; o
 
 ## 6. Adapt the frontend to Serve
 
-The full accelerator's contract differs from the compact demo's `/api/scenario` and `/api/analyze` API. Implement an adapter; changing an API URL alone is insufficient. Keep the explicit, deterministic screening evaluator for the fictional policy logic, and use Serve for retrieval and context assembly. Formal class modelling and a natural-language answer are not substitutes for executing those policy rules.
+The full accelerator's contract differs from the compact demo's `/api/scenario?persona=...` and `/api/analyze` API. Implement an adapter; changing an API URL alone is insufficient. Preserve the four audience entry points, persona-scoped context forms, graph identifiers, and display filters. Keep the explicit, deterministic screening evaluator for the fictional policy logic, and use Serve for retrieval and context assembly. Formal class modelling and a natural-language answer are not substitutes for executing those policy rules. The frontend can continue to use private S3 and CloudFront with Cognito, after its login client and namespace authorization are aligned with the full platform.
 
 ### Short REST query
 
@@ -269,11 +274,13 @@ Optional `relationshipFilter` restricts predicate IRIs. The response has `entiti
 ## Acceptance checks for the expansion
 
 - An authorized user can sign in to the custom CloudFront frontend and query only the intended namespace.
+- Each of the four audience journeys scopes its programmes, context, graph, and evidence correctly; UI audience selection is not treated as source authorization.
+- Support-type filters narrow visible content while leaving applicant facts and screening statuses unchanged.
 - The imported reference ontology appears in `/schema` and ontology inventory after completed ingestion.
 - At least one source-backed question executes against synthetic Glue/Athena rows; its trace and outputs establish which source was queried.
 - An `ontop` demonstration succeeds through accepted R2RML mappings rather than an unnoticed NL-to-SQL fallback.
 - A context question returns inspected graph relationships and a real retrieved fictional policy passage.
-- Missing income remains unknown; the explicit screening evaluator's regression cases remain unchanged after the retrieval adapter is added.
+- Missing income, ownership, public benefit, or ethics approval remains unknown; the explicit screening evaluator's regression cases remain unchanged after the retrieval adapter is added.
 - No UI describes a screening outcome as an approval or claims that an application/case was submitted.
 
 ## Source references checked

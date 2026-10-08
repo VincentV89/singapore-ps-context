@@ -5,6 +5,7 @@ import type { GraphEdge, GraphNode } from './types';
 const columns = ['resident', 'household', 'event', 'scheme', 'rule', 'document', 'agency'];
 const colors: Record<string, string> = { resident: '#e4f5b6', household: '#e4f5b6', event: '#94ccff', scheme: '#6de0bc', rule: '#b8a5eb', document: '#e4ba81', agency: '#a7b9d2' };
 const columnLabels = ['RESIDENT', 'HOUSEHOLD', 'LIFE EVENT', 'SUPPORT SCHEME', 'ELIGIBILITY', 'EVIDENCE', 'AGENCY'];
+const nodeColumn = (node: GraphNode) => ['organization', 'institution'].includes(node.type) ? 'resident' : node.type === 'context' ? 'household' : node.type === 'lifeEvent' ? 'event' : node.type;
 function labelLines(node: GraphNode) {
   const label = node.type === 'agency' ? node.label.replace(/^Demo /, '') : node.label;
   if (label.length <= 23) return [label];
@@ -13,7 +14,7 @@ function labelLines(node: GraphNode) {
   if (line) lines.push(line);
   return lines.slice(0, 2).map((s, i) => i === 1 && lines.length > 2 ? s.slice(0, 21) + '…' : s);
 }
-export function Graph({ nodes, edges, highlighted, selectedScheme, selectedNode, onNode }: { nodes: GraphNode[]; edges: GraphEdge[]; highlighted: string[]; selectedScheme: string | null; selectedNode: string | null; onNode: (node: GraphNode) => void }) {
+export function Graph({ nodes, edges, highlighted, selectedScheme, selectedNode, onNode, caption = 'Follow the connections from your context to support, rules and evidence.' }: { nodes: GraphNode[]; edges: GraphEdge[]; highlighted: string[]; selectedScheme: string | null; selectedNode: string | null; onNode: (node: GraphNode) => void; caption?: string }) {
   const [allPaths, setAllPaths] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [expanded, setExpanded] = useState(false);
@@ -23,18 +24,19 @@ export function Graph({ nodes, edges, highlighted, selectedScheme, selectedNode,
     const chosenEdges = new Set<string>();
     for (const edge of edges) if (edge.source === selectedScheme || edge.target === selectedScheme) { relevant.add(edge.source); relevant.add(edge.target); chosenEdges.add(edge.id); }
     for (const edge of edges) if (relevant.has(edge.source) && ['rule', 'document'].includes(nodes.find(n => n.id === edge.source)?.type || '')) { relevant.add(edge.target); chosenEdges.add(edge.id); }
-    for (const edge of edges) if (relevant.has(edge.target) && ['household', 'resident'].includes(nodes.find(n => n.id === edge.source)?.type || '')) { relevant.add(edge.source); chosenEdges.add(edge.id); }
+    for (const edge of edges) if (relevant.has(edge.target) && ['household', 'resident', 'organization', 'institution', 'context'].includes(nodes.find(n => n.id === edge.source)?.type || '')) { relevant.add(edge.source); chosenEdges.add(edge.id); }
     return { relevant, chosenEdges };
   }, [selectedScheme, edges, nodes]);
   const visibleColumns = allPaths || selectedScheme ? columns : ['resident', 'household', 'event', 'scheme', 'agency'];
-  const contentHeight = allPaths ? Math.max(555, Math.max(...columns.map(type => nodes.filter(n => n.type === type).length)) * 70 + 110) : 555;
+  const contentHeight = allPaths ? Math.max(555, Math.max(...columns.map(type => nodes.filter(n => nodeColumn(n) === type).length)) * 70 + 110) : 555;
+  const labels = nodes.some(n => ['organization', 'institution'].includes(n.type)) ? ['APPLICANT', 'PROJECT CONTEXT', 'PROJECT GOAL', ...columnLabels.slice(3)] : columnLabels;
   const positioned = useMemo(() => {
     const map = new Map<string, { x: number; y: number; node: GraphNode }>();
-    const groups = visibleColumns.map(type => nodes.filter(n => (n.type === type || (type === 'event' && n.type === 'lifeEvent')) && (allPaths || !selectedPath || selectedPath.relevant.has(n.id))));
+    const groups = visibleColumns.map(type => nodes.filter(n => nodeColumn(n) === type && (allPaths || !selectedPath || selectedPath.relevant.has(n.id))));
     groups.forEach((group, col) => group.forEach((node, row) => map.set(node.id, { x: 70 + col * (940 / (visibleColumns.length - 1)), y: 64 + (row + 0.5) * ((contentHeight - 110) / Math.max(group.length, 1)), node })));
     return map;
   }, [nodes, allPaths, selectedPath, visibleColumns.join(','), contentHeight]);
-  const highlightSet = useMemo(() => new Set(highlighted), [highlighted]);
+  const highlightSet = useMemo(() => new Set(highlighted.filter(id => edges.some(edge => edge.id === id))), [highlighted, edges]);
   const activeEdges = selectedPath?.chosenEdges ?? highlightSet;
   const activeNodes = useMemo(() => {
     const active = new Set<string>();
@@ -43,12 +45,12 @@ export function Graph({ nodes, edges, highlighted, selectedScheme, selectedNode,
   }, [edges, activeEdges]);
   return <section className={`panel graph-panel ${expanded ? 'graph-expanded' : ''}`} aria-label="Interactive knowledge graph">
     <div className="panel-heading"><div><div className="eyebrow">CONNECTED CONTEXT</div><h2>The knowledge graph <span className="live-dot" /></h2></div><div className="graph-tools"><button className={`icon-button ${allPaths ? 'active' : ''}`} title={allPaths ? 'Show relevant paths' : 'Show all relationships'} aria-label={allPaths ? 'Show relevant paths' : 'Show all relationships'} onClick={() => setAllPaths(v => !v)}><Focus size={17}/></button><button className="icon-button" title={expanded ? 'Close expanded graph' : 'Expand graph'} aria-label={expanded ? 'Close expanded graph' : 'Expand graph'} onClick={() => setExpanded(v => !v)}><Expand size={16}/></button></div></div>
-    <div className="graph-caption">Follow the connections from a life event to support, rules and evidence.</div>
+    <div className="graph-caption">{caption}</div>
     <div className={`graph-canvas ${allPaths ? 'full-ontology' : ''}`}>
       <svg style={allPaths ? { minHeight: contentHeight * .8, maxHeight: 'none', aspectRatio: `1080/${contentHeight}` } : undefined} viewBox={`0 0 ${1080 / zoom} ${contentHeight / zoom}`} role="img" aria-label={`Knowledge graph with ${nodes.length} entities and ${edges.length} relationships. Select a node to explore its context.`}>
         <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".6" fill="#29374a"/></pattern><filter id="glow"><feGaussianBlur stdDeviation="3"/></filter><linearGradient id="edge-gradient"><stop stopColor="#aee5af"/><stop offset="1" stopColor="#70cccd"/></linearGradient></defs>
         <rect width="1080" height={contentHeight} fill="url(#grid)"/>
-        {visibleColumns.map((column, i) => <g key={column}><text x={70 + i * (940 / (visibleColumns.length - 1))} y="29" textAnchor="middle" className="graph-column-label">{columnLabels[columns.indexOf(column)]}</text><line x1={70 + i * (940 / (visibleColumns.length - 1))} x2={70 + i * (940 / (visibleColumns.length - 1))} y1="48" y2="529" stroke="#233043" strokeWidth=".7" strokeDasharray="2 7"/></g>)}
+        {visibleColumns.map((column, i) => <g key={column}><text x={70 + i * (940 / (visibleColumns.length - 1))} y="29" textAnchor="middle" className="graph-column-label">{labels[columns.indexOf(column)]}</text><line x1={70 + i * (940 / (visibleColumns.length - 1))} x2={70 + i * (940 / (visibleColumns.length - 1))} y1="48" y2={contentHeight - 26} stroke="#233043" strokeWidth=".7" strokeDasharray="2 7"/></g>)}
         {edges.map(edge => {
           const source = positioned.get(edge.source), target = positioned.get(edge.target);
           if (!source || !target) return null;

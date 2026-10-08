@@ -2,136 +2,124 @@
 
 ## Before the session
 
-Open the deployed CloudFront site and verify Cognito sign-in with your demo account. Use a desktop browser at about 1440 pixels wide for the household controls and graph; scroll down to the support pathways and assistant. Start with **Job loss · household of four** and **Amazon Bedrock synthesis off**. The explicit screening and evidence story works without a model call; use the optional model only after rehearsing it in the deployed account.
+Open the deployed CloudFront site and verify Cognito sign-in with your demo account. Use a desktop browser at about 1440 pixels wide for the context controls and graph. Start at **Find Government Support** with **Amazon Bedrock synthesis off**. The explicit screening and evidence story works without a model call; use the optional model only after rehearsing it in the deployed account.
 
 Have the source repository and `backend/data/ontology.ttl` available in a second tab/editor if the audience asks how this relates to the accelerator. Use the file export for an architectural discussion, not an unplanned deployment during the presentation.
 
-The demo is hosted in **`us-east-1`**, as selected for this demonstration. All profiles, schemes, offices, benefits, thresholds, and policy evidence are fictional. No real citizen records or documents are needed.
+The demo is hosted in **`us-east-1`**, as selected for this demonstration. Every profile, organisation, scheme, office, benefit, threshold, and policy excerpt is fictional. No real citizen records or documents are needed. The example catalogue is deliberately small; it is not a comprehensive listing of Singapore schemes.
 
-## 0:00–0:35 — Establish the problem and sign in
+## 0:00–0:40 — Sign in and choose an audience
 
-**Action:** Show the login page, click **Sign in to explore**, and complete Cognito sign-in. If the session is already authenticated, briefly point to the workspace account control and move on.
-
-**Say:**
-
-> A life change often affects several services at once. A resident should not have to understand every agency boundary before finding the right next step. This demonstration connects household context, programme rules, supporting policy evidence, and agency responsibility in one inspectable picture.
->
-> The profiles and programmes here are fictional. We are demonstrating how context changes an explanation and a service pathway, not making a government eligibility decision.
-
-**Visible proof:** The deployed site is served through CloudFront and the login uses Cognito. Keep infrastructure details for a later question; the opening story is about the resident's experience.
-
-## 0:35–1:25 — Discover the starting pathways
-
-**Action:** Select **Job loss · household of four**. Point to the citizen context, the S$900 income-per-member calculation, and the support pathway cards. Click the **Household Bridge Grant** title to highlight its connections in the graph.
+**Action:** Complete Cognito sign-in and show **Find Government Support**. Point to the four entry cards: **Individuals & Families**, **Businesses & Entrepreneurs**, **Nonprofits & Community Organisations**, and **Researchers & Educational Institutions**. Choose Individuals & Families.
 
 **Say:**
 
-> This fictional resident is 42, recently lost employment, and lives in a household of four with monthly household income of S$3,600. The useful context is not income alone: S$3,600 divided by four gives S$900 per person.
+> Different applicants need different starting points. A household, an SME, a community organisation, and a university researcher should each see a relevant support journey. These four entry points organise discovery without asking applicants to navigate agency boundaries first.
 >
-> That combination matches Household Bridge Grant and Skills Restart Support. Caregiver Relief does not match because there is no caregiving responsibility; Accessible Living Support does not match because the accessibility flag is off. The explanation identifies the condition, rather than only giving a score.
+> Everything here is fictional. We are demonstrating how context changes the explanation and the next step, not making a government eligibility decision.
 
-**Expected result:** Two `Likely eligible`, two `Not eligible`, zero `Needs review`. Seventeen rules are evaluated across the four fictional schemes. The card benefits are illustrative, not actual Singapore assistance amounts.
+**Visible proof:** The entry point offers four audiences. A support-type chip can narrow the displayed catalogue and graph; it does not change a screening rule or assume facts about the applicant. There are no separate personalised segment filters. The context form collects the facts used in assessment.
 
-**Audience takeaway:** The same household facts can connect to different services because each service uses a different set of conditions.
+## 0:40–1:35 — Connect household facts to rules and evidence
 
-## 1:25–2:20 — Explain the graph and show the evidence
-
-**Action:** Click **View reasoning** on Household Bridge Grant. Show the four observed/required checks. Click the evidence icon beside the income rule. Close the evidence/modal, then expand **Trace the reasoning** in the assistant.
+**Action:** Use **Job loss · household of four**. Point to S$3,600 household income, four household members, and the derived S$900 income per member. Open **Household Bridge Grant** and its reasoning; inspect the income criterion's fictional evidence.
 
 **Say:**
 
-> Here is the basis for the pathway: citizen status, age, recent job loss, and the S$1,000-per-person ceiling all pass. Each criterion points back to a versioned fictional policy excerpt. The graph also connects the programme to its administering office and the documents needed for verification.
+> The useful context is not income alone: S$3,600 divided by four gives S$900 per person. This fictional programme also checks citizenship, age, and recent job loss. Every condition is visible, with the observed value and the policy evidence that defines the requirement.
 >
-> A document search could return the paragraph about the S$1,000 ceiling. The graph adds the relationship: this household has four members, this derived income is the value used by this rule, this rule belongs to this scheme, and this scheme has these evidence requirements.
->
-> The screening checks are explicit SPARQL rule results. A language model can express the explanation, but it does not set the scheme status.
+> A document search might find the income ceiling. The graph connects the household fact to the derived value, the particular programme rule, its administering office, and the required documents.
 
-**Visible proof:** Actual and required values are inspectable, source evidence is clickable, and the reasoning contains the recorded assessment steps. Do not present the graph's visual connections as independent proof of a policy's correctness: its definitions are authored fictional data.
+**Action:** Select **New caregiving responsibility**, then **Compare changes**.
 
-## 2:20–3:20 — Change the context and compare
+**Expected change:** Income per member rises to S$1,350. Household Bridge Grant fails its S$1,000 ceiling; Caregiver Relief matches its different S$1,800 ceiling and the caregiving condition. The comparison shows why the pathways changed.
 
-**Action:** Select **New caregiving responsibility**, then click **Compare changes**. Point to S$5,400 income divided by four = S$1,350 per person. Open Caregiver Relief's reasoning if time allows.
+**Audience takeaway:** The screening status comes from explicit SPARQL rule results. The language model can explain those results, but it does not decide them.
+
+**Optional audience variation:** **Student education support** opens Student Pathways Bursary for a fictional 20-year-old student; **Senior healthcare support** opens Senior Health Access for a fictional 70-year-old resident. Both use S$4,800 household income across four people. These broaden the individual journey without adding separate student or senior entry cards.
+
+## 1:35–2:30 — Show a business project changing the pathway
+
+**Action:** Switch to **Businesses & Entrepreneurs** and use **SME digital transformation**. Inspect **Digital Spark Grant**. Show the optional support-type chips, clear any filter, then change **Project focus** from **Digitalisation** to **Sustainability** and apply the context update. Keep applicant co-funding at 40%. Open **Green Launch Support** and inspect its project-focus criterion.
 
 **Say:**
 
-> Now the household context changes: there is a caregiving responsibility, and household income is S$5,400. Income per member is S$1,350.
+> Now the applicant is an organisation. Household size and caregiving are no longer the useful questions. The relevant context is the organisation and its proposed project.
 >
-> Household Bridge Grant no longer passes its S$1,000 ceiling. Caregiver Relief now matches because caregiving is present and its different S$1,800 ceiling is met. Skills Restart Support still matches: its fictional rules depend on the employment transition and age, not this income ceiling.
->
-> We can explain both changes without hiding them inside a generated answer. The before-and-after comparison shows which pathways changed and their reasons.
+> With the same SME facts and 40% applicant co-funding, digitalisation matches Digital Spark Grant. Changing the project focus to sustainability closes that pathway and opens Green Launch Support. We can inspect the required activity and the submitted activity, and follow the same evidence path. This is a change in assessed context; selecting a discovery filter only narrows what we display.
 
-**Expected result:** Household Bridge Grant changes from likely eligible to not eligible; Caregiver Relief changes from not eligible to likely eligible. Skills Restart Support stays likely eligible. Accessible Living Support stays not eligible. There are still two likely-eligible schemes, but they are a different pair.
+**Expected change:** Digital Spark Grant changes from likely eligible to not eligible; Green Launch Support changes from not eligible to likely eligible. Workforce Lift Support remains not eligible because the project is not workforce development. Use **Compare changes** to show the pathway changes. **SME sustainability transition** is a preset shortcut for the same transition. **Missing ownership · needs review** shows an unresolved required business fact.
 
-**Optional manual variation:** Keep the default profile, change household income to S$4,100, and click **Update context**. Income per member becomes S$1,025, causing Household Bridge Grant to fail while Skills Restart Support stays likely eligible. Manually edited facts are not applied until the update button is clicked.
+## 2:30–3:10 — Show community support
 
-## 3:20–4:05 — Make missing information visible
-
-**Action:** Select **Missing income · needs review**. Point to `Unknown` income per member and the review states. Open Household Bridge Grant's rule details.
+**Action:** Switch to **Nonprofits & Community Organisations** and use **Charity social-service project**. Open **Community Impact Seed Fund** and inspect its organisation/project criteria and document requirements. If time permits, select **Community arts initiative** and inspect **Creative Youth Connections**.
 
 **Say:**
 
-> What if income has not been supplied yet? The system keeps that fact unknown. It does not replace missing income with zero or assume the previous value.
+> A community organisation needs a different pathway again. The same shared model connects an organisation, a project, a support programme, its criteria, policy evidence, and the next-step documents.
 >
-> Household Bridge Grant and Caregiver Relief now need review because their income conditions are unresolved. Skills Restart Support can still pass because its rules do not require income. Accessible Living Support still fails its known accessibility condition.
+> The audience choice scopes the catalogue and context form. It does not make an organisation eligible merely because it selected a card.
 
-**Expected result:** One likely eligible, two need review, one not eligible. An unknown fact does not override a known failed condition. This is the useful distinction between missing evidence and an actual disqualifying condition.
+**Visible proof:** The context, programmes, and graph correspond to the community audience. Individuals' and businesses' schemes do not leak into this assessment.
 
-## 4:05–4:40 — Give an evidence-backed next step
+## 3:10–3:50 — Show research and education support
 
-**Action:** Ask **What documents should this household prepare?** in the question box. Click a citation chip, then click **Prepare checklist** to download the illustrative text checklist.
+**Action:** Switch to **Researchers & Educational Institutions** and use **University fundamental research**. Open **Discovery Catalyst Fund**. If time permits, select **Industry-academia applied research** and inspect **Collaboration Forge Grant** and the collaboration requirement.
 
 **Say:**
 
-> The next step follows the same connected model. We can prepare the evidence checklist for pathways that pass or need review, including the employment transition record, training plan, household and income evidence, and caregiving declaration.
+> For a researcher or institution, the relevant facts concern the institution and the proposed activity. We keep the experience familiar, while the graph supplies different criteria and evidence.
 >
-> The checklist carries the scheme status and policy evidence. This demo has prepared information for the resident; it has not submitted an application or created an agency case.
+> This is one reusable relationship model serving four journeys, rather than one generated answer with four different introductory prompts.
 
-**Optional model moment:** If rehearsed, enable **Use Amazon Bedrock synthesis** and send the same question. Describe the prose as a grounded narrative over the same assessment and evidence. Show the synthesis indicator. If it remains deterministic or reports a fallback, explain that the explicit assessment and evidence remain available; do not claim a model invocation succeeded.
+**Visible proof:** The graph and rule details use the research audience's programmes and facts. Point to a policy excerpt and its document requirements; do not describe a fictional programme as an official research funding scheme.
 
-## 4:40–5:00 — Connect the experience to the accelerator
+## 3:50–4:35 — Show uncertainty and a practical next step
 
-**Action:** Open **How it works**, then return to the graph for the closing statement.
+**Action:** Return to **Individuals & Families**, choose **Missing income · needs review**, and inspect an unknown income condition. Ask **What documents should this household prepare?** Click a citation and use **Prepare checklist** to download the illustrative checklist.
 
 **Say:**
 
-> This compact demo executes real graph traversal code from AWS Context Ontology Accelerator and uses its serializer to produce an importable OWL schema. The full accelerator can expand this into Scan, Model, and Serve over governed data sources, ontology mappings, graph context, and retrieved documents.
+> Missing income stays unknown. It does not become zero or inherit an earlier profile's value. If no known condition fails but a required fact is missing, the pathway needs review.
 >
-> The result shown here is a service pathway that changes with the resident's context, with each rule and source evidence available for inspection.
+> The checklist follows the current assessment and evidence. We have prepared information for the applicant; we have not submitted an application or created an agency case.
 
-**Do not overstate scope:** This stack does not deploy Neptune, OpenSearch Serverless, DataZone, Ontop, or AgentCore. The current graph store is RDFLib, hosted in the Lambda. The full integration design is documented separately.
+**Optional model moment:** If rehearsed, enable **Use Amazon Bedrock synthesis** and send the same question. Show the actual synthesis indicator. If the response reports a fallback, explain that the explicit assessment and evidence remain available; do not claim a model invocation succeeded.
 
-## Rehearsal result card
+## 4:35–5:00 — Explain the current scope and accelerator path
 
-All thresholds and benefits in this card are fictional. Other inputs remain the default profile unless stated.
+**Action:** Open **How it works**, then return to the graph.
 
-| Preset | Income per person | Household Bridge Grant | Skills Restart Support | Caregiver Relief | Accessible Living Support |
-| --- | ---: | --- | --- | --- | --- |
-| Job loss · household of four | S$900 | Likely eligible | Likely eligible | Not eligible | Not eligible |
-| New caregiving responsibility | S$1,350 | Not eligible | Likely eligible | Likely eligible | Not eligible |
-| Accessibility support need | S$900 | Likely eligible | Likely eligible | Not eligible | Likely eligible |
-| Higher household income | S$2,500 | Not eligible | Likely eligible | Not eligible | Not eligible |
-| Missing income · needs review | Unknown | Needs review | Likely eligible | Needs review | Not eligible |
+**Say:**
+
+> This compact demo loads authored RDF files into an in-memory graph and executes real graph traversal code from AWS Context Ontology Accelerator. It also uses the accelerator's serializer for an importable OWL schema.
+>
+> The full accelerator adds Scan, Model, and Serve: discovering connected sources, proposing and reviewing the knowledge model, and serving governed context to applications and agents. Those platform services are a documented next stage; this deployment demonstrates the four applicant experiences and their inspectable assessments.
+
+**Do not overstate scope:** This stack does not deploy Neptune, OpenSearch Serverless, DataZone, Ontop, AgentCore, or live agency connectors. Its current graph store is an in-memory RDFLib dataset in Lambda. Changing the bundled catalogue or policies requires updating the files and redeploying. Changing applicant context recomputes a hypothetical assessment at request time.
 
 ## Short answers to likely audience questions
 
-**Why an ontology instead of only a chatbot?** The ontology names the concepts and relationships consistently; the rule data defines which facts a programme needs; the graph exposes the links used to assemble context. A chatbot can provide the conversational surface over those inspectable definitions.
+**Are the support filters personalised?** They are discovery filters for the selected audience. They narrow visible schemes and graph relationships. Screening depends on the applied context facts and authored criteria, not the selected filter.
+
+**Why an ontology instead of only a chatbot?** The ontology names concepts and relationships consistently; rule data defines which facts a programme needs; the graph exposes the links used to assemble context. A chatbot can provide the conversational surface over those inspectable definitions.
 
 **Is this using actual Singapore policy?** No. The agencies, schemes, thresholds, and benefits are fictional. A real adoption would load steward-reviewed programme definitions and source evidence, then evaluate them against a meaningful benchmark and application process.
 
-**Is the AI deciding eligibility?** Scheme status comes from the explicit conjunctive rule checks. Optional Bedrock synthesis expresses the assessment in prose. The result remains a fictional screening, not an approval.
+**Is the AI deciding eligibility?** Scheme status comes from explicit conjunctive rule checks. Optional Bedrock synthesis expresses the assessment in prose. The result remains a fictional screening, not an approval.
 
-**What part comes from the accelerator?** The executed `GraphTraverser`, its query/namespace helpers and `GraphClient` protocol, and the Turtle serializer. The RDFLib adapter and the synthetic eligibility experience are added here. The complete accelerator deployment is a documented future integration.
+**What part comes from the accelerator?** The executed `GraphTraverser`, its query/namespace helpers and `GraphClient` protocol, and the Turtle serializer. The RDFLib adapter, persona-scoped catalogue, and synthetic screening experience are added here. The complete accelerator deployment is a documented future integration.
 
-**Does the question assistant search a document corpus?** This compact version grounds answers in authored policy evidence associated with the graph. It does not deploy a vector index. The full accelerator path adds actual document ingestion, retrieval, and orchestration.
+**Does the question assistant search a document corpus?** This compact version grounds answers in authored policy evidence associated with the graph. It does not deploy a vector index. The full accelerator path adds document ingestion, retrieval, and orchestration.
 
-**Does changing a profile affect other residents?** The assessment is hypothetical request context. The demo does not persist a real citizen record or submit a case.
+**Does changing a profile affect other applicants?** The assessment uses hypothetical request context. The demo does not persist an authoritative applicant record or submit a case.
 
-**Can it run in Singapore?** The current demo region is `us-east-1`, selected for this session. The compact AWS services can be configured for a future Singapore deployment, with regional/model checks. A full accelerator deployment additionally requires checking AgentCore Runtime, DataZone, Neptune, OpenSearch Serverless, and the chosen Bedrock models.
+**Can it run in Singapore?** The current region is `us-east-1`, selected for this session. A future Singapore deployment requires regional service and model checks. A full accelerator deployment additionally requires checking AgentCore Runtime, DataZone, Neptune, OpenSearch Serverless, and the chosen Bedrock models.
 
 **What does it cost?** The compact stack primarily incurs API/Lambda requests, CloudFront delivery, S3 storage, Cognito usage, logs, and optional model tokens. The complete accelerator adds standing managed-graph/vector/container/network costs. Quote current account-specific estimates rather than a fixed figure from this script.
 
 ## Recovery during a live demonstration
 
-If an API call fails, keep the current visible assessment, use **Retry**, and describe only the last completed result. If Cognito expires, sign in again. If a Bedrock call cannot complete, use the deterministic mode and show its actual indicator. Do not substitute a screenshot for a live result without saying it is a saved view.
+If an API call fails, keep the last completed assessment, use **Retry**, and describe only that result. If Cognito expires, sign in again. If a Bedrock call cannot complete, use deterministic mode and show its actual indicator. Do not substitute a screenshot for a live result without saying it is a saved view.
 
-**Reset** restores the default profile. **Compare changes** compares against the starting household loaded for the session, not against the immediately preceding edit. Questions explain the currently applied context; asking about a life change does not itself change the profile. Apply a preset or edit the input controls to demonstrate the change.
+**Reset** restores the selected audience's default profile. **Compare changes** compares against that audience's starting profile, not the immediately preceding edit. Switching audiences or returning to **All audiences** clears the workspace context, questions, filters, comparison baseline, and open detail views. Questions explain the currently applied context; asking about a different activity does not itself change the profile. Apply a preset or edit and update the context to demonstrate the change.

@@ -5,6 +5,8 @@ test('changing household context changes auditable pathways and prepares a real 
   const browserErrors: string[] = [];
   page.on('pageerror', error => browserErrors.push(error.message));
   await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Find Government Support', exact: true })).toBeVisible();
+  await page.locator('.persona-card').filter({ hasText: 'Individuals & Families' }).click();
   const update = page.getByRole('button', { name: 'Update context' });
   await expect(update).toBeEnabled();
   const bridge = page.locator('.scheme-card').filter({ hasText: 'Household Bridge Grant' });
@@ -20,7 +22,7 @@ test('changing household context changes auditable pathways and prepares a real 
   await expect(bridge.locator('.status-badge')).toHaveText('Not eligible');
   await expect(page.getByRole('status')).toHaveCount(0);
 
-  await page.getByRole('switch').nth(1).check();
+  await page.getByRole('switch', { name: 'Caregiving responsibility' }).check();
   await update.click();
   await expect(caregiver.locator('.status-badge')).toHaveText('Likely eligible');
   await page.getByRole('button', { name: 'Compare changes' }).click();
@@ -53,7 +55,7 @@ test('changing household context changes auditable pathways and prepares a real 
   expect(checklist).toContain('Needs review');
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByRole('heading', { name: 'Citizen context' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Household context', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false);
   expect(browserErrors).toEqual([]);
 });

@@ -1,6 +1,6 @@
 # Life Events Navigator: architecture and design
 
-This demo helps a resident or service officer understand which fictional support programmes fit a changing household context, why each programme appears, and which evidence would be needed next. It shows how an explicit knowledge model makes an answer inspectable and makes a change in circumstances visible.
+This demo helps applicants or service officers understand which fictional support programmes fit a changing household, organisation, or project context, why each programme appears, and which evidence would be needed next. Four entry points serve Individuals & Families, Businesses & Entrepreneurs, Nonprofits & Community Organisations, and Researchers & Educational Institutions. A shared knowledge model makes each answer inspectable and makes a change in circumstances visible.
 
 All profiles, schemes, agencies, benefits, thresholds, and policy excerpts are invented for this demonstration. The labels and Singapore-dollar amounts create a local public-sector story; they do not describe actual Singapore government programmes. The output is a screening illustration, not an eligibility approval, legal advice, or an application workflow.
 
@@ -23,9 +23,9 @@ flowchart LR
     Lambda -. Optional grounded narrative .-> Bedrock[Amazon Bedrock]
 ```
 
-The browser serves an interactive graph, household context controls, scheme assessments, rule results, source evidence, a document checklist, and a question interface. Cognito gates the deployed experience. The API validates the caller's JWT before invoking the Lambda. A public local preview is a developer convenience and is separate from the deployed authenticated experience.
+The browser starts at **Find Government Support**, with four audience cards. Selecting an audience opens its interactive graph, relevant context controls, scheme assessments, rule results, source evidence, document checklist, and question interface. Optional support-type chips narrow the visible catalogue and graph. They are discovery filters; they do not change assessment facts, policy criteria, or computed screening outcomes. No separate personalised segment filters are used. Switching audiences resets workspace state and the comparison baseline. Cognito gates the deployed experience. The API validates the caller's JWT before invoking the Lambda. A public local preview is a developer convenience and is separate from the deployed authenticated experience.
 
-The Lambda loads a small, versioned synthetic graph. There is no managed graph database in this compact implementation. An RDFLib adapter runs SPARQL against an in-memory `Dataset`, while the upstream accelerator traversal component receives its normal `GraphClient` interface. The dataset uses `https://demo.example.gov.sg/graph/life-events/instances` and `/ontology` named graphs; these are illustrative identifiers, not network services. Graph definitions and policy evidence are packaged with the backend; a hypothetical assessment does not update an authoritative resident record.
+The Lambda loads a small, versioned synthetic graph from bundled RDF/Turtle files. There is no managed graph database in this compact implementation. An RDFLib adapter runs SPARQL against an in-memory `Dataset`, while the upstream accelerator traversal component receives its normal `GraphClient` interface. The dataset uses `https://demo.example.gov.sg/graph/life-events/instances` and `/ontology` named graphs; these are illustrative identifiers, not network services. Graph definitions and policy evidence are packaged with the backend; changing a programme or policy requires regenerating the artifacts and redeploying. Applicant facts are request context: a hypothetical assessment does not update an authoritative person or organisation record.
 
 Amazon Bedrock can generate a narrative from the computed assessment, the supplied evidence, and the actual enriched traversal context. When it is disabled or unavailable, the deterministic explanation still presents rule results and citations. The `engine` response identifies the path used. The narrative layer does not decide whether a screening rule passes.
 
@@ -36,15 +36,16 @@ These endpoints belong to this demo, not the full accelerator's namespace API:
 | Method and path | Response |
 | --- | --- |
 | `GET /api/health` | Basic service/scenario status |
-| `GET /api/scenario` | Synthetic profile, presets, visual graph nodes/edges, policy evidence |
-| `POST /api/analyze` | Screening statuses, rule results, reasoning, citations, enriched graph context, highlighted paths, and actual engine metadata |
+| `GET /api/scenario?persona=individuals` | Selected audience metadata, four audience entry definitions, synthetic profile, presets, scoped visual graph nodes/edges, policy evidence |
+| `POST /api/analyze` | Persona-scoped screening statuses, rule results, reasoning, citations, enriched graph context, highlighted paths, and actual engine metadata |
 | `GET /api/ontology?kind=schema` | Downloadable OWL/Turtle T-Box |
 | `GET /api/ontology?kind=instances` | Downloadable synthetic RDF A-Box |
 
-An analysis request contains `profile`, `question`, and Boolean `useBedrock`. For example:
+The audience identifiers are `individuals`, `businesses`, `community`, and `research`. An analysis request contains `persona`, `profile`, `question`, and Boolean `useBedrock`. For example:
 
 ```json
 {
+  "persona": "individuals",
   "profile": {
     "householdIncome": 3600,
     "householdSize": 4,
@@ -62,13 +63,13 @@ An analysis request contains `profile`, `question`, and Boolean `useBedrock`. Fo
 
 The deployed frontend sends a Cognito **access token** with the custom `life-events/access` scope. The API Gateway JWT authorizer checks issuer, audience/client and scope. This demo's token contract is separate from the full accelerator v0.3.4 browser's ID-token contract.
 
-The question interface supports the fictional catalogue's schemes, income, documents, agencies, and screening context. Deterministic mode selects those themes through a bounded intent/keyword function. It does not provide arbitrary natural-language graph-to-query translation. Unsupported questions return an explicit unsupported answer, rather than introducing external facts. Asking about caregiving does not change the profile; edit the inputs or choose a preset to assess a hypothetical change.
+The selected audience controls the allowed context fields and the schemes assessed. Scheme-to-audience links are authored in RDF and used to scope retrieval and evaluation. The question interface supports that audience's fictional catalogue, documents, agencies, and screening context. Deterministic mode selects those themes through a bounded intent/keyword function. It does not provide arbitrary natural-language graph-to-query translation. Unsupported questions return an explicit unsupported answer, rather than introducing external facts. Asking about caregiving or a different project does not change the profile; edit the inputs or choose a preset to assess a hypothetical change.
 
 ## What graph context adds
 
-Document retrieval finds a relevant passage, such as a paragraph explaining an income threshold. A knowledge graph supplies relationships and typed facts: a resident belongs to a household; household income divided by household size produces the income value a particular rule uses; a scheme has multiple criteria, an administering agency, evidence requirements, and a source policy.
+Document retrieval finds a relevant passage, such as a paragraph explaining an income threshold. A knowledge graph supplies relationships and typed facts: a resident belongs to a household; household income divided by household size produces the value a particular rule uses; an organisation proposes a project; a scheme serves an audience and has criteria, an administering agency, evidence requirements, and a source policy.
 
-The graph establishes the path used to explain a recommendation. SPARQL retrieves scheme criteria from RDF rule individuals, computes income per person, and evaluates the comparisons against request-scoped context triples. A generic aggregation step derives each scheme's overall status from its criterion results. The accelerator's `GraphTraverser` gathers labelled neighbouring entities and relationships through SPARQL. The adapter verifies relationship direction against source RDF and supplies explicit source/target identifiers. The response exposes rule checks, reasoning steps, citations, and node/edge identifiers so the frontend can highlight the relevant path. Its enriched traversal results are returned as `context` and supplied to optional Bedrock synthesis alongside the computed scheme assessment, current profile, and associated evidence records.
+The graph establishes the path used to explain a recommendation. SPARQL retrieves the selected audience's scheme criteria from RDF rule individuals and evaluates comparisons against request-scoped context triples. Income per person is derived for household assessments; business and project assessments use their own applicable fields. A generic aggregation step derives each scheme's overall status from its criterion results. The accelerator's `GraphTraverser` gathers labelled neighbouring entities and relationships through SPARQL. The adapter verifies relationship direction against source RDF and supplies explicit source/target identifiers. The response exposes rule checks, reasoning steps, citations, and node/edge identifiers so the frontend can highlight the relevant path. Its enriched traversal results are returned as `context` and supplied to optional Bedrock synthesis alongside the computed scheme assessment, current profile, and associated evidence records.
 
 The compact demo includes authored policy excerpts, rather than a vector search system over a document corpus. Citations are evidence records attached to the graph. A question can receive a narrative grounded in those records, but the demo does not claim to run the accelerator's full document ingestion, vector retrieval, or agent orchestration pipeline. [Full integration](accelerator-integration.md) explains how to add those services.
 
@@ -76,9 +77,9 @@ The compact demo includes authored policy excerpts, rather than a vector search 
 
 | Artifact | Meaning | Typical contents | Full accelerator use |
 | --- | --- | --- | --- |
-| OWL/Turtle schema, or T-Box | Shared vocabulary and relationship definitions | Resident, Household, LifeEvent, Scheme, EligibilityRule, Agency, Document, Evidence, Relationship; domain/range and datatype properties | Upload as a reference ontology for browsing and grounding |
-| RDF/Turtle instances, or A-Box | Concrete fictional scenario and policy records | The demonstration household, four schemes, seventeen rule individuals, policy excerpts, agency and evidence links | Import as instance facts through a separately designed ingestion path, or represent as structured source tables |
-| Submitted profile | Facts used for a particular hypothetical assessment | Income, household size, age, citizenship, employment, recent job loss, caregiving, accessibility need | Supply as controlled request context or a permissioned source record |
+| OWL/Turtle schema, or T-Box | Shared vocabulary and relationship definitions | Applicant, Resident, Household, Organization, Institution, ApplicantContext, SupportNeed, LifeEvent, Scheme, EligibilityRule, Agency, Document, Evidence, and Relationship classes; object/datatype properties including audience (`persona`) and support category | Upload as a reference ontology for browsing and grounding |
+| RDF/Turtle instances, or A-Box | Concrete fictional scenario and policy records | Four audience journeys, schemes, rule individuals, policy excerpts, agency and evidence links | Import as instance facts through a separately designed ingestion path, or represent as structured source tables |
+| Submitted profile | Facts used for a particular hypothetical assessment | Household facts for individuals; organisation, ownership, workforce, registration, project, budget, collaboration, or evidence facts for the other audiences | Supply as controlled request context or a permissioned source record |
 
 An ontology upload is not a database import. Uploading the T-Box to the full accelerator does not create household rows, service tables, or virtual knowledge graph mappings. Uploading a Turtle schema also does not automatically turn its rules into a statutory eligibility engine. These distinctions keep the demonstration's current behavior and later integration concrete.
 
@@ -102,6 +103,18 @@ Income per person is gross monthly household income divided by household size. F
 | Skills Restart Support | Citizen or permanent resident; age 18–60 inclusive; unemployed; recent job loss | S$600 training credit | Employment transition record, training plan |
 | Caregiver Relief | Citizen; age ≥ 21; caregiving responsibility; income per person ≤ S$1,800 | S$250 monthly respite credit | Caregiving declaration, income statement, household declaration |
 | Accessible Living Support | Citizen; age ≥ 21; synthetic accessibility need flag; income per person ≤ S$2,200 | S$1,200 home adaptation credit | Accessibility assessment, income statement, household declaration |
+| Student Pathways Bursary | Citizen or permanent resident; student; age 16–30 inclusive; income per person ≤ S$1,600 | S$1,500 education credit | Student enrolment, income statement, household declaration |
+| Senior Health Access | Citizen or permanent resident; age ≥ 65; income per person ≤ S$1,800 | S$800 healthcare support credit | Senior care assessment, income statement, household declaration |
+
+The other audiences use the same rule evaluator with different fields and fictional programmes:
+
+| Audience | Fictional programmes | Examples of assessed context |
+| --- | --- | --- |
+| Businesses & Entrepreneurs | Digital Spark Grant, Workforce Lift Support, Green Launch Support | Local registration, business type, ownership, employee count, revenue, project focus, applicant co-funding |
+| Nonprofits & Community Organisations | Community Impact Seed Fund, Social Capability Bridge, Creative Youth Connections | Organisation type, registration, charity status, public benefit, project focus, budget |
+| Researchers & Educational Institutions | Discovery Catalyst Fund, Collaboration Forge Grant, Learning Futures Programme | Institution type, registration, lead applicant, project focus, collaboration, ethics approval, budget |
+
+For example, the default SME has a digitalisation project and 40% co-funding. Digital Spark Grant matches. Changing only its project focus to sustainability excludes Digital Spark Grant and opens Green Launch Support. Missing ownership produces a review state when the other Digital Spark criteria pass. These are authored examples, not real grant conditions.
 
 The document checklist lists illustrative evidence types. It does not collect documents, submit an application, reserve capacity, create a case, or contact an agency. Agency nodes are fictional labels, not service integrations.
 
@@ -124,8 +137,10 @@ This is component reuse, not a deployment of the complete accelerator. No claim 
 ## What can be demonstrated and measured
 
 - **Explainability:** inspect actual values, expected values, comparison operators, rule outcomes, and cited policy records for each programme.
-- **Sensitivity to context:** change income or life-event flags and see assessments and highlighted paths change.
-- **Uncertainty:** choose missing income and see review states instead of an invented answer.
+- **Audience scoping:** select one of four entry points and inspect the relevant graph, context fields, schemes, and evidence.
+- **Discovery:** narrow the displayed catalogue by support type without altering applicant facts or screening outcomes.
+- **Sensitivity to context:** change household income, project focus, or another applicable fact and see assessments and highlighted paths change.
+- **Uncertainty:** choose missing income, ownership, public benefit, or ethics approval and see review states instead of an invented answer.
 - **Separation of concerns:** screening results come from explicit rules; a model can express the explanation using supplied context.
 - **Portability:** export the ontology separately from the synthetic instance facts for integration into a larger semantic platform.
 

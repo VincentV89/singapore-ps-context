@@ -1,10 +1,14 @@
-export type Profile = { householdIncome: number | null; householdSize: number; age: number; citizenship: string; employmentStatus: string; caregiver: boolean; disability: boolean; recentJobLoss: boolean };
+export type ProfileValue = number | string | boolean | null;
+export type Profile = Record<string, ProfileValue>;
+export type PersonaId = 'individuals' | 'businesses' | 'community' | 'research';
+export type FieldDescriptor = { key: string; label: string; type: 'number' | 'select' | 'boolean'; options?: { value: string; label: string }[]; min?: number; max?: number; step?: number; allowUnknown?: boolean };
+export type Persona = { id: PersonaId; name: string; tagline: string; description: string; segments: string[]; contextTitle: string; profileTitle: string; prompts: string[]; supportCategories: { id: string; label: string }[]; fields: FieldDescriptor[] };
 export type GraphNode = { id: string; label: string; type: string; agency?: string; description?: string };
 export type GraphEdge = { id: string; source: string; target: string; label: string; evidenceId?: string };
 export type Evidence = { id: string; title: string; source: string; excerpt: string; updatedAt?: string };
 export type Preset = { id: string; label: string; profile: Profile };
-export type Scenario = { scenario: { id: string; title: string; timestamp: string; description: string; synthetic: boolean }; profile: Profile; nodes: GraphNode[]; edges: GraphEdge[]; evidence: Evidence[]; presets: Preset[] };
+export type Scenario = { persona: Persona; personas: Persona[]; scenario: { id: string; title: string; timestamp: string; description: string; synthetic: boolean }; profile: Profile; nodes: GraphNode[]; edges: GraphEdge[]; evidence: Evidence[]; presets: Preset[] };
 export type Rule = { id: string; label: string; field: string; operator: string; expected: unknown; actual: unknown; result: 'pass' | 'fail' | 'unknown'; evidenceId: string };
-export type Scheme = { id: string; name: string; status: 'likely-eligible' | 'not-eligible' | 'needs-review'; reason: string; benefit: string; ruleResults: Rule[]; documentIds: string[]; evidenceIds: string[]; pathNodeIds: string[]; agency: string };
+export type Scheme = { id: string; name: string; categories: string[]; status: 'likely-eligible' | 'not-eligible' | 'needs-review'; reason: string; benefit: string; ruleResults: Rule[]; documentIds: string[]; evidenceIds: string[]; pathNodeIds: string[]; agency: string };
 export type Analysis = { schemes: Scheme[]; summary: string; metrics: { perCapitaIncome: number | null; likelyEligible: number; notEligible: number; needsReview: number; rulesEvaluated: number; graphNodes: number; graphEdges: number; contextEntities: number }; reasoning: { step: number; title: string; detail: string; nodeIds: string[]; evidenceIds: string[] }[]; citations: Evidence[]; answer: string; engine: { graph: string; synthesis: string; accelerator: string }; warnings: string[]; affectedNodeIds: string[]; highlightedEdgeIds: string[] };
 export type AppConfig = { apiUrl: string; region: string; localPreview?: boolean; cognito: { authority: string; clientId: string; domain: string; scope?: string } };

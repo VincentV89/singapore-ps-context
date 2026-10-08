@@ -1,12 +1,12 @@
 # Singapore Life Events Navigator
 
-A public sector demonstration of knowledge graphs and context intelligence: see how a resident's changing circumstances affect discovery of relevant services, with an inspectable path from household facts to eligibility rules, policy evidence, documents, and agencies.
+A public sector demonstration of knowledge graphs and context intelligence: choose one of four audiences, discover relevant support, and inspect the path from household or organisation facts to eligibility rules, policy evidence, documents, and agencies.
 
-**All resident profiles, programmes, policy thresholds, benefits, and agency workflows are synthetic. This is an illustrative demo, not Singapore government eligibility advice or an approval system.** No personal data is required.
+**All profiles, organisations, programmes, policy thresholds, benefits, and agency workflows are synthetic. This is an illustrative demo, not Singapore government eligibility advice or an approval system.** No personal data is required.
 
 [Open the deployed demo](https://d1pbdc1b2fpdk2.cloudfront.net). Cognito sign-in is required; credentials are distributed separately.
 
-![Deployed Life Events Navigator showing household context, connected graph, support pathways and evidence](docs/demo-preview.png)
+![Life Events Navigator showing context, connected graph, support pathways and evidence](docs/demo-preview.png)
 
 ## Deployment target
 
@@ -21,10 +21,20 @@ This compact demo reuses accelerator components; it is **not a deployment of the
 
 ## Demo story
 
-1. Discover support for a synthetic household after a job transition.
-2. Inspect the graph linking the household to scheme rules and supporting policy evidence.
-3. Change income or caregiving context and compare the assessment.
-4. Inspect unmet or unknown conditions, prepare a document checklist, and ask a grounded question.
+1. Start at **Find Government Support** and choose **Individuals & Families**, **Businesses & Entrepreneurs**, **Nonprofits & Community Organisations**, or **Researchers & Educational Institutions**.
+2. Explore that audience's synthetic support catalogue, optionally narrowing it by support type. There are no separate personalised segment filters; the context form captures facts that affect screening.
+3. Inspect the graph linking a person or organisation to scheme rules and supporting policy evidence.
+4. Change a relevant fact, such as household income or a business project area, and compare the assessment.
+5. Inspect unmet or unknown conditions, prepare a document checklist, and ask a grounded question. Use **All audiences** to return to the entry point.
+
+| Audience | Illustrative support discovery |
+| --- | --- |
+| Individuals & Families | Financial assistance, employment and training, caregiving, accessibility, education, and healthcare |
+| Businesses & Entrepreneurs | Digitalisation, AI adoption, workforce development, and sustainability |
+| Nonprofits & Community Organisations | Community projects, social services, capability building, arts, and youth programmes |
+| Researchers & Educational Institutions | Research, innovation, education funding, and collaboration |
+
+The included programmes are deliberately small fictional examples, not a complete catalogue of Singapore support. The four entry points provide a structure for adding further support types such as housing or international expansion later.
 
 ## Run locally
 
@@ -38,7 +48,7 @@ make dev-api
 
 In another terminal, run `make dev-web`, then open `http://localhost:5173`. Local preview works only on loopback hosts. Deployed configuration disables it and requires Cognito login.
 
-The **Job loss · household of four** preset starts at S$3,600 household income and two likely eligible fictional schemes. **New caregiving responsibility** changes income to S$5,400 and opens a caregiving pathway while excluding the bridge grant. **Missing income · needs review** demonstrates uncertainty. Click a scheme to inspect its rules, documents, and evidence; select **Compare changes** to compare with the starting household.
+Choose an audience, then use its example profiles or edit the context. In **Individuals & Families**, **Job loss · household of four** starts at S$3,600 household income. **New caregiving responsibility** changes income to S$5,400 and opens a caregiving pathway while excluding the bridge grant. **Missing income · needs review** demonstrates uncertainty. In **Businesses & Entrepreneurs**, change the project area to see which support pathways depend on the proposed activity. Click a scheme to inspect its rules, documents, and evidence; select **Compare changes** to compare with that audience's starting profile. Switching audiences resets the assessment context and comparison baseline.
 
 ## Deploy to AWS
 
@@ -63,9 +73,9 @@ python -m unittest discover -s infra/tests -v
 cd frontend && npm run build
 ```
 
-Backend checks cover changed household context, eligibility boundaries, unknown facts, changed RDF policies, evidence links, bounded questions, and genuine traversal context passed to synthesis. Infrastructure checks cover private origins, scoped authentication, dependency cycles, SPA routing, caching, and Lambda permissions. The GitHub workflow runs backend and infrastructure checks and the frontend build without AWS credentials.
+Backend checks cover audience scoping, changed context, eligibility boundaries, unknown facts, changed RDF policies, evidence links, bounded questions, and genuine traversal context passed to synthesis. Infrastructure checks cover private origins, scoped authentication, dependency cycles, SPA routing, caching, and Lambda permissions. The GitHub workflow runs backend and infrastructure checks and the frontend build without AWS credentials.
 
-The accelerator source is pinned to `v0.3.4`, commit `c84a3043a989c30fe33658c763f5f279c6981aba`. Reused files retain their notices and Apache-2.0 license; see [component provenance](backend/vendor/PROVENANCE.md). The demo's schema has 77 triples; synthetic instance data has 556 triples. The visual graph contains 36 entities and 57 relationships.
+The accelerator source is pinned to `v0.3.4`, commit `c84a3043a989c30fe33658c763f5f279c6981aba`. Reused files retain their notices and Apache-2.0 license; see [component provenance](backend/vendor/PROVENANCE.md). The exported schema defines the shared vocabulary; synthetic instance data contains the four audience journeys, their programmes, criteria, and evidence. The frontend displays the selected audience's graph.
 
 Useful guides:
 
