@@ -645,7 +645,7 @@
       "id": "ev-profile",
       "title": "Synthetic household context",
       "source": "Demo household scenario v1",
-      "excerpt": "A fictional adult resident in a household of four recently lost employment. All inputs are editable synthetic facts; missing facts must not be assumed.",
+      "excerpt": "Resident and household facts come from the current editable synthetic profile. The validated request is authoritative for this screening; no household size, employment or life event is assumed. Missing facts remain unknown.",
       "updatedAt": "2026-10-08T09:00:00+08:00"
     },
     {

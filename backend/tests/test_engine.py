@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from rdflib import Graph, Literal, RDF, OWL
+from rdflib import Graph, Literal, RDF, OWL, URIRef
 from app import dispatch, lambda_handler
 from engine import BASE_GRAPH, NS, SCENARIO, InputError, analyze, context_graph, evaluate
 from fixture import PROFILE
@@ -137,6 +137,26 @@ class EligibilityTests(unittest.TestCase):
         self.assertEqual(context, result["context"])
         self.assertTrue(any(e["id"] == "agency-support" for e in context))
         self.assertTrue(any(e["id"] == "doc-employment" for e in context))
+        self.assertEqual(model.call_args.args[5], PROFILE)
+
+    def test_traversed_relationship_direction_matches_authoritative_graph(self):
+        result = analyze({"profile": PROFILE, "question": "Explain the Household Bridge Grant"})
+        agency = next(e for e in result["context"] if e["id"] == "agency-support")
+        relationship = next(r for r in agency["relationships"] if r["predicate"] == str(NS.administeredBy))
+        self.assertEqual(relationship["source_uri"], str(NS["scheme-bridge"]))
+        self.assertEqual(relationship["target_uri"], str(NS["agency-support"]))
+        self.assertEqual(relationship["direction"], "incoming")
+        for entity in result["context"]:
+            for edge in entity["relationships"]:
+                self.assertIn(tuple(URIRef(edge[k]) for k in ("source_uri", "predicate", "target_uri")), BASE_GRAPH)
+
+    def test_profile_evidence_does_not_assert_outdated_household_facts(self):
+        changed = {**PROFILE, "householdSize": 2, "recentJobLoss": False, "employmentStatus": "employed", "caregiver": True}
+        result = analyze({"profile": changed, "question": "What documents should this household prepare?"})
+        evidence = next(e for e in result["citations"] if e["id"] == "ev-profile")
+        self.assertIn("current editable synthetic profile", evidence["excerpt"])
+        self.assertNotIn("household of four", evidence["excerpt"])
+        self.assertEqual(result["profile"]["householdSize"], 2)
 
     def test_environment_can_disable_synthesis(self):
         with patch.dict(os.environ, {"ENABLE_BEDROCK": "false"}), patch("engine.bedrock_synthesis") as model:

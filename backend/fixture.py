@@ -14,7 +14,7 @@ DISCLAIMER = (
 
 EVIDENCE = [
     {"id": "ev-profile", "title": "Synthetic household context", "source": "Demo household scenario v1",
-     "excerpt": "A fictional adult resident in a household of four recently lost employment. All inputs are editable synthetic facts; missing facts must not be assumed.", "updatedAt": TIMESTAMP},
+     "excerpt": "Resident and household facts come from the current editable synthetic profile. The validated request is authoritative for this screening; no household size, employment or life event is assumed. Missing facts remain unknown.", "updatedAt": TIMESTAMP},
     {"id": "ev-bridge", "title": "Household Bridge Grant · fictional rules", "source": "Synthetic policy catalogue v1 · HBG",
      "excerpt": "Fictional grant: citizen, age 21 or older, recent job loss, and gross monthly household income per person at most S$1,000. Benefit: S$450 monthly for three months. Income, household composition and employment evidence are required.", "updatedAt": TIMESTAMP},
     {"id": "ev-skills", "title": "Skills Restart Support · fictional rules", "source": "Synthetic policy catalogue v1 · SRS",
