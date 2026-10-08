@@ -76,14 +76,20 @@ class Checks:
         documents = [s for s in sources if s.get("sourceType") == "DOCUMENTS"]
         if not documents or any(s["status"] != "COMPLETED" for s in documents):
             raise AssertionError("Document ingestion is incomplete.")
+        expected_batches = {self.state["sources"][batch["name"]]["sourceId"]: len(batch["schemeIds"]) for batch in self.state["documentBatches"]}
+        if {field(s, "sourceId") for s in documents} != set(expected_batches):
+            raise AssertionError("Actual document sources differ from the staged official batches.")
         details = []
         for source in documents:
             detail = self.client.request("GET", self.path + "/sources/" + field(source, "sourceId"))
             doc = detail.get("documentDetails", {})
             if doc.get("filesErrored", 0) or doc.get("errorMessage") or doc.get("filesSkipped", 0):
                 raise AssertionError("A document source completed with preprocessing errors.")
-            if doc.get("documentsProcessed") is not None and doc["documentsProcessed"] <= 0:
-                raise AssertionError("A completed document source did not process any actual documents.")
+            expected = expected_batches[field(source, "sourceId")]
+            if doc.get("filesTotal") != expected or doc.get("documentsProcessed") != expected:
+                raise AssertionError(f"A completed document source lacks complete extraction evidence: expected {expected}, filesTotal={doc.get('filesTotal')}, documentsProcessed={doc.get('documentsProcessed')}.")
+            if not doc.get("chunksEmbed") or not doc.get("chunksGraph"):
+                raise AssertionError("A completed document source lacks actual vector/graph chunk writes.")
             details.append(redact(detail))
         s3 = self.client.aws.client("s3")
         block = s3.get_public_access_block(Bucket=self.state["bucket"])["PublicAccessBlockConfiguration"]

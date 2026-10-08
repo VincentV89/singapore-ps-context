@@ -427,6 +427,18 @@ class IngestRun:
             source = self.register(batch["name"], name, {"sourceType": "DOCUMENTS", "documentSource": {"name": name, "sourceBucketArn": f"arn:aws:s3:::{self.state['bucket']}", "s3Prefixes": [batch["prefix"]], "extractionConfig": {"preferredEntityClassifications": ["Scheme", "Agency", "Audience", "SupportCategory", "EligibilityStatement", "PolicyDocument", "SourceVersion"], "useBatchInference": False}}})
             if source["status"] != "COMPLETED":
                 self.pending.append("Documents " + batch["name"])
+            else:
+                # The upstream KG task can complete with partial extraction
+                # failures. A completed status alone does not prove all files
+                # became retrievable source documents.
+                details = source["details"].get("documentDetails", {})
+                expected = len(batch["schemeIds"])
+                if details.get("filesErrored", 0) or details.get("filesSkipped", 0) or details.get("errorMessage"):
+                    raise RuntimeError(f"Document batch {batch['name']} completed with preprocessing failures: {redact(details)}")
+                if details.get("filesTotal") != expected or details.get("documentsProcessed") != expected:
+                    raise RuntimeError(f"Document batch {batch['name']} has incomplete extraction evidence: expected {expected}, filesTotal={details.get('filesTotal')}, documentsProcessed={details.get('documentsProcessed')}. Inspect actual KG task logs before rescanning.")
+                if not details.get("chunksEmbed") or not details.get("chunksGraph"):
+                    raise RuntimeError(f"Document batch {batch['name']} has no confirmed vector/graph chunk writes.")
 
     def reference_ontology(self):
         ns = self.state["namespaceId"]
