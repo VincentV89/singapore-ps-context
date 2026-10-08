@@ -1,0 +1,67 @@
+@prefix sg: <https://vincentv89.github.io/singapore-ps-context/ontology/support#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+<urn:sgsupport:singapore-support:v1> a owl:Ontology ;
+  dct:title "Singapore Support Navigator reference ontology"@en ;
+  dct:description "Demo vocabulary for published Singapore agency support programmes, audiences, and source evidence. Agency statements remain attributed source text; the ontology does not encode authoritative eligibility decisions."@en ;
+  owl:versionInfo "1.0.0" ;
+  dct:license <https://www.apache.org/licenses/LICENSE-2.0> .
+
+sg:Scheme a owl:Class ; rdfs:label "Scheme"@en ;
+  rdfs:comment "A publicly described Singapore support programme, grant, subsidy, credit, or funding call. Corresponds to a row of the schemes table."@en .
+sg:Agency a owl:Class ; rdfs:label "Agency"@en ;
+  rdfs:comment "The public agency or official administering body attributed by the source. Corresponds to a row of the agencies table."@en .
+sg:Audience a owl:Class ; rdfs:label "Audience"@en ;
+  rdfs:comment "A discovery audience used by this demonstration; audience selection does not grant data access or prove eligibility."@en .
+sg:SupportCategory a owl:Class ; rdfs:label "Support category"@en ;
+  rdfs:comment "An editorial discovery category such as healthcare, skills, enterprise development, community capability, or research."@en .
+sg:PolicyDocument a owl:Class ; rdfs:label "Policy document"@en ;
+  rdfs:comment "A retrieved public agency page or published document that supports a programme description."@en .
+sg:EligibilityStatement a owl:Class ; rdfs:label "Eligibility statement"@en ;
+  rdfs:comment "An attributed excerpt of published eligibility information. It is evidence, not an executable rule or a decision on an applicant."@en .
+sg:SourceVersion a owl:Class ; rdfs:label "Source version"@en ;
+  rdfs:comment "A timestamped source snapshot identified by its URL and SHA-256 digest."@en .
+sg:Evidence a owl:Class ; rdfs:label "Evidence"@en ;
+  rdfs:comment "An attributed excerpt supporting a programme's summary, eligibility, or benefit. Corresponds to a row of the evidence table."@en .
+
+sg:administeredBy a owl:ObjectProperty ; rdfs:label "administered by"@en ; rdfs:domain sg:Scheme ; rdfs:range sg:Agency .
+sg:forAudience a owl:ObjectProperty ; rdfs:label "for audience"@en ; rdfs:domain sg:Scheme ; rdfs:range sg:Audience .
+sg:hasCategory a owl:ObjectProperty ; rdfs:label "has category"@en ; rdfs:domain sg:Scheme ; rdfs:range sg:SupportCategory .
+sg:hasEvidence a owl:ObjectProperty ; rdfs:label "has evidence"@en ; rdfs:domain sg:Scheme ; rdfs:range sg:Evidence .
+sg:evidenceFor a owl:ObjectProperty ; rdfs:label "evidence for"@en ; rdfs:domain sg:Evidence ; rdfs:range sg:Scheme ; owl:inverseOf sg:hasEvidence .
+sg:attributedTo a owl:ObjectProperty ; rdfs:label "attributed to"@en ; rdfs:domain sg:Evidence ; rdfs:range sg:Agency .
+sg:hasEligibilityStatement a owl:ObjectProperty ; rdfs:label "has eligibility statement"@en ; rdfs:domain sg:Scheme ; rdfs:range sg:EligibilityStatement .
+sg:derivedFromDocument a owl:ObjectProperty ; rdfs:label "derived from document"@en ; rdfs:domain sg:Evidence ; rdfs:range sg:PolicyDocument .
+sg:hasSourceVersion a owl:ObjectProperty ; rdfs:label "has source version"@en ; rdfs:range sg:SourceVersion .
+
+sg:schemeId a owl:DatatypeProperty ; rdfs:label "scheme identifier"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:schemeName a owl:DatatypeProperty ; rdfs:label "scheme name"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:agencyId a owl:DatatypeProperty ; rdfs:label "agency identifier"@en ; rdfs:domain sg:Agency ; rdfs:range xsd:string .
+sg:agencyName a owl:DatatypeProperty ; rdfs:label "agency name"@en ; rdfs:domain sg:Agency ; rdfs:range xsd:string .
+sg:abbreviation a owl:DatatypeProperty ; rdfs:label "agency abbreviation"@en ; rdfs:domain sg:Agency ; rdfs:range xsd:string .
+sg:agencyUrl a owl:DatatypeProperty ; rdfs:label "agency website URL"@en ; rdfs:domain sg:Agency ; rdfs:range xsd:string .
+sg:persona a owl:DatatypeProperty ; rdfs:label "discovery audience code"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:categories a owl:DatatypeProperty ; rdfs:label "discovery category codes"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string ;
+  rdfs:comment "Pipe-separated editorial codes in the source CSV; these describe discovery filters rather than policy conditions."@en .
+sg:status a owl:DatatypeProperty ; rdfs:label "published programme status"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:summary a owl:DatatypeProperty ; rdfs:label "source-supported programme summary"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:eligibilityText a owl:DatatypeProperty ; rdfs:label "published eligibility text"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:benefitText a owl:DatatypeProperty ; rdfs:label "published benefit text"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:applicationUrl a owl:DatatypeProperty ; rdfs:label "official application information URL"@en ; rdfs:domain sg:Scheme ; rdfs:range xsd:string .
+sg:evidenceId a owl:DatatypeProperty ; rdfs:label "evidence identifier"@en ; rdfs:domain sg:Evidence ; rdfs:range xsd:string .
+sg:evidenceType a owl:DatatypeProperty ; rdfs:label "evidence type"@en ; rdfs:domain sg:Evidence ; rdfs:range xsd:string .
+sg:excerpt a owl:DatatypeProperty ; rdfs:label "attributed source excerpt"@en ; rdfs:domain sg:Evidence ; rdfs:range xsd:string .
+sg:sourceUrl a owl:DatatypeProperty ; rdfs:label "official source URL"@en ; rdfs:range xsd:string .
+sg:sourceTitle a owl:DatatypeProperty ; rdfs:label "official source title"@en ; rdfs:range xsd:string .
+sg:fetchedAt a owl:DatatypeProperty ; rdfs:label "source fetched at"@en ; rdfs:range xsd:string ;
+  rdfs:comment "An ISO-8601 UTC timestamp retained as source text for CSV/SQL mapping."@en .
+sg:sourceHash a owl:DatatypeProperty ; rdfs:label "source SHA-256"@en ; rdfs:range xsd:string .
+
+sg:IndividualsAndFamilies a sg:Audience, owl:NamedIndividual ; rdfs:label "Individuals & Families"@en .
+sg:BusinessesAndEntrepreneurs a sg:Audience, owl:NamedIndividual ; rdfs:label "Businesses & Entrepreneurs"@en .
+sg:NonprofitsAndCommunity a sg:Audience, owl:NamedIndividual ; rdfs:label "Nonprofits & Community Organisations"@en .
+sg:ResearchersAndEducation a sg:Audience, owl:NamedIndividual ; rdfs:label "Researchers & Educational Institutions"@en .

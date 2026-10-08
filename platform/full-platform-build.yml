@@ -1,0 +1,154 @@
+# Builds the pinned accelerator on an ephemeral AWS CodeBuild host.
+# Privileged Docker/QEMU applies only to this managed build host, never the
+# interactive workspace. build publishes assets; deploy applies an assembly.
+version: 0.2
+env:
+  shell: bash
+  variables:
+    SGSUPPORT_PHASE: build
+    SGSUPPORT_PREFIX: sgsupport
+    SGSUPPORT_ENV: demo
+    SGSUPPORT_SMUS_ADMIN_ARN: arn:aws:iam::879594333699:user/bedrock-engineer
+    SGSUPPORT_ASSEMBLY_S3_URI: ""
+    NX_DAEMON: "false"
+phases:
+  install:
+    runtime-versions:
+      python: "3.12"
+      nodejs: "22"
+      java: corretto21
+    commands:
+      - |
+        set -euo pipefail
+        export AWS_DEFAULT_REGION=us-east-1 CDK_DEFAULT_REGION=us-east-1
+        export CDK_DEFAULT_ACCOUNT="$(aws sts get-caller-identity --query Account --output text)"
+        test "$CDK_DEFAULT_ACCOUNT" = 879594333699
+        test "$AWS_REGION" = us-east-1
+        test "$SGSUPPORT_PREFIX" = sgsupport
+        test "$SGSUPPORT_ENV" = demo
+        case "$SGSUPPORT_PHASE" in build|deploy) ;; *) exit 2 ;; esac
+        mkdir -p "$CODEBUILD_SRC_DIR/platform-artifacts"
+        npm install --global pnpm@10.34.5 aws-cdk@2.1127.0 cdk-assets@3
+        node --version
+        python --version
+        java -version
+        if [ "$SGSUPPORT_PHASE" = build ] || [ -z "$SGSUPPORT_ASSEMBLY_S3_URI" ]; then
+          python -m pip install --disable-pip-version-check 'uv>=0.8,<1'
+          docker info >/dev/null
+          # This kernel is the disposable AWS-managed job, not the user's host.
+          docker run --privileged --rm tonistiigi/binfmt --install arm64
+          test "$(docker run --rm --platform linux/arm64 public.ecr.aws/docker/library/alpine:3.21 uname -m)" = aarch64
+          # Public ECR base images support anonymous pulls. CDK handles the
+          # separate private ECR publisher authentication via its bootstrap role.
+        fi
+  build:
+    commands:
+      - |
+        set -euo pipefail
+        export COA_ASSEMBLY_DIR="$CODEBUILD_SRC_DIR/platform-artifacts/cdk.out"
+        if [ "$SGSUPPORT_PHASE" = deploy ] && [ -n "$SGSUPPORT_ASSEMBLY_S3_URI" ]; then
+          case "$SGSUPPORT_ASSEMBLY_S3_URI" in
+            s3://"$SGSUPPORT_BUILD_BUCKET"/builds/*) ;;
+            *) echo 'Assembly must come from this project build bucket.' >&2; exit 2 ;;
+          esac
+          aws s3 cp "$SGSUPPORT_ASSEMBLY_S3_URI" /tmp/sgsupport-assembly.zip --only-show-errors
+          python - <<'PY'
+        import os
+        from pathlib import Path
+        from zipfile import ZipFile
+        target = Path(os.environ["CODEBUILD_SRC_DIR"]) / "platform-artifacts"
+        with ZipFile("/tmp/sgsupport-assembly.zip") as archive:
+            for info in archive.infolist():
+                path = (target / info.filename).resolve()
+                if not path.is_relative_to(target.resolve()):
+                    raise ValueError("Unsafe assembly archive path")
+            archive.extractall(target)
+        PY
+          test -f "$COA_ASSEMBLY_DIR/manifest.json"
+        else
+          chmod +x scripts/*.sh models/gradlew
+          make generate
+          uv sync --all-packages
+          pnpm install --no-frozen-lockfile
+          pnpm nx run-many -t build
+          pnpm --filter coa-infra exec cdk synth --quiet \
+            --output "$COA_ASSEMBLY_DIR" \
+            -c env="$SGSUPPORT_ENV" -c resource_prefix="$SGSUPPORT_PREFIX" \
+            -c project_tag=SingaporeContext \
+            -c smus_admin_principal_arns="$SGSUPPORT_SMUS_ADMIN_ARN" \
+            -c aoss_min_ocu=2 -c aoss_max_ocu=4 \
+            -c tier3_strategy=hand-rolled -c neptune_instance_class=db.t4g.medium \
+            -c ontology_cpu=2048 -c ontology_memory_mib=8192 \
+            -c extra_callback_origin=https://d1pbdc1b2fpdk2.cloudfront.net
+          # Cloud assembly paths are portable. Publishing all manifests now
+          # builds mixed ARM64/AMD64 assets without creating platform stacks.
+          python - <<'PY'
+        import os
+        import subprocess
+        from pathlib import Path
+        root = Path(os.environ["COA_ASSEMBLY_DIR"])
+        manifests = sorted(root.glob("*.assets.json"))
+        if not manifests:
+            raise RuntimeError("No CDK asset manifests were synthesized")
+        for manifest in manifests:
+            subprocess.run(["cdk-assets", "publish", "--path", str(manifest)], check=True)
+        PY
+        fi
+        if [ "$SGSUPPORT_PHASE" = deploy ]; then
+          cdk deploy --app "$COA_ASSEMBLY_DIR" --all \
+            --require-approval=never \
+            --outputs-file "$CODEBUILD_SRC_DIR/platform-artifacts/stack-outputs.json"
+        fi
+  post_build:
+    commands:
+      - |
+        # Persist concise diagnostics even when synth/publishing/deploy fails.
+        python - <<'PY'
+        import json
+        import os
+        import subprocess
+        from datetime import datetime, timezone
+        from pathlib import Path
+        root = Path(os.environ["CODEBUILD_SRC_DIR"]) / "platform-artifacts"
+        root.mkdir(exist_ok=True)
+        manifest_path = root / "cdk.out" / "manifest.json"
+        stacks = {}
+        if manifest_path.exists():
+            manifest = json.loads(manifest_path.read_text())
+            for value in manifest.get("artifacts", {}).values():
+                if value.get("type") != "aws:cloudformation:stack":
+                    continue
+                name = value["properties"]["stackName"]
+                if not name.startswith("sgsupport-demo-"):
+                    raise RuntimeError("Assembly contains an unexpected stack")
+                result = subprocess.run(
+                    ["aws", "cloudformation", "describe-stacks", "--stack-name", name,
+                     "--region", "us-east-1", "--output", "json"],
+                    capture_output=True, text=True,
+                )
+                if result.returncode == 0:
+                    stack = json.loads(result.stdout)["Stacks"][0]
+                    stacks[name] = {
+                        "status": stack["StackStatus"],
+                        "outputs": {item["OutputKey"]: item["OutputValue"] for item in stack.get("Outputs", [])},
+                    }
+                else:
+                    stacks[name] = {"status": "not-readable-or-not-created"}
+        summary = {
+            "buildId": os.environ.get("CODEBUILD_BUILD_ID"),
+            "phase": os.environ.get("SGSUPPORT_PHASE"),
+            "commandSucceeded": os.environ.get("CODEBUILD_BUILD_SUCCEEDING") == "1",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "account": "879594333699", "region": "us-east-1",
+            "resourcePrefix": "sgsupport", "environment": "demo", "stacks": stacks,
+        }
+        (root / "build-summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+        source_manifest = Path(os.environ["CODEBUILD_SRC_DIR"]) / "platform" / "source-manifest.json"
+        if source_manifest.exists():
+            (root / "source-manifest.json").write_bytes(source_manifest.read_bytes())
+        print(json.dumps({"phase": summary["phase"], "commandSucceeded": summary["commandSucceeded"], "stacks": len(stacks)}))
+        PY
+artifacts:
+  base-directory: platform-artifacts
+  files:
+    - '**/*'

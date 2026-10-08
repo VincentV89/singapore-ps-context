@@ -1,0 +1,76 @@
+diff --git a/infra/bin/app.ts b/infra/bin/app.ts
+index 6e67615..7e985b5 100644
+--- a/infra/bin/app.ts
++++ b/infra/bin/app.ts
+@@ -492,6 +492,10 @@ async function deploy(): Promise<void> {
+   // fresh-account `cdk deploy --all` synthesizes parents first.
+   const ontology = new OntologyStack(app, `${stackPrefix}-ontology`, {
+     network,
++    cpu: Number(app.node.tryGetContext("ontology_cpu") ?? 8192),
++    memoryLimitMiB: Number(
++      app.node.tryGetContext("ontology_memory_mib") ?? 32768,
++    ),
+     serviceNamespace: network.serviceNamespace,
+     neptuneClusterArn: storage.neptuneClusterArn,
+     neptuneClusterEndpoint: storage.neptuneClusterEndpoint,
+diff --git a/infra/lib/lambdas/admin-user-handler.ts b/infra/lib/lambdas/admin-user-handler.ts
+index 2349dbc..0ed5dbc 100644
+--- a/infra/lib/lambdas/admin-user-handler.ts
++++ b/infra/lib/lambdas/admin-user-handler.ts
+@@ -129,7 +129,7 @@ async function handleDelete(
+ }
+ 
+ /**
+- * Create the admin user with a temporary password (Cognito emails it)
++ * Create the demo admin user without sending an invitation email.
+  * and assign them to the admin group.
+  *
+  * No permanent password is set — the user must change it on first login.
+@@ -150,7 +150,7 @@ async function createUserAndGroup(
+           { Name: "email", Value: email },
+           { Name: "email_verified", Value: "true" },
+         ],
+-        DesiredDeliveryMediums: ["EMAIL"],
++        MessageAction: "SUPPRESS",
+       }),
+     );
+     if (!res.User) throw new Error("Failed to create user");
+diff --git a/infra/lib/stacks/foundation/storage-stack.ts b/infra/lib/stacks/foundation/storage-stack.ts
+index 59bcaa6..3465fd8 100644
+--- a/infra/lib/stacks/foundation/storage-stack.ts
++++ b/infra/lib/stacks/foundation/storage-stack.ts
+@@ -115,7 +115,8 @@ export class StorageStack extends SCLStack {
+       "NeptunePrimaryInstance",
+       {
+         dbInstanceIdentifier: this.prefixed("neptune-primary"),
+-        dbInstanceClass: "db.r8g.large",
++        dbInstanceClass:
++          this.node.tryGetContext("neptune_instance_class") ?? "db.r8g.large",
+         dbClusterIdentifier: neptuneCluster.dbClusterIdentifier!,
+       },
+     );
+diff --git a/infra/lib/stacks/foundation/web-stack.ts b/infra/lib/stacks/foundation/web-stack.ts
+index 4f494d6..c0a2e01 100644
+--- a/infra/lib/stacks/foundation/web-stack.ts
++++ b/infra/lib/stacks/foundation/web-stack.ts
+@@ -287,11 +287,19 @@ export class WebStack extends SCLStack {
+             ClientId: clientId,
+             CallbackURLs: [
+               `${siteUrl}/authenticate/`,
++              ...(this.node.tryGetContext("extra_callback_origin")
++                ? [`${this.node.tryGetContext("extra_callback_origin")}/auth/callback`]
++                : []),
+               ...(this.envName === "dev"
+                 ? ["http://localhost:5173/authenticate/"]
+                 : []),
+             ],
+-            LogoutURLs: [`${siteUrl}/`],
++            LogoutURLs: [
++              `${siteUrl}/`,
++              ...(this.node.tryGetContext("extra_callback_origin")
++                ? [`${this.node.tryGetContext("extra_callback_origin")}/`]
++                : []),
++            ],
+             ExplicitAuthFlows: [
+               "ALLOW_USER_SRP_AUTH",
+               "ALLOW_REFRESH_TOKEN_AUTH",

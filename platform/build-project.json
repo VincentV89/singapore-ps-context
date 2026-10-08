@@ -1,0 +1,85 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Project-owned disposable CodeBuild jobs for Singapore full context platform; deployment uses existing CDK bootstrap roles.",
+  "Parameters": {
+    "ProjectName": {"Type": "String", "Default": "sgsupport-full-platform", "AllowedPattern": "sgsupport-[a-z0-9-]{3,30}"},
+    "SmusAdminArn": {"Type": "String", "Default": "arn:aws:iam::879594333699:user/bedrock-engineer", "AllowedPattern": "arn:aws:iam::879594333699:(user|role)/[A-Za-z0-9+=,.@_/-]+"}
+  },
+  "Resources": {
+    "BuildBucket": {
+      "Type": "AWS::S3::Bucket", "DeletionPolicy": "Retain", "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "BucketName": {"Fn::Sub": "${ProjectName}-build-${AWS::AccountId}-${AWS::Region}"},
+        "BucketEncryption": {"ServerSideEncryptionConfiguration": [{"ServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]},
+        "PublicAccessBlockConfiguration": {"BlockPublicAcls": true, "BlockPublicPolicy": true, "IgnorePublicAcls": true, "RestrictPublicBuckets": true},
+        "VersioningConfiguration": {"Status": "Enabled"},
+        "OwnershipControls": {"Rules": [{"ObjectOwnership": "BucketOwnerEnforced"}]},
+        "LifecycleConfiguration": {"Rules": [{"Id": "ExpireBuildArtifacts", "Status": "Enabled", "ExpirationInDays": 30, "NoncurrentVersionExpiration": {"NoncurrentDays": 15}, "AbortIncompleteMultipartUpload": {"DaysAfterInitiation": 2}}]},
+        "Tags": [{"Key": "Project", "Value": "sgsupport"}, {"Key": "Purpose", "Value": "SingaporeContext"}]
+      }
+    },
+    "BuildBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {"Bucket": {"Ref": "BuildBucket"}, "PolicyDocument": {"Version": "2012-10-17", "Statement": [{"Sid": "RequireTls", "Effect": "Deny", "Principal": "*", "Action": "s3:*", "Resource": [{"Fn::GetAtt": ["BuildBucket", "Arn"]}, {"Fn::Sub": "${BuildBucket.Arn}/*"}], "Condition": {"Bool": {"aws:SecureTransport": "false"}}}]}}
+    },
+    "BuildLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {"LogGroupName": {"Fn::Sub": "/aws/codebuild/${ProjectName}"}, "RetentionInDays": 14, "Tags": [{"Key": "Project", "Value": "sgsupport"}, {"Key": "Purpose", "Value": "SingaporeContext"}]}
+    },
+    "BuildRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {"Fn::Sub": "${ProjectName}-codebuild"},
+        "AssumeRolePolicyDocument": {"Version": "2012-10-17", "Statement": [{"Effect": "Allow", "Principal": {"Service": "codebuild.amazonaws.com"}, "Action": "sts:AssumeRole", "Condition": {"StringEquals": {"aws:SourceAccount": {"Ref": "AWS::AccountId"}}, "ArnEquals": {"aws:SourceArn": {"Fn::Sub": "arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}"}}}}]},
+        "Tags": [{"Key": "Project", "Value": "sgsupport"}, {"Key": "Purpose", "Value": "SingaporeContext"}],
+        "Policies": [{"PolicyName": "BuildAndAssumeBootstrapRoles", "PolicyDocument": {"Version": "2012-10-17", "Statement": [
+          {"Sid": "BuildLogs", "Effect": "Allow", "Action": ["logs:CreateLogStream", "logs:PutLogEvents"], "Resource": {"Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}:*"}},
+          {"Sid": "BuildBucketMetadata", "Effect": "Allow", "Action": ["s3:GetBucketLocation", "s3:ListBucket"], "Resource": {"Fn::GetAtt": ["BuildBucket", "Arn"]}},
+          {"Sid": "BuildSourceAndArtifacts", "Effect": "Allow", "Action": ["s3:GetObject", "s3:GetObjectVersion", "s3:PutObject"], "Resource": [{"Fn::Sub": "${BuildBucket.Arn}/sources/*"}, {"Fn::Sub": "${BuildBucket.Arn}/builds/*"}]},
+          {"Sid": "ExistingCdkBootstrapRoles", "Effect": "Allow", "Action": "sts:AssumeRole", "Resource": [
+            {"Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}"},
+            {"Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"},
+            {"Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-image-publishing-role-${AWS::AccountId}-${AWS::Region}"},
+            {"Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}"}
+          ]},
+          {"Sid": "ReadDeploymentConfig", "Effect": "Allow", "Action": ["ssm:GetParameter", "ssm:GetParameters"], "Resource": [{"Fn::Sub": "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sgsupport/*"}, {"Fn::Sub": "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/cdk-bootstrap/hnb659fds/version"}]},
+          {"Sid": "DescribeNetworkingForSynthesis", "Effect": "Allow", "Action": ["ec2:DescribeAvailabilityZones", "ec2:DescribeVpcEndpointServices", "ec2:DescribeVpcs", "ec2:DescribeSubnets", "ec2:DescribeRouteTables", "ec2:DescribeSecurityGroups"], "Resource": "*"},
+          {"Sid": "ReadProjectStackState", "Effect": "Allow", "Action": ["cloudformation:DescribeStacks", "cloudformation:DescribeStackEvents", "cloudformation:DescribeStackResources", "cloudformation:GetTemplateSummary", "cloudformation:DescribeChangeSet"], "Resource": [{"Fn::Sub": "arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/sgsupport-*/*"}, {"Fn::Sub": "arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/CDKToolkit/*"}]},
+          {"Sid": "PublicBaseImages", "Effect": "Allow", "Action": "ecr-public:GetAuthorizationToken", "Resource": "*"},
+          {"Sid": "PublicEcrBearerToken", "Effect": "Allow", "Action": "sts:GetServiceBearerToken", "Resource": "*", "Condition": {"StringEquals": {"sts:AWSServiceName": "ecr-public.amazonaws.com"}}}
+        ]}}]
+      }
+    },
+    "BuildProject": {
+      "Type": "AWS::CodeBuild::Project", "DependsOn": "BuildBucketPolicy",
+      "Properties": {
+        "Name": {"Ref": "ProjectName"},
+        "Description": "Ephemeral mixed-architecture accelerator build; ARM emulation is confined to the managed CodeBuild job.",
+        "ServiceRole": {"Fn::GetAtt": ["BuildRole", "Arn"]},
+        "TimeoutInMinutes": 180, "QueuedTimeoutInMinutes": 60,
+        "ConcurrentBuildLimit": 1,
+        "Source": {"Type": "S3", "Location": {"Fn::Sub": "${BuildBucket}/sources/pending.zip"}, "BuildSpec": "platform/full-platform-build.yml"},
+        "Artifacts": {"Type": "S3", "Location": {"Ref": "BuildBucket"}, "Path": "builds", "NamespaceType": "BUILD_ID", "Name": "assembly.zip", "Packaging": "ZIP", "EncryptionDisabled": false},
+        "Environment": {
+          "Type": "LINUX_CONTAINER", "ComputeType": "BUILD_GENERAL1_LARGE", "Image": "aws/codebuild/standard:7.0", "ImagePullCredentialsType": "CODEBUILD", "PrivilegedMode": true,
+          "EnvironmentVariables": [
+            {"Name": "SGSUPPORT_PHASE", "Value": "build"},
+            {"Name": "SGSUPPORT_PREFIX", "Value": "sgsupport"},
+            {"Name": "SGSUPPORT_ENV", "Value": "demo"},
+            {"Name": "SGSUPPORT_BUILD_BUCKET", "Value": {"Ref": "BuildBucket"}},
+            {"Name": "SGSUPPORT_SMUS_ADMIN_ARN", "Value": {"Ref": "SmusAdminArn"}}
+          ]
+        },
+        "Cache": {"Type": "LOCAL", "Modes": ["LOCAL_DOCKER_LAYER_CACHE", "LOCAL_SOURCE_CACHE"]},
+        "LogsConfig": {"CloudWatchLogs": {"Status": "ENABLED", "GroupName": {"Ref": "BuildLogs"}}},
+        "Tags": [{"Key": "Project", "Value": "sgsupport"}, {"Key": "Purpose", "Value": "SingaporeContext"}]
+      }
+    }
+  },
+  "Outputs": {
+    "BuildProjectName": {"Value": {"Ref": "BuildProject"}},
+    "BuildBucket": {"Value": {"Ref": "BuildBucket"}},
+    "BuildRoleArn": {"Value": {"Fn::GetAtt": ["BuildRole", "Arn"]}},
+    "LogGroupName": {"Value": {"Ref": "BuildLogs"}}
+  }
+}
