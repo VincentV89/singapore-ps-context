@@ -34,6 +34,26 @@ Install operator dependencies with `python -m pip install -r platform/requiremen
 
 If every service build and asset upload succeeded but the final reporter alone failed with `KeyError: stackName`, the helper supports `start --phase deploy --assembly <original-artifact> --recover-diagnostics-only --assembly-file artifacts/full-platform-assembly.zip`. It verifies the phase statuses, exact diagnostic, all 16 expected stack templates, asset destinations and the original archive before recording a recovery receipt. It preserves the original build failure status and refuses broader failures.
 
+For the pinned assembly's AOSS **32-character name constraint**, [the narrow repair tool](../platform/repair-aoss-names.py) shortens the collection-group and two data-access-policy names in the storage, sources and metric-service templates. It also updates the collection's group reference and the three content-addressed template hashes in their asset manifests and assembly manifest. Docker images and other application assets remain unchanged; a Docker rebuild is unnecessary.
+
+Use the original **asset-build** ID and its actual reported S3 artifact URI:
+
+```bash
+env -u AWS_PROFILE python platform/deploy-full.py download \
+  --build-id 'sgsupport-full-platform:<original-asset-build-id>' \
+  --output artifacts/full-platform-assembly.zip
+env -u AWS_PROFILE python platform/repair-aoss-names.py \
+  --input artifacts/full-platform-assembly.zip \
+  --output artifacts/full-platform-assembly-aoss-fixed.zip \
+  --original-build-id 'sgsupport-full-platform:<original-asset-build-id>' \
+  --original-uri 's3://<project-build-bucket>/builds/<original-artifact>.zip' \
+  --publish
+env -u AWS_PROFILE python platform/deploy-full.py start --phase deploy \
+  --assembly 's3://<project-build-bucket>/builds/aoss-name-repair-<derived-sha256>.zip'
+```
+
+`--publish` verifies the known reporter-only failure, uploads only the three changed templates plus the derived assembly and receipt, and records the repair for the deployment helper. Use the returned `derivedArtifactS3Uri` in the final command. The original archive and actual **`FAILED`** build status remain intact; receipts retain the diagnostic proof, original and derived SHA-256 values, changed properties and unchanged-asset verification. The helper accepts only a matching recorded receipt and the exact allowlisted changes. This recovery does not establish deployment success or live query validation; check the subsequent deployment, ingestion and service results separately. Future full builds include the same short names in the project source patch.
+
 Before deploying a new VPC, verify regional VPC headroom and that the selected Availability Zones offer the accelerator's endpoint services. The initial account check found five VPCs against a quota of five and requested an increase to ten. Check the current quota/request state; it is a prerequisite check, not a permanent deployment status. Do not remove unrelated VPCs to make room. Reusing a VPC requires explicitly prepared private subnets and endpoints because the upstream imported-VPC path does not create them.
 
 The demo settings use Neptune `db.t4g.medium`, ontology ECS **2 vCPU / 8 GiB / one task**, and an OpenSearch NEXTGEN collection group with standby replicas enabled. Search and indexing each have a **2-OCU minimum and 4-OCU maximum**. The small ontology task is sized for this bounded catalogue; larger inductions require revisiting memory and CPU. Keep embedding producers and retrieval consumers on the same model and **1,024 dimensions**. Current configuration uses Sonnet 5, Haiku 4.5 and Cohere Embed v4, and the hand-rolled Tier 3 strategy consults the formal ontology.

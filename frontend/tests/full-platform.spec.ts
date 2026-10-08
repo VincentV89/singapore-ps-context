@@ -168,6 +168,39 @@ test('editing hypothetical facts changes the platform query and standard mode us
   await expect(page.getByRole('status')).toHaveCount(0);
 });
 
+test('opaque synthesis document IDs resolve through authenticated KBSearch metadata without replacing the cited passage', async ({ page }) => {
+  const calls: CapturedCall[] = [], first = firstScheme('individuals');
+  const originalPassage = 'TEST FIXTURE ORIGINAL SYNTHESIS PASSAGE retained after provenance lookup.';
+  await baseRoutes(page);
+  await page.route(runtimePattern, async route => {
+    if (!await capture(route, calls)) return;
+    const result = mockResult(first);
+    result.supportingContent = [{ chunkId: `fixture-${first.id}-chunk`, text: originalPassage, sourceDoc: 'opaque-platform-document-id' }];
+    const event = { type: 'done', requestId: 'opaque-provenance-fixture', payload: { result } };
+    await route.fulfill({ contentType: 'text/event-stream', headers: corsHeaders, body: `data: ${JSON.stringify(event)}\n\n` });
+  });
+  await page.route('https://context-platform.test/namespaces/test-fixture-namespace/kb/search', async route => {
+    if (!await capture(route, calls)) return;
+    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ chunks: [
+      { chunkId: 'other-chunk-from-same-document', sourceDocumentId: 'opaque-platform-document-id', sourceDocumentName: `${first.id}.md`, text: 'TEST FIXTURE different KB passage must not overwrite the original citation.' },
+      { chunkId: 'unrelated-chunk', sourceDocumentId: 'different-document-id', sourceDocumentName: 'chas.md', text: 'TEST FIXTURE unrelated source.' },
+    ] }) });
+  });
+  await page.goto('/');
+  await page.locator('.persona-card').filter({ hasText: audienceNames.individuals }).click();
+  await expect(page.getByRole('button', { name: 'Update context', exact: false })).toBeEnabled();
+  await page.locator('.citation-chips').getByRole('button').first().click();
+  const evidence = page.getByRole('dialog');
+  await expect(evidence.locator('blockquote')).toHaveText(originalPassage);
+  await expect(evidence.getByRole('heading', { name: first.sourceTitle, exact: true })).toBeVisible();
+  await expect(evidence.getByRole('link', { name: 'Open official source' })).toHaveAttribute('href', new URL(first.sourceUrl).href);
+  expect(calls).toHaveLength(2);
+  expect(calls[1].url).toBe(`${config.platform!.apiUrl}/namespaces/${config.platform!.namespaceId}/kb/search`);
+  expect(calls[1].authorization).toBe(`Bearer ${fixtureIdToken}`);
+  expect(calls[1].body.topK).toBe(100);
+  expect(calls[1].body.query).toContain('Audience: Individuals & Families.');
+});
+
 test('a namespace 403 shows the actual failure without a fabricated platform answer or graph', async ({ page }) => {
   const calls: CapturedCall[] = [];
   await baseRoutes(page);

@@ -278,6 +278,42 @@ function relatedScheme(item: RecordValue, catalogue: OfficialCatalogue): Officia
   const explicitId = stringValue(item.schemeId) || stringValue(metadata.schemeId);
   return catalogue.schemes.find(scheme => explicitId === scheme.id || source.includes(scheme.sourceUrl.toLowerCase()) || source.includes(scheme.name.toLowerCase()) || new RegExp(`(?:^|[/\\\\\\s])${scheme.id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\.|[/\\\\\\s]|$)`, 'i').test(source));
 }
+/** v0.3.4 synthesis carries sourceDoc as an opaque document ID, while KBSearch
+ * exposes that same ID and the source filename. Join only on exact actual IDs;
+ * the filename then resolves to the captured catalogue document. The retrieved
+ * passage itself always remains the text supplied by the original answer.
+ */
+async function resolveSupportingProvenance(result: PlatformResult, catalogue: OfficialCatalogue, platform: FullPlatformConfig, query: string, idToken: string, signal: AbortSignal, fetcher: Fetcher, warnings: string[]): Promise<void> {
+  const missing = result.supportingContent.filter(item => !relatedScheme(item, catalogue) && (stringValue(item.sourceDocumentId) || stringValue(item.sourceDoc)));
+  if (!missing.length) return;
+  try {
+    const response = await checkedResponse(await fetcher(`${platform.apiUrl.replace(/\/$/, '')}/namespaces/${encodeURIComponent(platform.namespaceId)}/kb/search`, {
+      method: 'POST', headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ query, topK: 100 }), signal,
+    }));
+    const raw: unknown = await response.json();
+    const body = isRecord(raw) && isRecord(raw.result) ? raw.result : raw;
+    const namesById = new Map<string, Set<string>>();
+    for (const chunk of isRecord(body) ? records(body.chunks) : []) {
+      const id = stringValue(chunk.sourceDocumentId), name = stringValue(chunk.sourceDocumentName);
+      if (!id || !name) continue;
+      const names = namesById.get(id) || new Set<string>(); names.add(name); namesById.set(id, names);
+    }
+    result.supportingContent = result.supportingContent.map(item => {
+      if (relatedScheme(item, catalogue)) return item;
+      const id = stringValue(item.sourceDocumentId) || stringValue(item.sourceDoc);
+      const names = id ? namesById.get(id) : undefined;
+      if (!names || names.size !== 1) return item;
+      return { ...item, sourceDocumentName: [...names][0] };
+    });
+    if (missing.some(item => {
+      const id = stringValue(item.sourceDocumentId) || stringValue(item.sourceDoc);
+      return !result.supportingContent.some(resolved => (stringValue(resolved.sourceDocumentId) || stringValue(resolved.sourceDoc)) === id && relatedScheme(resolved, catalogue));
+    })) warnings.push('Some retrieved passages could not be matched to an official catalogue URL using platform document metadata.');
+  } catch (error) {
+    if (signal.aborted || error instanceof PlatformRequestError && (error.status === 401 || error.status === 403)) throw error;
+    warnings.push('Source document metadata could not be retrieved. Unresolved passages retain their platform document IDs without an inferred official link.');
+  }
+}
 function supportingEvidence(result: PlatformResult, catalogue: OfficialCatalogue): Evidence[] {
   const evidence = new Map<string, Evidence>();
   for (const [index, item] of result.supportingContent.entries()) {
@@ -341,6 +377,7 @@ export async function analyzeOfficialScenario({ config, persona, profile, questi
   if (!graph.nodes.length) warnings.push('This query returned no graph entities. No graph relationships have been inferred for display.');
   if (result.partial) warnings.push('The platform marked this answer as partial. Review the source evidence and execution trace.');
   if (result.guardrailBlocked) warnings.push('The platform blocked this response with its content guardrail.');
+  await resolveSupportingProvenance(result, catalogue, platform, query, idToken, requestSignal, fetcher, warnings);
   const citations = supportingEvidence(result, catalogue);
   const schemes = officialSchemes(persona, catalogue, graph.nodes, graph.edges);
   const answer = result.synthesizedAnswer || JSON.stringify(result.resultRows, null, 2);
