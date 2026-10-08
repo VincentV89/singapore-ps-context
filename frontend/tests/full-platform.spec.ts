@@ -138,9 +138,10 @@ test('full mode shows all four official catalogues, actual response graph and tr
   for (const call of calls) {
     expect(call.authorization).toBe(`Bearer ${fixtureIdToken}`);
     expect(call.authorization).not.toContain(fixtureAccessToken);
-    expect(call.body.namespace).toBe(config.platform!.namespaceId);
-    expect(call.body.options).toMatchObject({ mode: 'deep-reasoning', includeSupporting: true });
-    expect(call.body.stream).toBe(true);
+    expect(call.url).toBe(`${config.platform!.apiUrl}/namespaces/${config.platform!.namespaceId}/query`);
+    expect(call.body.mode).toBe('standard');
+    expect(call.body.includeSupporting).toBe(true);
+    expect(call.body.options).toBeUndefined();
   }
   expect(browserErrors).toEqual([]);
 });
@@ -172,12 +173,11 @@ test('opaque synthesis document IDs resolve through authenticated KBSearch metad
   const calls: CapturedCall[] = [], first = firstScheme('individuals');
   const originalPassage = 'TEST FIXTURE ORIGINAL SYNTHESIS PASSAGE retained after provenance lookup.';
   await baseRoutes(page);
-  await page.route(runtimePattern, async route => {
+  await page.route(queryPattern, async route => {
     if (!await capture(route, calls)) return;
     const result = mockResult(first);
     result.supportingContent = [{ chunkId: `fixture-${first.id}-chunk`, text: originalPassage, sourceDoc: 'opaque-platform-document-id' }];
-    const event = { type: 'done', requestId: 'opaque-provenance-fixture', payload: { result } };
-    await route.fulfill({ contentType: 'text/event-stream', headers: corsHeaders, body: `data: ${JSON.stringify(event)}\n\n` });
+    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ requestId: 'opaque-provenance-fixture', result }) });
   });
   await page.route('https://context-platform.test/namespaces/test-fixture-namespace/kb/search', async route => {
     if (!await capture(route, calls)) return;
@@ -204,7 +204,7 @@ test('opaque synthesis document IDs resolve through authenticated KBSearch metad
 test('a namespace 403 shows the actual failure without a fabricated platform answer or graph', async ({ page }) => {
   const calls: CapturedCall[] = [];
   await baseRoutes(page);
-  await page.route(runtimePattern, async route => {
+  await page.route(queryPattern, async route => {
     if (!await capture(route, calls)) return;
     await route.fulfill({ status: 403, contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ message: 'TEST FIXTURE namespace access denied' }) });
   });
@@ -223,17 +223,17 @@ test('switching audiences cancels the old platform request and prevents a late r
   const captured = new Promise<void>(resolve => { capturedPrevious = resolve; });
   const held = new Promise<void>(resolve => { releasePrevious = resolve; });
   await baseRoutes(page);
-  await page.route(runtimePattern, async route => {
+  await page.route(queryPattern, async route => {
     const body = await capture(route, calls); if (!body) return;
     const persona = personaFromQuery(body.query);
     if (persona === 'businesses') { capturedPrevious(); await held; }
     // The first request has already been aborted by the browser after switching.
-    await route.fulfill({ contentType: 'text/event-stream', headers: corsHeaders, body: sseBody(firstScheme(persona)) }).catch(() => undefined);
+    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ result: mockResult(firstScheme(persona)) }) }).catch(() => undefined);
   });
   await page.goto('/');
   await page.locator('.persona-card').filter({ hasText: audienceNames.businesses }).click();
   await captured;
-  const cancellation = page.waitForEvent('requestfailed', { predicate: (request: Request) => runtimePattern.test(request.url()) && String(request.postDataJSON().query).includes(`Audience: ${audienceNames.businesses}.`), timeout: 10000 });
+  const cancellation = page.waitForEvent('requestfailed', { predicate: (request: Request) => queryPattern.test(request.url()) && String(request.postDataJSON().query).includes(`Audience: ${audienceNames.businesses}.`), timeout: 10000 });
   await page.getByRole('button', { name: 'All audiences', exact: true }).click();
   const cancelled = await cancellation;
   expect(cancelled.failure()?.errorText).toContain('ERR_ABORTED');
@@ -254,4 +254,72 @@ test('full mode requires a Cognito session before loading any official catalogue
   await expect(page.getByRole('button', { name: 'Sign in to explore' })).toBeVisible();
   await expect(page.getByText('Secure sign-in with Amazon Cognito')).toBeVisible();
   expect(protectedRequests).toEqual([]);
+});
+
+
+test('explicit deep reasoning sends the ID token and actual AgentCore SSE contract after standard context loads', async ({ page }) => {
+  const calls: CapturedCall[] = [];
+  await baseRoutes(page); await successfulRoutes(page, calls);
+  await page.goto('/');
+  await page.locator('.persona-card').filter({ hasText: audienceNames.individuals }).click();
+  await expect(page.getByRole('button', { name: 'Update context', exact: false })).toBeEnabled();
+  await expect(page.getByRole('checkbox', { name: 'Deep context reasoning', exact: true })).not.toBeChecked();
+  await page.getByRole('checkbox', { name: 'Deep context reasoning', exact: true }).check();
+  await page.getByRole('textbox', { name: 'Ask a question about this context', exact: true }).fill('TEST FIXTURE follow-up about agency requirements.');
+  await page.getByRole('button', { name: 'Send question', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Update context', exact: false })).toBeEnabled();
+  expect(calls).toHaveLength(2);
+  const deep = calls[1];
+  expect(runtimePattern.test(deep.url)).toBe(true);
+  expect(deep.authorization).toBe(`Bearer ${fixtureIdToken}`);
+  expect(deep.body.namespace).toBe(config.platform!.namespaceId);
+  expect(deep.body.options).toMatchObject({ mode: 'deep-reasoning', includeSupporting: true });
+  expect(deep.body.stream).toBe(true);
+  expect(deep.body.query).toContain('TEST FIXTURE follow-up about agency requirements.');
+  await page.getByText('Trace the reasoning', { exact: true }).click();
+  await expect(page.locator('.reasoning-details')).toContainText('TEST FIXTURE graph returned');
+});
+
+test('schema fallback uses nonblank match-all search and preserves real neighboring classes and property endpoints', async ({ page }) => {
+  const calls: CapturedCall[] = [], first = firstScheme('individuals');
+  const classUri = 'https://test-fixture.example/ontology/Schemes';
+  const propertyUri = 'https://test-fixture.example/ontology/schemes_agencyId';
+  const referenceUri = 'https://test-fixture.example/ontology/Agency';
+  await baseRoutes(page);
+  await page.route('**/config.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...config, platform: { ...config.platform!, ontologyId: 'https://test-fixture.example/ontology/' } }) }));
+  await page.route(queryPattern, async route => {
+    if (!await capture(route, calls)) return;
+    const result = mockResult(first); result.graphContext.relationships = [];
+    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ result }) });
+  });
+  await page.route('https://context-platform.test/namespaces/test-fixture-namespace/graph/search?**', async route => {
+    const url = new URL(route.request().url());
+    expect(route.request().headers().authorization).toBe(`Bearer ${fixtureIdToken}`);
+    expect(url.searchParams.get('q')).toBe('*');
+    expect(url.searchParams.get('ontology_id')).toBe('https://test-fixture.example/ontology/');
+    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({ hits: [{ uri: classUri, label: 'schemes', kind: 'class' }], total_count: 1 }) });
+  });
+  await page.route('https://context-platform.test/namespaces/test-fixture-namespace/graph/class?**', async route => {
+    expect(route.request().headers().authorization).toBe(`Bearer ${fixtureIdToken}`);
+    expect(new URL(route.request().url()).searchParams.get('uri')).toBe(classUri);
+    await route.fulfill({ contentType: 'application/json', headers: corsHeaders, body: JSON.stringify({
+      uri: classUri, kind: 'class', labels: ['schemes'], comments: ['TEST FIXTURE actual-shaped schema vertex.'],
+      edges: [
+        { direction: 'incoming', predicate: 'http://www.w3.org/2000/01/rdf-schema#domain', predicate_label: 'domain', neighbor: { uri: propertyUri, label: 'agency_id', kind: 'object-property' } },
+        { direction: 'outgoing', predicate: 'http://www.w3.org/2000/01/rdf-schema#subClassOf', predicate_label: 'subclass of', neighbor: { uri: referenceUri, label: 'Agency', kind: 'class' } },
+        { direction: 'outgoing', predicate: 'http://www.w3.org/2000/01/rdf-schema#label', neighbor: { uri: 'literal:schemes', label: 'schemes', kind: 'literal' } },
+      ],
+    }) });
+  });
+  await page.goto('/');
+  await page.locator('.persona-card').filter({ hasText: audienceNames.individuals }).click();
+  await expect(page.getByRole('button', { name: 'Update context', exact: false })).toBeEnabled();
+  await expect(page.getByText('Live Neptune ontology schema. Applicant context remains hypothetical.', { exact: true })).toBeVisible();
+  await expect(page.locator('.graph-node')).toHaveCount(3);
+  await expect(page.locator('.graph-edge')).toHaveCount(2);
+  await page.getByRole('button', { name: 'agency: agency_id', exact: true }).click();
+  await expect(page.getByRole('dialog').getByText(`Entity ID: ${propertyUri}`, { exact: true })).toBeVisible();
+  await expect(page.getByRole('dialog').getByRole('heading', { name: 'Connected relationships' })).toBeVisible();
+  await expect(page.getByRole('dialog').locator('.relationship-row')).toContainText('domain');
+  await expect(page.getByRole('dialog').locator('.relationship-row')).toContainText('schemes');
 });

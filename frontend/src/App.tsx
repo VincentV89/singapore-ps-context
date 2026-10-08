@@ -88,7 +88,7 @@ function App() {
   }, [config, manager, user]);
 
   const isFull = config?.platform?.mode === 'full';
-  const runPlatform = async (audience: PersonaId, nextProfile: Profile, nextQuestion: string, deep = true) => {
+  const runPlatform = async (audience: PersonaId, nextProfile: Profile, nextQuestion: string, deep = false) => {
     if (!config) throw new Error('Platform configuration is not ready.');
     const authUser = manager ? await manager.getUser() : user;
     if (!authUser?.id_token || authUser.expired) { setUser(null); throw new Error('Sign in to query the full platform.'); }
@@ -107,7 +107,7 @@ function App() {
     setScenario(null); setProfile(null); setAppliedProfile(null); setAnalysis(null); setBaseline(null);
     setActivePreset(''); setError(''); setQuestion(''); setLastQuestion(''); setSupportFilter('');
     setSelectedScheme(null); setSelectedNode(null); setSelectedEvidence(null); setShowComparison(false);
-    setChecklistReady(false); setUseBedrock(Boolean(isFull)); setSelectedPolicy(null); setShowHow(false);
+    setChecklistReady(false); setUseBedrock(false); setSelectedPolicy(null); setShowHow(false);
   };
   const choosePersona = async (id: PersonaId) => {
     const version = ++requestVersion.current;

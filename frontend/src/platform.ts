@@ -247,7 +247,8 @@ function graphFromContext(raw: unknown): { nodes: GraphNode[]; edges: GraphEdge[
  */
 async function loadOntologyGraph(platform: FullPlatformConfig, idToken: string, signal: AbortSignal, fetcher: Fetcher): Promise<{ nodes: GraphNode[]; edges: GraphEdge[] }> {
   const base = `${platform.apiUrl.replace(/\/$/, '')}/namespaces/${encodeURIComponent(platform.namespaceId)}`;
-  const params = new URLSearchParams({ q: '', kind: 'class', limit: '24', ...(platform.ontologyId ? { ontology_id: platform.ontologyId } : {}) });
+  // API Gateway drops blank query values; '*' is the store's match-all query.
+  const params = new URLSearchParams({ q: '*', kind: 'class', limit: '24', ...(platform.ontologyId ? { ontology_id: platform.ontologyId } : {}) });
   const headers = { Authorization: `Bearer ${idToken}` };
   const search = await checkedResponse(await fetcher(`${base}/graph/search?${params}`, { headers, signal }));
   const searchResult: unknown = await search.json();
@@ -265,6 +266,12 @@ async function loadOntologyGraph(platform: FullPlatformConfig, idToken: string, 
     entities.push({ uri: vertex.uri, label: label || labelFromUri(vertex.uri), type: 'http://www.w3.org/2002/07/owl#Class', properties: { description: comment || 'Published ontology class returned by the platform graph API.' } });
     for (const edge of records(vertex.edges)) {
       if (!isRecord(edge.neighbor) || typeof edge.neighbor.uri !== 'string' || typeof edge.predicate !== 'string') continue;
+      // Class vertices link to property and reference-class vertices. Keep the
+      // returned endpoints so their actual relationships survive normalization.
+      const neighbor = edge.neighbor;
+      const neighborType = neighbor.kind === 'class' ? 'http://www.w3.org/2002/07/owl#Class' : neighbor.kind === 'object-property' ? 'http://www.w3.org/2002/07/owl#ObjectProperty' : neighbor.kind === 'datatype-property' ? 'http://www.w3.org/2002/07/owl#DatatypeProperty' : undefined;
+      if (!neighborType) continue;
+      entities.push({ uri: neighbor.uri, label: stringValue(neighbor.label) || labelFromUri(String(neighbor.uri)), type: neighborType, properties: { graphKind: neighbor.kind, description: 'Ontology vertex returned by the platform graph API.' } });
       const incoming = edge.direction === 'incoming' || edge.direction === 'in';
       relationships.push({ sourceUri: incoming ? edge.neighbor.uri : vertex.uri, predicateUri: edge.predicate, targetUri: incoming ? vertex.uri : edge.neighbor.uri, predicateLabel: stringValue(edge.predicate_label) });
     }

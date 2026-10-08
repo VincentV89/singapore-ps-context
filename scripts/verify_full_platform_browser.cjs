@@ -42,7 +42,9 @@ function privateJson(filename, value) {
   fs.writeFileSync(filename, JSON.stringify(value, null, 2) + '\n', { mode: 0o600 });
   fs.chmodSync(filename, 0o600);
 }
-function check(condition, label) { assert(condition, label); }
+function check(condition, label) {
+  try { assert(condition, label); } catch (error) { error.verificationCheck = label; throw error; }
+}
 function progress(label) { stage = label; console.log(`[full-platform browser] ${label}`); }
 function compactGraph(raw) {
   const entities = Array.isArray(raw) ? raw : Array.isArray(raw?.entities) ? raw.entities : [];
@@ -87,7 +89,7 @@ async function main(args) {
   const report = { passed: false, checkedAt: new Date().toISOString(), website: website.origin, region: metadata.region, namespaceId: metadata.namespaceId, tlsVerification: true, trustStoreChanged: false, mockedPlatformResponses: false, sseRelayBuffered: true, personas: [], runtimeCalls: [], pageErrors: [], relayErrors: [] };
   const actualGraphUris = new Set();
   const actualPassages = new Set();
-  let idToken = '', accessToken = '', callbackResolve;
+  let idToken = '', accessToken = '', callbackResolve, deepResponseResolve;
   const callbackPromise = new Promise(resolve => { callbackResolve = resolve; });
   let callbackCaptured = false;
   page.on('pageerror', error => report.pageErrors.push(error.name));
@@ -123,6 +125,7 @@ async function main(args) {
       const request = route.request();
       const url = new URL(request.url());
       const runtimeCall = url.hostname === `bedrock-agentcore.${metadata.region}.amazonaws.com` && url.pathname.endsWith('/invocations') && request.method() === 'POST';
+      const standardCall = url.origin === api.origin && url.pathname.endsWith(`/namespaces/${metadata.namespaceId}/query`) && request.method() === 'POST';
       try {
         let response = await route.fetch({ maxRedirects: 0, timeout: runtimeCall ? 240000 : 60000 });
         if (response.status() === 302 && url.origin === cognitoDomain.origin && url.pathname === '/oauth2/authorize') {
@@ -140,25 +143,28 @@ async function main(args) {
             return;
           }
         }
-        if (runtimeCall) {
+        if (runtimeCall || standardCall) {
           const body = request.postDataJSON();
           const responseText = await response.text();
-          const events = sseEvents(responseText);
+          const events = runtimeCall ? sseEvents(responseText) : [];
           const done = events.find(event => event.type === 'done');
-          const result = done?.payload?.result;
+          const result = runtimeCall ? done?.payload?.result : JSON.parse(responseText).result;
           const graph = compactGraph(result?.graphContext);
           for (const entity of graph.entities) if (typeof entity.uri === 'string') actualGraphUris.add(entity.uri);
           for (const passage of Array.isArray(result?.supportingContent) ? result.supportingContent : []) if (typeof passage.text === 'string') actualPassages.add(passage.text.trim().replace(/\s+/g, ' '));
           const persona = personas.find(item => String(body.query).includes(`Audience: ${item.name}.`));
-          report.runtimeCalls.push({
-            persona: persona?.id, status: response.status(), mode: body.options?.mode, namespaceMatches: body.namespace === metadata.namespaceId,
+          const call = {
+            persona: persona?.id, status: response.status(), transport: runtimeCall ? 'sse' : 'rest', mode: runtimeCall ? body.options?.mode : body.mode, namespaceMatches: runtimeCall ? body.namespace === metadata.namespaceId : standardCall,
             idTokenMatches: Boolean(idToken && request.headers().authorization === `Bearer ${idToken}`), accessTokenUsed: Boolean(accessToken && request.headers().authorization === `Bearer ${accessToken}`),
             actualSseDone: Boolean(done), sseStepEvents: events.filter(event => event.type === 'step').length, sseErrorEvents: events.filter(event => event.type === 'error').length,
             answerCharacters: typeof result?.synthesizedAnswer === 'string' ? result.synthesizedAnswer.length : 0, supportingPassages: Array.isArray(result?.supportingContent) ? result.supportingContent.length : 0,
             graphEntities: graph.entities.length, graphRelationships: graph.relationships.length, trace: safeTrace(result?.trace), tier: result?.tier,
-          });
+          };
+          report.runtimeCalls.push(call);
+          if (runtimeCall && deepResponseResolve) { deepResponseResolve(call); deepResponseResolve = undefined; }
         } else if (url.origin === api.origin && url.pathname.endsWith('/graph/class') && response.ok()) {
           const vertex = await response.json(); if (typeof vertex.uri === 'string') actualGraphUris.add(vertex.uri);
+          for (const edge of Array.isArray(vertex.edges) ? vertex.edges : []) if (typeof edge.neighbor?.uri === 'string') actualGraphUris.add(edge.neighbor.uri);
         }
         await route.fulfill({ response });
       } catch (error) {
@@ -202,8 +208,8 @@ async function main(args) {
       check(await page.locator('.scheme-card').count() === expected.length, 'Audience programme cards do not match the live official catalogue.');
       for (const scheme of expected) {
         const card = page.locator('.scheme-card').filter({ hasText: scheme.name });
-        assert.equal((await card.locator('.scheme-agency').innerText()).trim(), scheme.agency.name);
-        assert.equal((await card.locator('.status-badge').innerText()).trim(), 'Agency assessment required');
+        check((await card.locator('.scheme-agency').innerText()).trim() === scheme.agency.name, 'The programme card agency must match the official catalogue.');
+        check((await card.locator('.status-badge').innerText()).trim() === 'Agency assessment required', 'The programme card must require agency assessment.');
       }
       check((await page.locator('.answer-content').innerText()).trim().length > 20, 'The live platform returned an empty answer.');
       check(await page.getByText('0/0 rules met', { exact: false }).count() === 0, 'Official cards must not claim automated screening.');
@@ -235,7 +241,7 @@ async function main(args) {
       const first = expected[0];
       await page.locator('.scheme-card').filter({ hasText: first.name }).getByRole('button', { name: 'View source & criteria' }).click();
       const sourceLink = await page.getByRole('dialog').getByRole('link', { name: 'Official source', exact: true }).getAttribute('href');
-      assert.equal(sourceLink, new URL(first.sourceUrl).href);
+      check(sourceLink === new URL(first.sourceUrl).href, 'The programme detail source must match the official agency URL.');
       await page.getByRole('button', { name: 'Close programme details' }).click();
       await page.screenshot({ path: path.join(args.artifacts, `full-platform-${persona.id}.png`), fullPage: true });
       await page.setViewportSize({ width: 390, height: 844 });
@@ -247,14 +253,50 @@ async function main(args) {
       if (persona.id === 'research') await page.screenshot({ path: path.join(args.artifacts, 'full-platform-entry-mobile.png'), fullPage: true });
       await page.setViewportSize({ width: 1600, height: 1050 });
     }
-    check(report.runtimeCalls.length >= 4, 'Expected actual runtime queries from all four audiences.');
-    check(report.runtimeCalls.every(call => call.status === 200 && call.mode === 'deep-reasoning' && call.namespaceMatches && call.idTokenMatches && !call.accessTokenUsed && call.actualSseDone && !call.sseErrorEvents && call.answerCharacters > 20 && call.supportingPassages > 0 && call.trace.length > 0), 'The browser runtime requests must use the full platform and its actual grounded results.');
+    // Diagnose all standard graph/evidence journeys before the longer deep call.
+    await page.locator('.persona-card').filter({ hasText: personas[0].name }).click();
+    await page.waitForFunction(() => Boolean(document.querySelector('.scheme-card')) || Boolean(document.querySelector('[role="alert"]')), undefined, { timeout: 240000 });
+    check(await page.getByRole('alert').count() === 0, 'The standard context reload before deep reasoning failed.');
+    progress('live explicit deep household follow-up');
+    const deepResponse = new Promise(resolve => { deepResponseResolve = resolve; });
+    await page.getByRole('checkbox', { name: 'Deep context reasoning', exact: true }).check();
+    await page.getByRole('textbox', { name: 'Ask a question about this context', exact: true }).fill('Compare official household, employment and caregiving support for this hypothetical household. Explain which agency requirements and evidence they should verify, with citations. Do not declare eligibility.');
+    await page.getByRole('button', { name: 'Send question', exact: true }).click();
+    const actualDeep = await within(deepResponse, 240000);
+    check(actualDeep.status === 200 && actualDeep.actualSseDone && !actualDeep.sseErrorEvents, 'The explicit deep follow-up must complete through actual AgentCore SSE.');
+    await page.waitForFunction(() => !document.querySelector('.is-updating') || Boolean(document.querySelector('[role="alert"]')), undefined, { timeout: 240000 });
+    check(await page.getByRole('alert').count() === 0, 'The explicit deep follow-up reported an application error.');
+    check((await page.locator('.answer-content').innerText()).trim().length > 20, 'The explicit deep answer is empty.');
+    report.explicitDeepFollowup = true;
+    const deepCall = report.runtimeCalls.findLast(call => call.transport === 'sse');
+    await page.getByText('Trace the reasoning', { exact: true }).click();
+    const deepTraceSteps = await page.locator('.reasoning-details li').count();
+    check(deepCall && deepCall.trace.length === deepTraceSteps && deepTraceSteps > 0, 'The deep trace display must match the actual AgentCore result.');
+    await page.locator('.citation-chips button').first().click();
+    const deepEvidence = page.getByRole('dialog');
+    const deepPassage = (await deepEvidence.locator('blockquote').innerText()).trim().replace(/\s+/g, ' ');
+    check(actualPassages.has(deepPassage), 'The deep citation passage must match actual AgentCore supporting content.');
+    const deepEvidenceUrl = await deepEvidence.getByRole('link', { name: 'Open official source' }).getAttribute('href');
+    check(capturedSchemes.some(scheme => new URL(scheme.sourceUrl).href === deepEvidenceUrl), 'The deep citation needs an actual mapped official agency source.');
+    await page.getByRole('button', { name: 'Close evidence' }).click();
+    report.deepFollowup = { traceSteps: deepTraceSteps, officialEvidenceUrl: deepEvidenceUrl, actualSseDone: true };
+    await page.screenshot({ path: path.join(args.artifacts, 'full-platform-deep-followup.png'), fullPage: true });
+    const standardCalls = report.runtimeCalls.filter(call => call.transport === 'rest');
+    const deepCalls = report.runtimeCalls.filter(call => call.transport === 'sse');
+    check(standardCalls.length >= 4 && new Set(standardCalls.map(call => call.persona)).size === 4, 'Expected actual standard Serve queries from all four audiences.');
+    check(deepCalls.length >= 1 && report.explicitDeepFollowup, 'Expected an explicit real AgentCore deep-reasoning query.');
+    check(report.runtimeCalls.every(call => call.status === 200 && call.mode === (call.transport === 'sse' ? 'deep-reasoning' : 'standard') && call.namespaceMatches && call.idTokenMatches && !call.accessTokenUsed && (call.transport !== 'sse' || call.actualSseDone) && !call.sseErrorEvents && call.answerCharacters > 20 && call.supportingPassages > 0 && call.trace.length > 0), 'The browser requests must use the full platform and its actual grounded results.');
     check(report.pageErrors.length === 0 && report.relayErrors.length === 0, 'The live browser reported application or relay errors.');
     report.passed = true; report.mobileEntryOverflow = false;
     privateJson(reportPath, report);
-    console.log(JSON.stringify({ passed: true, cognitoHostedLogin: true, pkceCallback: true, audiences: report.personas.length, actualDeepQueries: report.runtimeCalls.length, officialProgrammes: report.officialSchemeCount, mockedPlatformResponses: false, mobileOverflow: false, pageErrors: 0 }));
+    console.log(JSON.stringify({ passed: true, cognitoHostedLogin: true, pkceCallback: true, audiences: report.personas.length, actualStandardQueries: standardCalls.length, actualDeepQueries: deepCalls.length, officialProgrammes: report.officialSchemeCount, mockedPlatformResponses: false, mobileOverflow: false, pageErrors: 0 }));
   } catch (error) {
     report.failedStage = stage; report.errorType = error.name;
+    if (error.verificationCheck) report.failedCheck = error.verificationCheck;
+    if (report.pkceCallback) {
+      report.domDiagnostic = await page.evaluate(() => ({ schemeCards: document.querySelectorAll('.scheme-card').length, answerCharacters: document.querySelector('.answer-content')?.textContent?.trim().length || 0, citationChips: document.querySelectorAll('.citation-chips button').length, graphNodes: document.querySelectorAll('.graph-node').length, graphEdges: document.querySelectorAll('.graph-edge').length, alerts: document.querySelectorAll('[role="alert"]').length })).catch(() => undefined);
+      await page.screenshot({ path: path.join(args.artifacts, 'full-platform-failure.png'), fullPage: true }).catch(() => undefined);
+    }
     privateJson(reportPath, report);
     throw error;
   } finally {
