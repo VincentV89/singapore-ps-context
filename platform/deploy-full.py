@@ -241,6 +241,10 @@ def start(args):
                 if not args.recover_diagnostics_only:
                     raise ValueError("Assembly deployment requires a successful build; diagnostic-only recovery requires --recover-diagnostics-only")
                 recovery = recover_diagnostics(aws, previous, args.assembly, args.assembly_file)
+                receipt = json.loads(Path(recovery["receipt"]).read_text())
+                with ZipFile(receipt["inspectedFile"]) as archive:
+                    historical_storage = json.loads(archive.read("cdk.out/sgsupport-demo-storage.template.json"))
+                guard_neptune_capacity(aws, historical_storage)
     token = uuid.uuid4().hex
     artifact_name = f"{args.phase}-{token}.zip"
     result = aws.client("codebuild").start_build(
@@ -299,9 +303,54 @@ def verify_name_repair(aws, state, recorded):
         or {n for n, v in phases.items() if v == "FAILED"} != {"POST_BUILD"}
         or any(phases.get(n) != "SUCCEEDED" for n in ["INSTALL", "BUILD", "UPLOAD_ARTIFACTS"])):
         raise ValueError("Original asset publication proof is invalid")
+    storage = [item for item in receipt.get("templateRepairs", [])
+               if item.get("stack") == "sgsupport-demo-storage"]
+    if len(storage) != 1:
+        raise ValueError("Repair receipt must identify one storage template")
+    storage = storage[0]
+    template_hash = storage.get("newSha256", "")
+    template_bucket = f"cdk-hnb659fds-assets-{ACCOUNT}-{REGION}"
+    if (len(template_hash) != 64 or any(c not in "0123456789abcdef" for c in template_hash)
+        or storage.get("objectKey") != template_hash + ".json"
+        or receipt.get("publishedTemplateBucket") != template_bucket):
+        raise ValueError("Historical storage template is outside the authorized bootstrap namespace")
+    template_bytes = s3.get_object(Bucket=template_bucket, Key=storage["objectKey"])["Body"].read()
+    if hashlib.sha256(template_bytes).hexdigest() != template_hash:
+        raise ValueError("Historical storage template does not match its repair receipt")
+    guard_neptune_capacity(aws, json.loads(template_bytes))
     return {"repairKind": receipt["repairKind"], "receiptS3Uri": recorded["receiptS3Uri"],
             "originalBuildId": original["id"], "originalBuildStatus": "FAILED",
             "derivedAssemblySha256": digest, "changedTemplateCount": 3}
+
+
+def guard_neptune_capacity(aws, historical_storage):
+    """Prevent only historical medium assemblies from undoing the owned resize."""
+    resource = historical_storage.get("Resources", {}).get("NeptunePrimaryInstance", {})
+    props = resource.get("Properties", {})
+    if props.get("DBInstanceClass") != "db.t4g.medium":
+        return
+    identifier = "sgsupport-demo-neptune-primary"
+    if resource.get("Type") != "AWS::Neptune::DBInstance" or props.get("DBInstanceIdentifier") != identifier:
+        raise ValueError("Historical Neptune resource does not match this project's primary")
+    from botocore.exceptions import ClientError
+    try:
+        instance = aws.client("neptune").describe_db_instances(DBInstanceIdentifier=identifier)["DBInstances"][0]
+    except ClientError as exc:
+        if exc.response["Error"]["Code"] in {"DBInstanceNotFound", "DBInstanceNotFoundFault"}:
+            return
+        raise
+    if instance["DBInstanceClass"] != "db.r8g.large":
+        return
+    owned_instance = aws.client("cloudformation").describe_stack_resource(
+        StackName="sgsupport-demo-storage", LogicalResourceId="NeptunePrimaryInstance",
+    )["StackResourceDetail"]
+    if owned_instance.get("PhysicalResourceId") != identifier:
+        raise ValueError("Cannot verify ownership of the Neptune primary for historical assembly replay")
+    raise ValueError(
+        "Refusing historical db.t4g.medium assembly: the owned Neptune primary is already "
+        "db.r8g.large after medium-instance graph memory failures. Run package, prepare and "
+        "start --phase build with the current db.r8g.large build settings, then deploy that new assembly."
+    )
 
 
 def inspect_assembly_archive(path):
