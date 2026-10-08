@@ -1,0 +1,2 @@
+# Unified diffs preserve a single-space marker for blank context lines.
+platform/patches/*.patch -whitespace

@@ -30,11 +30,30 @@ env -u AWS_PROFILE python platform/deploy-full.py status --build-id 'sgsupport-f
 env -u AWS_PROFILE python platform/deploy-full.py start --phase deploy --assembly 's3://<project-build-bucket>/builds/<completed-build-artifact>.zip'
 ```
 
-The AWS subcommands require `boto3` and use the normal SDK credential chain. `env -u AWS_PROFILE` addresses this session's missing injected profile while retaining the explicitly selected environment credentials; on a normally configured workstation, use its intended profile instead. The helper restricts deployment to the account and region above. Inspect failed CodeBuild phases and the matching CloudFormation resource events before rerunning. A successful asset build is not a successful platform deployment.
+Install operator dependencies with `python -m pip install -r platform/requirements.txt`. The AWS subcommands require `boto3` and use the normal SDK credential chain. `env -u AWS_PROFILE` addresses this session's missing injected profile while retaining the explicitly selected environment credentials; on a normally configured workstation, use its intended profile instead. The helper restricts deployment to the account and region above. Inspect failed CodeBuild phases and the matching CloudFormation resource events before rerunning. A successful asset build is not a successful platform deployment.
 
 Before deploying a new VPC, verify regional VPC headroom and that the selected Availability Zones offer the accelerator's endpoint services. The initial account check found five VPCs against a quota of five and requested an increase to ten. Check the current quota/request state; it is a prerequisite check, not a permanent deployment status. Do not remove unrelated VPCs to make room. Reusing a VPC requires explicitly prepared private subnets and endpoints because the upstream imported-VPC path does not create them.
 
 The demo settings use Neptune `db.t4g.medium`, ontology ECS **2 vCPU / 8 GiB / one task**, and an OpenSearch NEXTGEN collection group with standby replicas enabled. Search and indexing each have a **2-OCU minimum and 4-OCU maximum**. The small ontology task is sized for this bounded catalogue; larger inductions require revisiting memory and CPU. Keep embedding producers and retrieval consumers on the same model and **1,024 dimensions**. Current configuration uses Sonnet 5, Haiku 4.5 and Cohere Embed v4, and the hand-rolled Tier 3 strategy consults the formal ontology.
+
+## Administrator and branded frontend
+
+After the full stacks complete, initialize the private login and collect the deployed endpoints:
+
+```bash
+env -u AWS_PROFILE python scripts/full_platform_frontend.py --bootstrap
+```
+
+This suppresses invitation emails and saves the administrator password once in `artifacts/full-platform-login.local.json` with mode `0600`. Repeated runs reuse it. The full Cognito client permits both the accelerator console and the branded navigator callbacks.
+
+After source ingestion, reviewed ontology publication and live query checks succeed:
+
+```bash
+cd frontend && npm run build && cd ..
+env -u AWS_PROFILE python scripts/full_platform_frontend.py --publish
+```
+
+Publishing checks the actual accepted proposal and source states, updates the navigator's exact API/login CSP origins, uploads the public catalogue and full-platform configuration, and invalidates CloudFront. The accelerator console is retained. The initial assembly's gateway error responses select the console origin; the publisher updates only those two owned full-web CloudFormation custom resources to `*`, matching the demo's existing authenticated success/OPTIONS responses, and redeploys the API after both updates. The source patch carries the same origin setting for future synths. Tokens remain required for platform access.
 
 ## Source refresh and validation
 

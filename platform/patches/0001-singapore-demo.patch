@@ -50,7 +50,7 @@ index 59bcaa6..3465fd8 100644
        },
      );
 diff --git a/infra/lib/stacks/foundation/web-stack.ts b/infra/lib/stacks/foundation/web-stack.ts
-index 4f494d6..c0a2e01 100644
+index 4f494d6..8b1f586 100644
 --- a/infra/lib/stacks/foundation/web-stack.ts
 +++ b/infra/lib/stacks/foundation/web-stack.ts
 @@ -287,11 +287,19 @@ export class WebStack extends SCLStack {
@@ -74,3 +74,17 @@ index 4f494d6..c0a2e01 100644
              ExplicitAuthFlows: [
                "ALLOW_USER_SRP_AUTH",
                "ALLOW_REFRESH_TOKEN_AUTH",
+@@ -327,8 +335,12 @@ export class WebStack extends SCLStack {
+ 
+     // ── Patch API Gateway CORS origin ──────────────────────────────
+     if (props.apiRestApiId && props.apiStageName) {
++      // Demo success/OPTIONS responses already allow both authenticated UIs.
++      const gatewayCorsOrigin = this.node.tryGetContext("extra_callback_origin")
++        ? "*"
++        : siteUrl;
+       const corsHeaders = {
+-        "gatewayresponse.header.Access-Control-Allow-Origin": `'${siteUrl}'`,
++        "gatewayresponse.header.Access-Control-Allow-Origin": `'${gatewayCorsOrigin}'`,
+         "gatewayresponse.header.Strict-Transport-Security":
+           "'max-age=63072000; includeSubDomains; preload'",
+         "gatewayresponse.header.X-Content-Type-Options": "'nosniff'",

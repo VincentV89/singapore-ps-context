@@ -95,7 +95,7 @@ phases:
         PY
         fi
         if [ "$SGSUPPORT_PHASE" = deploy ]; then
-          cdk deploy --app "$COA_ASSEMBLY_DIR" --all \
+          cdk deploy --app "$COA_ASSEMBLY_DIR" --all --concurrency 4 \
             --require-approval=never \
             --outputs-file "$CODEBUILD_SRC_DIR/platform-artifacts/stack-outputs.json"
         fi
