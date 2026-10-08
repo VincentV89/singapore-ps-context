@@ -167,10 +167,10 @@
       "Type": "AWS::ApiGatewayV2::Route", "Properties": {"ApiId": {"Ref": "HttpApi"}, "RouteKey": "ANY /", "Target": {"Fn::Join": ["/", ["integrations", {"Ref": "LambdaIntegration"}]]}, "AuthorizationType": "JWT", "AuthorizerId": {"Ref": "JwtAuthorizer"}, "AuthorizationScopes": ["life-events/access"]}
     },
     "PreflightRoute": {
-      "Type": "AWS::ApiGatewayV2::Route", "Properties": {"ApiId": {"Ref": "HttpApi"}, "RouteKey": "OPTIONS /{proxy+}", "AuthorizationType": "NONE"}
+      "Type": "AWS::ApiGatewayV2::Route", "Properties": {"ApiId": {"Ref": "HttpApi"}, "RouteKey": "OPTIONS /{proxy+}", "AuthorizationType": "NONE", "Target": {"Fn::Join": ["/", ["integrations", {"Ref": "LambdaIntegration"}]]}}
     },
     "RootPreflightRoute": {
-      "Type": "AWS::ApiGatewayV2::Route", "Properties": {"ApiId": {"Ref": "HttpApi"}, "RouteKey": "OPTIONS /", "AuthorizationType": "NONE"}
+      "Type": "AWS::ApiGatewayV2::Route", "Properties": {"ApiId": {"Ref": "HttpApi"}, "RouteKey": "OPTIONS /", "AuthorizationType": "NONE", "Target": {"Fn::Join": ["/", ["integrations", {"Ref": "LambdaIntegration"}]]}}
     },
     "InvokePermission": {
       "Type": "AWS::Lambda::Permission", "Properties": {"Action": "lambda:InvokeFunction", "FunctionName": {"Ref": "ApiFunction"}, "Principal": "apigateway.amazonaws.com", "SourceArn": {"Fn::Sub": "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*"}}

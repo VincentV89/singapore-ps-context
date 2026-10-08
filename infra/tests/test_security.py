@@ -83,7 +83,8 @@ class InfrastructureTests(unittest.TestCase):
                 route = resource["Properties"]
                 if route["RouteKey"].startswith("OPTIONS "):
                     self.assertEqual(route["AuthorizationType"], "NONE")
-                    self.assertNotIn("Target", route, "Preflight must not invoke the data API")
+                    self.assertIn("Target", route, "Unintegrated routes are omitted from API Gateway deployments")
+                    self.assertNotIn("AuthorizerId", route)
                 else:
                     self.assertEqual(route["AuthorizationType"], "JWT")
                     self.assertEqual(route["AuthorizationScopes"], ["life-events/access"])

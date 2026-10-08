@@ -17,6 +17,8 @@ def response(status, body, content_type="application/json"):
 
 def dispatch(method, path, body=None, query=None):
     path = path.rstrip("/") or "/"
+    if method == "OPTIONS":
+        return response(204, "", "text/plain")
     if method == "GET" and path == "/api/health":
         return response(200, {"status": "ok", "graph": "RDF / SPARQL", "scenario": "life-events-navigator", "synthetic": True})
     if method == "GET" and path == "/api/scenario":

@@ -167,6 +167,13 @@ class EligibilityTests(unittest.TestCase):
 
 
 class ApiTests(unittest.TestCase):
+    def test_preflight_returns_no_citizen_data_or_analysis(self):
+        with patch("app.analyze") as evaluate_request:
+            result = dispatch("OPTIONS", "/api/scenario")
+        self.assertEqual(result["statusCode"], 204)
+        self.assertEqual(result["body"], "")
+        evaluate_request.assert_not_called()
+
     def test_invalid_and_bounded_input(self):
         payloads = [None, [], {"profile": []}, {"profile": {"householdSize": 0}}, {"profile": {"householdSize": 2.5}}, {"profile": {"householdIncome": -1}}, {"profile": {"householdIncome": float("inf")}}, {"profile": {"age": True}}, {"profile": {"caregiver": "yes"}}, {"profile": {"citizenship": []}}, {"profile": {"nrIc": "private"}}, {"profile": PROFILE, "question": "a" * 1501}, {"profile": PROFILE, "useBedrock": "true"}]
         for payload in payloads:
