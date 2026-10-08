@@ -269,11 +269,16 @@ class IngestRun:
         print(f"{step}: {status}", flush=True)
 
     def namespace(self):
+        def validate(detail):
+            if detail.get("name") != "sg-support" or detail.get("status") != "ACTIVE":
+                raise ValueError("Namespace must identify the active sg-support deployment.")
+            if not field(detail, "dataZoneProjectId") or not field(detail, "athenaWorkgroupName"):
+                raise RuntimeError("Namespace provisioning omitted its DataZone project or Athena workgroup. Inspect control-plane logs and storage SSM parameters before staging public sources.")
+
         if self.state.get("namespaceId"):
             result = self.client.request("GET", "/namespaces/" + self.state["namespaceId"])
             detail = result.get("namespace", result)
-            if detail.get("name") != "sg-support":
-                raise ValueError("Saved namespace does not identify sg-support.")
+            validate(detail)
             self.state["namespace"] = redact(detail)
             return
         namespaces = self.client.paginate("/namespaces", ("namespaces", "items"))
@@ -284,6 +289,7 @@ class IngestRun:
         self.state["namespaceId"] = field(result, "namespaceId")
         if not self.state["namespaceId"]:
             raise RuntimeError("Namespace response omitted its identifier.")
+        validate(result)
         self.state["namespace"] = redact(result)
         self.checkpoint()
         self.log("Namespace", self.state["namespaceId"])

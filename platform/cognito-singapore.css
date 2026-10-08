@@ -1,0 +1,22 @@
+.banner-customizable {
+  background-color: #d71932;
+  padding: 24px 0px 24px 0px;
+}
+
+.background-customizable {
+  background-color: #ffffff;
+}
+
+.textDescription-customizable {
+  color: #16243a;
+}
+
+.submitButton-customizable {
+  color: #ffffff;
+  background-color: #d71932;
+}
+
+.submitButton-customizable:hover {
+  color: #ffffff;
+  background-color: #a81125;
+}

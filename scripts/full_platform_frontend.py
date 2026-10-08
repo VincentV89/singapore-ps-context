@@ -128,6 +128,32 @@ def random_password():
     return "".join(chars)
 
 
+def configure_hosted_ui_style(client, metadata):
+    """Apply supported classic-hosted-UI colors only to the demo app client.
+
+    The selectors are from Cognito's documented legacy CSS template:
+    https://docs.aws.amazon.com/cognito/latest/developerguide/hosted-ui-classic-branding.html
+    No logo/image, user-pool setting, managed-login version or other client
+    configuration is changed by SetUICustomization.
+    """
+    pool = metadata["cognito"]["userPoolId"]
+    client_id = metadata["cognito"]["clientId"]
+    hostname = urlparse(metadata["cognito"]["domain"]).hostname or ""
+    if not hostname.endswith(f".auth.{REGION}.amazoncognito.com"):
+        raise ValueError("Expected the owned full-platform Cognito prefix domain.")
+    domain = client.describe_user_pool_domain(Domain=hostname.split(".", 1)[0])["DomainDescription"]
+    if domain.get("UserPoolId") != pool or domain.get("ManagedLoginVersion") != 1:
+        raise ValueError("Singapore CSS requires this pool's existing classic hosted UI (version 1).")
+    css = (ROOT / "platform" / "cognito-singapore.css").read_text().strip()
+    current = client.get_ui_customization(UserPoolId=pool, ClientId=client_id)["UICustomization"].get("CSS", "")
+    if current.strip() == css:
+        print("Cognito hosted UI already uses the Singapore red and white palette.", flush=True)
+        return False
+    client.set_ui_customization(UserPoolId=pool, ClientId=client_id, CSS=css)
+    print("Applied Singapore red and white colors to the existing Cognito hosted UI.", flush=True)
+    return True
+
+
 def configure_login(aws, metadata, credentials_path):
     client = aws.client("cognito-idp")
     pool = metadata["cognito"]["userPoolId"]
@@ -173,6 +199,7 @@ def configure_login(aws, metadata, credentials_path):
         request["CallbackURLs"] = sorted(set(config.get("CallbackURLs", []) + [callback]))
         request["LogoutURLs"] = sorted(set(config.get("LogoutURLs", []) + [logout]))
         client.update_user_pool_client(**request)
+    configure_hosted_ui_style(client, metadata)
     print(f"Administrator login saved privately to {credentials_path}; no invitation email was sent.", flush=True)
 
 
